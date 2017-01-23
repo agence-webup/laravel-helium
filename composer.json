@@ -1,0 +1,9 @@
+{
+    "name": "webup/laravel-helium",
+    "license": "MIT",
+    "autoload": {
+       "psr-4": {
+           "Webup\\LaravelHelium\\": "src/"
+        }
+    }
+}
