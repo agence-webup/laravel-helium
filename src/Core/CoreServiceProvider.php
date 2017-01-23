@@ -16,6 +16,12 @@ class CoreServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/Database/migrations/' => database_path('migrations')
         ], 'helium');
+
+        $this->loadViewsFrom(__DIR__.'/Resources/views', 'helium');
+
+        $this->publishes([
+            __DIR__.'/Resources/views' => resource_path('views/vendor/helium')
+        ], 'helium');
     }
 
     /**
