@@ -8,7 +8,7 @@ Provider
 ],
 ```
 
-Publish migrations and views
+Publish migrations, views and translations
 
 ```bash
 php artisan vendor:publish --tag=helium
@@ -60,6 +60,6 @@ if ($guard == 'admin') {
 }
 ```
 
-Depdencies
+Dependencies
 
 https://github.com/agence-webup/helium

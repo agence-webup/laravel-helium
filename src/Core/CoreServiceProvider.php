@@ -13,14 +13,23 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // migrations
         $this->publishes([
             __DIR__.'/Database/migrations/' => database_path('migrations')
         ], 'helium');
 
+        // views
         $this->loadViewsFrom(__DIR__.'/Resources/views', 'helium');
 
         $this->publishes([
             __DIR__.'/Resources/views' => resource_path('views/vendor/helium')
+        ], 'helium');
+
+        // translations
+        $this->loadTranslationsFrom(__DIR__.'/Resources/lang', 'helium');
+
+        $this->publishes([
+            __DIR__.'/Resources/lang' => resource_path('lang/vendor/helium'),
         ], 'helium');
     }
 
