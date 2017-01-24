@@ -4,14 +4,19 @@ namespace Webup\LaravelHelium\Contact\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Webup\LaravelHelium\Contact\Contracts\ContactService;
 use Yajra\Datatables\Datatables;
 
 class ContactController extends Controller
 {
-    public function __construct()
+    /**
+     * Create a new controller instance.
+     *
+     * @param  \Webup\LaravelHelium\Contact\Contracts\ContactService $contactService
+     */
+    public function __construct(ContactService $contactService)
     {
-        // @todo make a service or a repository
-        $this->model = new \Webup\LaravelHelium\Contact\Entities\Contact();
+        $this->contactService = $contactService;
     }
 
     /**
@@ -21,9 +26,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        return view('helium::contact.index', [
-            'contacts' => $this->model::orderBy('created_at', 'desc')->paginate(),
-        ]);
+        return view('helium::contact.index');
     }
 
     /**
@@ -33,7 +36,7 @@ class ContactController extends Controller
      */
     public function datatable()
     {
-        $contactQuery = $this->model::select('id', 'created_at', 'name');
+        $contactQuery = $this->contactService->query()->select('id', 'created_at', 'name');
 
         return Datatables::of($contactQuery)
             ->editColumn('created_at', function ($contact) {
@@ -53,7 +56,8 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-        $contact = $this->model::findOrFail($id);
+        $contact = $this->contactService->getById($id);
+        abort_if(!$contact, 404);
 
         return view('helium::contact.show', [
             'message' => $contact,
@@ -69,8 +73,9 @@ class ContactController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $this->model::findOrFail($id);
-        $this->model::destroy($id);
+        $contact = $this->contactService->getById($id);
+        abort_if(!$contact, 404);
+        $this->contactService->delete($id);
 
         // Flash message
         $request->session()->flash('flash.default', [
