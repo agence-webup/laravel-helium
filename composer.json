@@ -1,9 +1,19 @@
 {
     "name": "webup/laravel-helium",
     "license": "MIT",
+    "require": {
+        "php": ">=5.6.4",
+        "anlutro/l4-settings": "^0.4.9",
+        "webup/laravel-form": "1.0.*",
+        "yajra/laravel-datatables-oracle": "^6.23"
+    },
     "autoload": {
        "psr-4": {
            "Webup\\LaravelHelium\\": "src/"
         }
-    }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable"
 }

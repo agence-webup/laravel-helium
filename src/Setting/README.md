@@ -1,5 +1,8 @@
 # laravel-helium
 
+Dependencies
+
+"anlutro/l4-settings": "^0.4.9" https://github.com/anlutro/laravel-settings
 
 Provider
 
@@ -26,9 +29,5 @@ Menu
 Publish views
 
 ```bash
-php artisan vendor:publish --tag=helium.setting
+$ php artisan vendor:publish --tag=helium.setting
 ```
-
-Dependencies
-
-"anlutro/l4-settings": "^0.4.9" https://github.com/anlutro/laravel-settings

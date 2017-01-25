@@ -23,7 +23,7 @@ Provider
 Publish migrations, views and config
 
 ```bash
-php artisan vendor:publish --tag=helium
+$ php artisan vendor:publish --tag=helium
 ```
 
 Routes

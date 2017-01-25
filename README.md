@@ -1,65 +1,13 @@
-# laravel-helium
+# Laravel Helium
 
-Provider
-
-```php
-'providers' => [
-    Webup\LaravelHelium\Core\CoreServiceProvider::class,
-],
-```
-
-Publish migrations, views and translations
+This package is a set of module to build a backend.
 
 ```bash
-php artisan vendor:publish --tag=helium
+$ composer require webup/laravel-helium dev-master
 ```
 
-Routes
+Install the [core](./src/Core/README.md) for a start,
+then pick the module you wish.
 
-```php
-Route::get('/admin/login', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@showLoginForm')->name('login');
-Route::post('/admin/login', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@login')->name('postLogin');
-Route::post('/admin/logout', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@logout')->name('logout');
-```
-
-config/auth.php
-
-```
-'providers' => [
-    // ...
-    'admins' => [
-        'driver' => 'eloquent',
-        'model' => Webup\LaravelHelium\Core\Entities\AdminUser::class,
-    ],
-],
-
-'guards' => [
-    // ...
-
-    'admin' => [
-        'driver' => 'session',
-        'provider' => 'admins',
-    ],
-],
-```
-
-Define admin login URL :
-Exception/Handle.php add into unauthenticated function
-
-```php
-if (in_array('admin', $exception->guards())) {
-    return redirect()->guest(route('admin.login'));
-}
-```
-Define redirect URL after admin login :
-Middleware/RedirectIfAuthenticated.php add into handle function
-
-```php
-if ($guard == 'admin') {
-    return redirect()->route('admin.home');
-}
-```
-
-Dependencies
-
-https://github.com/agence-webup/helium
+- [contact](./src/Contact/README.md)
+- [setting](./src/Setting/README.md)
