@@ -39,6 +39,7 @@ class ContactController extends Controller
         $contactQuery = $this->contactService->query()->select('id', 'created_at', 'name');
 
         return Datatables::of($contactQuery)
+            ->rawColumns(['actions'])
             ->editColumn('created_at', function ($contact) {
                 return $contact->created_at->format('d/m/Y H:i');
             })
