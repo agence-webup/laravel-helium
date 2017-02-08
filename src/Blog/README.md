@@ -38,6 +38,7 @@ Route::get('/posts/{id}/edit', '\Webup\LaravelHelium\Blog\Http\Controllers\Admin
 Route::put('/posts/{id}', '\Webup\LaravelHelium\Blog\Http\Controllers\Admin\PostController@update')->name('post.update');
 Route::delete('/posts/{id}', '\Webup\LaravelHelium\Blog\Http\Controllers\Admin\PostController@destroy')->name('post.destroy');
 
+Route::post('/images', '\Webup\LaravelHelium\Blog\Http\Controllers\Admin\ImageController@store')->name('image.store');
 
 // web
 Route::get('/blog', '\Webup\LaravelHelium\Blog\Http\Controllers\PostController@index')->name('blog.index');

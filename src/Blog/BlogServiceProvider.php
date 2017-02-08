@@ -24,5 +24,9 @@ class BlogServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/Resources/views' => resource_path('views/vendor/helium')
         ], 'helium.blog');
+
+        $this->publishes([
+            __DIR__.'/Resources/assets' => resource_path('assets/admin/js/vendor')
+        ], 'helium.blog');
     }
 }

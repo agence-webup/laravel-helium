@@ -62,7 +62,7 @@ use Webup\LaravelHelium\Blog\Values\State;
         ->wrapperClass('custom-class')
         ->value($post->state ? $post->state->value() : null) !!}
 
-    {!! Form::create('text', 'published_at')
+    {!! Form::create('date', 'published_at')
         ->label('Date de publication')
         ->value($post->published_at) !!}
 </fieldset>

@@ -161,14 +161,15 @@ class PostController extends Controller
 
         $states = implode(',', array_keys(State::list()));
         $uniqSlug = $post ? '|unique:posts,slug,'.$post->id : '|unique:posts,slug';
+        $imageRequired = !$post || !$post->image ? '|required_unless:state,'.State::DRAFT : '';
 
         $validator = Validator::make($data, [
             'title' => 'required|max:255',
-            'image' => 'image|required_unless:state,'.State::DRAFT,
+            'image' => 'image'.$imageRequired,
             'content' => '',
             'seo_title' => 'max:255',
             'seo_description' => 'max:255',
-            'slug' => 'required|slug'.$uniqSlug,
+            'slug' => 'required|max:255|slug'.$uniqSlug,
             'state' => 'required|in:'.$states,
             'published_at' => 'date|required_if:state,'.State::SCHEDULED,
         ]);
