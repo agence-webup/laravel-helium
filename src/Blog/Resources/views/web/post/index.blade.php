@@ -1,6 +1,10 @@
 <?php
 SEO::setTitle('Actualités');
 SEO::setDescription('');
+
+SEO::metatags()
+    ->setPrev($posts->previousPageUrl())
+    ->setNext($posts->nextPageUrl());
 ?>
 
 @extends('layouts.master')
@@ -20,6 +24,7 @@ SEO::setDescription('');
                 </article>
             @endforeach
         </div>
+        {{ $posts->links() }}
         <div class="txtcenter mt3">
             <a class="blog-moreButton" href="">Afficher plus d'article</a>
         </div>

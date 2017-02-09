@@ -1,6 +1,6 @@
 <?php
-SEO::setTitle('Un article de blog');
-SEO::setDescription('');
+SEO::setTitle($post->seo_title);
+SEO::setDescription($post->seo_description);
 ?>
 
 @extends('layouts.master')

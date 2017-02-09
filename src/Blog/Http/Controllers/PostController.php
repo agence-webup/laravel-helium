@@ -14,7 +14,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::whereNotNull('published_at')->orderBy('published_at', 'desc')->get();
+        $posts = Post::whereNotNull('published_at')->orderBy('published_at', 'desc')
+            ->paginate(10);
 
         return view('helium::web.post.index', [
             'posts' => $posts,
