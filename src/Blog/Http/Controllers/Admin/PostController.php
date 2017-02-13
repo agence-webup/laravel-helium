@@ -8,6 +8,7 @@ use Validator;
 use Webup\LaravelHelium\Blog\Entities\Post;
 use Webup\LaravelHelium\Blog\Values\State;
 use Yajra\Datatables\Datatables;
+use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
@@ -111,10 +112,6 @@ class PostController extends Controller
         }
 
         $post->fill($validator->getData());
-        if ($request->image) {
-            $post->image = 'blog/'.uniqid().'.'.$request->image->extension();
-            $request->image->storeAs('public', $post->image);
-        }
         $post->save();
 
         // Flash message
@@ -147,6 +144,64 @@ class PostController extends Controller
         return redirect()->route('admin.post.index');
     }
 
+    public function image($name, $id = null)
+    {
+        $post = Post::find($id);
+
+        $json = [];
+        $nameUrl = $name.'Url';
+        if ($post && $post->{$name}) {
+            $json = [[
+                'id' => $name,
+                'url' => $post->{$nameUrl},
+            ]];
+        }
+
+        return response()->json($json);
+    }
+
+    public function updloadeImage(Request $request, $name, $id = null)
+    {
+        $post = Post::find($id);
+
+        $images = [
+            'thumbnail' => ['width' => 500, 'height'=> 200],
+            'image' => ['width' => 1000, 'height'=> 300],
+        ];
+
+        $nameUrl = $name.'Url';
+        if ($request->file) {
+            $crop = json_decode($request->get('crop'));
+
+            $filename = 'blog/'.uniqid().'.'.$request->file->extension();
+
+            $image = Image::make($request->file)
+                   ->crop(intval($crop->width), intval($crop->height), intval($crop->x), intval($crop->y))
+                   ->rotate($crop->rotate)
+                   ->resize($images[$name]['width'], $images[$name]['height'])
+                   ->save(storage_path('app/public/' . $filename));
+
+            if ($id) {
+                $old = storage_path('app/public/' . $post->{$name});
+                if ($post->{$name} && file_exists($old)) {
+                    unlink($old);
+                }
+
+                $post->{$name} = $filename;
+                $post->save();
+            } else {
+                $post = new Post();
+                $post->{$name} = $filename;
+            }
+        }
+
+        return response()->json([
+            'id' => $name,
+            'path' => $filename,
+            'url' => $post->{$nameUrl},
+        ]);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -161,11 +216,13 @@ class PostController extends Controller
 
         $states = implode(',', array_keys(State::list()));
         $uniqSlug = $post ? '|unique:posts,slug,'.$post->id : '|unique:posts,slug';
-        $imageRequired = !$post || !$post->image ? '|required_unless:state,'.State::DRAFT : '';
+        $thumbnailRequired = !$post || !$post->thumbnail ? 'required_unless:state,'.State::DRAFT : '';
+        $imageRequired = !$post || !$post->image ? 'required_unless:state,'.State::DRAFT : '';
 
         $validator = Validator::make($data, [
             'title' => 'required|max:255',
-            'image' => 'image'.$imageRequired,
+            'thumbnail' => $thumbnailRequired,
+            'image' => $imageRequired,
             'content' => '',
             'seo_title' => 'max:255',
             'seo_description' => 'max:255',

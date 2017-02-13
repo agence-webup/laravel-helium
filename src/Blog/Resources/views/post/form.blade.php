@@ -4,7 +4,7 @@ use Webup\LaravelHelium\Blog\Values\State;
 ?>
 
 <article class="box">
-    <header class="box__header">Ajouter un article</header>
+    <header class="box__header">{{ $title }}</header>
 
     <div class="box__content">
 
@@ -13,18 +13,26 @@ use Webup\LaravelHelium\Blog\Values\State;
         ->value($post->title)
         ->attr(['class' => 'f-50'])!!}
 
-        <div class="f-group {{ $errors->has('image') ? 'f-error' : '' }}">
+        <div class="f-group {{ $errors->has('thumbnail') ? 'f-error' : '' }}">
             <label for="image">Image de prévisualisation</label>
 
-            @if ($post->image)
-            <div class="thumbnail thumbnail--small">
-                <img src="{{ $post->imageUrl /* 300x300 */}}" alt="">
-            </div>
-            @endif
+            <div data-js="upload-thumbnail" data-label="Choisir un fichier" data-url="{{ route('admin.post.image', ['id' => $post ? $post->id : null, 'name' => 'thumbnail']).'?_token='.csrf_token() }}" class="iu-container"></div>
+            <input type="hidden" name="thumbnail" value="{{ old('thumbnail', $post ? $post->thumbnail : null) }}">
 
-            <div>
-                <input type="file" id="image" name="image">
-            </div>
+            @if($errors->has('thumbnail'))
+            <ul class="f-error-message">
+                @foreach ($errors->get('thumbnail') as $error)
+                <li>{{$error}}</li>
+                @endforeach
+            </ul>
+            @endif
+        </div>
+
+        <div class="f-group {{ $errors->has('image') ? 'f-error' : '' }}">
+            <label for="image">Image d'entête</label>
+
+            <div data-js="upload-image" data-label="Choisir un fichier" data-url="{{ route('admin.post.image', ['id' => $post ? $post->id : null, 'name' => 'image']).'?_token='.csrf_token() }}" class="iu-container"></div>
+            <input type="hidden" name="image" value="{{ old('image', $post ? $post->image : null) }}">
 
             @if($errors->has('image'))
             <ul class="f-error-message">
@@ -63,6 +71,7 @@ use Webup\LaravelHelium\Blog\Values\State;
             ->label('Permalien')
             ->value($post->slug)
             ->attr(['class' => 'f-100'])!!}
+            <button type="button" data-js="generate-slug">Générer</button>
 
             {!! Form::create('text', 'seo_title')
             ->label('Titre SEO')

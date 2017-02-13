@@ -14,6 +14,7 @@ class Post extends Model
      */
     protected $fillable = [
         'title',
+        'thumbnail',
         'image',
         'content',
         'seo_title',
@@ -31,6 +32,11 @@ class Post extends Model
     protected $dates = [
         'published_at',
     ];
+
+    public function getThumbnailUrlAttribute()
+    {
+        return url('/storage/'.$this->thumbnail);
+    }
 
     public function getImageUrlAttribute()
     {

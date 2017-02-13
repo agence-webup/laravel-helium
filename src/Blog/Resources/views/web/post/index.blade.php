@@ -15,7 +15,7 @@ SEO::metatags()
         <div class="blog-grid-index">
             @foreach($posts as $post)
                 <article class="blog-post">
-                    <img class="blog-post__visual" alt="" src="{{ $post->imageUrl }}" />
+                    <img class="blog-post__visual" alt="" src="{{ $post->thumbnailUrl }}" />
                     <h2 class="blog-post__title">{{ $post->title }}</h2>
                     <div class="blog-post__content">
                         {{ str_limit(strip_tags($post->content), 200) }}

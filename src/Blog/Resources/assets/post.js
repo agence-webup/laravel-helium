@@ -4,8 +4,30 @@
     var STATE_PUBLISHED = 3;
 
     function init() {
+        initUploader();
         initEditor();
         initSaveState();
+        initSlug();
+    }
+
+    function initUploader() {
+        var el = document.querySelector('[data-js=upload-thumbnail]');
+        new ImageUploader(el, {
+            cropper: true,
+            cropperOptions: {
+                aspectRatio: 500 / 200,
+            },
+            service: new AjaxService(el.dataset.url),
+        });
+
+        el = document.querySelector('[data-js=upload-image]');
+        new ImageUploader(el, {
+            cropper: true,
+            cropperOptions: {
+                aspectRatio: 1000 / 300,
+            },
+            service: new AjaxService(el.dataset.url),
+        });
     }
 
     function initEditor() {
@@ -31,6 +53,23 @@
         });
     }
 
+    function initSlug() {
+        var titleInput = document.querySelector('[name=title]');
+        var slugInput = document.querySelector('[name=slug]');
+        var slugButton = document.querySelector('[data-js=generate-slug]');
+
+        slugButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            slugInput.value = slugify(titleInput.value);
+        });
+
+        if (!slugInput.value) {
+            titleInput.addEventListener('change', function() {
+                slugInput.value = slugify(titleInput.value);
+            });
+        }
+    }
+
     function togglePublishedDate(state) {
         var publishedInput = document.querySelector('[name=published_at]');
 
@@ -49,6 +88,15 @@
         }
 
         return 'Enregistrer';
+    }
+
+    function slugify(text) {
+        return text.toString().toLowerCase()
+            .replace(/\s+/g, '-') // Replace spaces with -
+            .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+            .replace(/\-\-+/g, '-') // Replace multiple - with single -
+            .replace(/^-+/, '') // Trim - from start of text
+            .replace(/-+$/, ''); // Trim - from end of text
     }
 
     init();

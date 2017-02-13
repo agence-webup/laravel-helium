@@ -3,18 +3,21 @@
 Dependencies
 
 "yajra/laravel-datatables-oracle": "^7.0.1" : https://github.com/yajra/laravel-datatables
+composer require intervention/image
 
 npm:
 "datatables.net": "^1.10.13"
 "datatables.net-dt": "^2.1.1"
 "dropmic": "^0.1.5"
 "froala-editor": "^2.4.1",
+"image-crop-upload": master
 
 
 Provider
 
 ```php
 'providers' => [
+    Intervention\Image\ImageServiceProvider::class,
     Yajra\Datatables\DatatablesServiceProvider::class,
     Webup\LaravelHelium\Blog\BlogServiceProvider::class,
 ],
