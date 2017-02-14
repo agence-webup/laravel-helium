@@ -1,5 +1,5 @@
 <span class="dropmic" data-dropmic="{{ $post->id }}" data-dropmic-direction="bottom-left" role="navigation">
-    <button data-dropmic-btn><i class="fa fa-cog"></i> actions</button>
+    <button class="btn btn--action" data-dropmic-btn><i class="fa fa-cog"></i> actions</button>
     <div class="dropmic-menu" aria-hidden="true">
         <ul class="dropmic-menu__list" role="menu">
             <li class="dropmic-menu__listItem" role="menuitem">
