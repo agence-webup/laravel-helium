@@ -27,10 +27,8 @@
 <script src="{{ asset('/node_modules/tingle.js/dist/tingle.js') }}"></script>
 <script src="{{ asset('/node_modules/cropperjs/dist/cropper.min.js') }}"></script>
 <script src="{{ asset('/node_modules/dropmic/dist/dropmic.js') }}"></script>
-{{-- <script src="{{ asset('/node_modules/image-crop-upload/dist/image-uploader.js') }}"></script> --}}
-<script src="{{ asset('/assets/admin/js/modules/cropper-modal.js') }}"></script>
-<script src="{{ asset('/assets/admin/js/modules/image-uploader.js') }}"></script>
-<script src="{{ asset('/assets/admin/js/modules/service.js') }}"></script>
+<script src="{{ asset('/node_modules/image-crop-upload/dist/image-uploader.js') }}"></script>
 
+<script src="{{ asset('/assets/admin/js/modules/service.js') }}"></script>
 <script src="{{ asset('/assets/admin/js/vendor/post.js') }}"></script>
 @endsection

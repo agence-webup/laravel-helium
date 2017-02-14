@@ -8,25 +8,30 @@
         initEditor();
         initSaveState();
         initSlug();
+        initGoogleView();
     }
 
     function initUploader() {
         var el = document.querySelector('[data-js=upload-thumbnail]');
         new ImageUploader(el, {
+            sortable: false,
             cropper: true,
             cropperOptions: {
                 aspectRatio: 500 / 200,
             },
-            service: new AjaxService(el.dataset.url),
+            service: new AjaxService(el.dataset.url, document.querySelector('[name=thumbnail]')),
+            max: 1,
         });
 
         el = document.querySelector('[data-js=upload-image]');
         new ImageUploader(el, {
+            sortable: false,
             cropper: true,
             cropperOptions: {
                 aspectRatio: 1000 / 300,
             },
-            service: new AjaxService(el.dataset.url),
+            service: new AjaxService(el.dataset.url, document.querySelector('[name=image]')),
+            max: 1,
         });
     }
 
@@ -68,6 +73,32 @@
                 slugInput.value = slugify(titleInput.value);
             });
         }
+    }
+
+    function initGoogleView() {
+        var slugInput = document.querySelector('[name=slug]');
+        var titleInput = document.querySelector('[name=seo_title]');
+        var descriptionInput = document.querySelector('[name=seo_description]');
+
+        var urlLabel = document.querySelector('[data-js=url]');
+        var titleLabel = document.querySelector('[data-js=title]');
+        var descriptionLabel = document.querySelector('[data-js=description]');
+
+        urlLabel.innerHTML = slugInput.value;
+        titleLabel.innerHTML = titleInput.value;
+        descriptionLabel.innerHTML = descriptionInput.value;
+
+        slugInput.addEventListener('change', function() {
+            urlLabel.innerHTML = slugInput.value;
+        });
+
+        titleInput.addEventListener('change', function() {
+            titleLabel.innerHTML = titleInput.value;
+        });
+
+        descriptionInput.addEventListener('change', function() {
+            descriptionLabel.innerHTML = descriptionInput.value;
+        });
     }
 
     function togglePublishedDate(state) {

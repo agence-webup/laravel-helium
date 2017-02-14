@@ -106,9 +106,9 @@ use Webup\LaravelHelium\Blog\Values\State;
                 }
             </style>
             <div class="serp">
-                <div class="serp__title">Ici le titre de l'article</div>
-                <div class="serp__url">http://example.com</div>
-                <div class="serp_description">
+                <div class="serp__title" data-js="title">Ici le titre de l'article</div>
+                <div class="serp__url">{{ route('blog.index') }}/<span data-js="url"></span></div>
+                <div class="serp_description" data-js="description">
                     Nullam quis risus eget urna mollis ornare vel eu leo. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
                 </div>
             </div>
