@@ -6,10 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
     @yield('css')
+    <link rel="stylesheet" href="{{ asset('/node_modules/datatables.net-dt/css/jquery.dataTables.css') }}">
+    <link rel="stylesheet" href="{{ asset('/node_modules/dropmic/dist/dropmic.css') }}">
     <link href="https://rawgit.com/agence-webup/helium/master/dist/css/style.css" rel="stylesheet">
+    <link href="{{ asset('/assets/admin/css/admin.css') }}" rel="stylesheet">
+
 </head>
 <body>
-
     <header class="header">
         <div class="header__logo">
             <svg width="50" height="33" viewBox="0 0 50 33" xmlns="http://www.w3.org/2000/svg">
@@ -37,7 +40,10 @@
             @yield('content')
         </main>
     </div>
-
+    <script src="{{ asset('/node_modules/jquery/dist/jquery.js') }}"></script>
+    <script src="{{ asset('/node_modules/dropmic/dist/dropmic.js') }}"></script>
+    <script src="{{ asset('/node_modules/datatables.net/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('/assets/admin/js/modules/datatable.js') }}"></script>
     @yield('js')
 </body>
 </html>
