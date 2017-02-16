@@ -9,7 +9,7 @@
                 <form action="{{ route('admin.contact.destroy', ['id' => $contact->id]) }}" method="post" class="inline">
                     {{ method_field('DELETE') }}
                     {{ csrf_field() }}
-                    <button type="submit" class="dropmic-menu__listContent" tabindex="-1" data-js="confirm-delete"><i class="fa fa-trash"></i> Suprimmer</button>
+                    <button type="submit" class="dropmic-menu__listContent" tabindex="-1" data-js="confirm-delete"><i class="fa fa-trash"></i> Supprimer</button>
                 </form>
             </li>
         </ul>
