@@ -16,6 +16,7 @@
         new ImageUploader(el, {
             sortable: false,
             cropper: true,
+            deletable: false,
             cropperOptions: {
                 aspectRatio: 500 / 200,
             },
@@ -27,6 +28,7 @@
         new ImageUploader(el, {
             sortable: false,
             cropper: true,
+            deletable: false,
             cropperOptions: {
                 aspectRatio: 1000 / 300,
             },
