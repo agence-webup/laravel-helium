@@ -21,12 +21,6 @@
 @endsection
 
 @section('js')
-<link rel="stylesheet" href="{{ asset('/node_modules/dropmic/dist/dropmic.css') }}">
-
-<script src="{{ asset('/node_modules/jquery/dist/jquery.js') }}"></script>
-<script src="{{ asset('/node_modules/datatables.net/js/jquery.dataTables.js') }}"></script>
-<script src="{{ asset('/node_modules/dropmic/dist/dropmic.js') }}"></script>
-<script src="{{ asset('/assets/admin/js/modules/datatable.js') }}"></script>
 <script src="{{ asset('/assets/admin/js/modules/confirm-delete.js') }}"></script>
 <script type="text/javascript">
 $('[data-js=datatable]').DataTable({

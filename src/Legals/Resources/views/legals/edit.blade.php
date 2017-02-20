@@ -25,7 +25,6 @@
 @endsection
 
 @section('js')
-<script src="{{ asset('/node_modules/jquery/dist/jquery.js') }}"></script>
 <script src="{{ asset('/node_modules/froala-editor/js/froala_editor.pkgd.min.js') }}"></script>
 <script src="{{ asset('/node_modules/froala-editor/js/languages/fr.js') }}"></script>
 <script>
