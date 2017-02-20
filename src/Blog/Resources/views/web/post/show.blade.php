@@ -1,5 +1,5 @@
 <?php
-SEO::setTitle($post->seo_title);
+SEO::setTitle($post->seo_title ?: $post->title);
 SEO::setDescription($post->seo_description);
 ?>
 

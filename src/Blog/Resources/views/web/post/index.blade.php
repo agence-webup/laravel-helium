@@ -1,6 +1,6 @@
 <?php
 SEO::setTitle('Actualités');
-SEO::setDescription('');
+SEO::setDescription(null);
 
 SEO::metatags()
     ->setPrev($posts->previousPageUrl())
