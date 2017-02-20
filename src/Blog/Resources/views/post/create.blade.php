@@ -37,4 +37,9 @@
 
 <script src="{{ asset('/assets/admin/js/modules/service.js') }}"></script>
 <script src="{{ asset('/assets/admin/js/vendor/post.js') }}"></script>
+<script>
+PostPage({
+    imageUploadURL: "{{ route('admin.image.store') }}?_token={{ csrf_token() }}"
+});
+</script>
 @endsection

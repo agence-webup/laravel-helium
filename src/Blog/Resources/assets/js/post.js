@@ -1,9 +1,12 @@
-(function() {
+var PostPage = (function() {
     var STATE_DRAFT = 1;
     var STATE_SCHEDULED = 2;
     var STATE_PUBLISHED = 3;
 
-    function init() {
+    var options;
+
+    function init(opts) {
+        options = opts;
         initUploader();
         initEditor();
         initSaveState();
@@ -40,7 +43,7 @@
     function initEditor() {
         $('[name=content]').froalaEditor({
             language: 'fr',
-            imageUploadURL: "{{ route('admin.image.store') }}?_token={{ csrf_token() }}"
+            imageUploadURL: options.imageUploadURL,
         });
     }
 
@@ -132,5 +135,5 @@
             .replace(/-+$/, ''); // Trim - from end of text
     }
 
-    init();
+    return init;
 })();
