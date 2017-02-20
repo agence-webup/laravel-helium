@@ -31,34 +31,9 @@
 
   $('[name=legals]').froalaEditor({
       language: 'fr',
-      pluginsEnabled: [
-         'align',
-         'charCounter',
-         //'codeBeautifier',
-         'codeView',
-         'colors',
-         //'draggable',
-         //'emoticons',
-         'entities',
-         //'file',
-         //'fontFamily',
-         'fontSize',
-         'fullscreen',
-         //'image',
-         //'imageManager',
-         //'inlineStyle',
-         'lineBreaker',
-         'link',
-         'lists',
-         'paragraphFormat',
-         //'paragraphStyle',
-         //'quickInsert',
-         'quote',
-         //'save',
-         'table',
-         //'url',
-         //'video',
-     ]
+      toolbarButtons: ['paragraphFormat', 'bold', 'italic', 'underline', 'formatUL', 'align', '|', 'insertLink', 'insertTable', 'insertImage' ,'|', 'outdent', 'indent', 'insertTable', '|', 'fullscreen', 'undo', 'redo', 'clearFormatting'],
+      height: 300,
+      heightMax: 500
   });
 </script>
 @endsection
