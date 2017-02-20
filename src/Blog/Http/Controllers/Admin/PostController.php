@@ -166,7 +166,7 @@ class PostController extends Controller
 
         $images = [
             'thumbnail' => ['width' => 500, 'height'=> 200],
-            'image' => ['width' => 1000, 'height'=> 300],
+            'image' => ['width' => 1920, 'height'=> 300],
         ];
 
         $nameUrl = $name.'Url';
