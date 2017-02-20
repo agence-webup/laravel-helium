@@ -5,7 +5,8 @@ SEO::setDescription('Mentions Légales');
 @extends('layouts.master')
 
 @section('content')
-
-{!! $legals !!}
-
+<h1 class="pageTitle">Mentions légales</h1>
+<section class="container textPage">
+    {!! $legals !!}
+</section>
 @endsection
