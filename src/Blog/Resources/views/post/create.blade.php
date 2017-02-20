@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="{{ asset('/node_modules/froala-editor/css/froala_editor.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('/node_modules/froala-editor/css/froala_style.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('/node_modules/froala-editor/css/plugins/image.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('/node_modules/froala-editor/css/plugins/fullscreen.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('/node_modules/froala-editor/css/plugins/table.min.css') }}" />
+
 <link rel="stylesheet" href="{{ asset('/node_modules/tingle.js/dist/tingle.css') }}" />
 <link rel="stylesheet" href="{{ asset('/node_modules/cropperjs/dist/cropper.css') }}" />
 <link rel="stylesheet" href="{{ asset('/node_modules/image-crop-upload/dist/image-uploader.css') }}" />
@@ -21,6 +24,13 @@
 <script src="{{ asset('/node_modules/froala-editor/js/froala_editor.min.js') }}"></script>
 <script src="{{ asset('/node_modules/froala-editor/js/languages/fr.js') }}"></script>
 <script src="{{ asset('/node_modules/froala-editor/js/plugins/image.min.js') }}"></script>
+<script src="{{ asset('/node_modules/froala-editor/js/plugins/paragraph_format.min.js') }}"></script>
+<script src="{{ asset('/node_modules/froala-editor/js/plugins/fullscreen.min.js') }}"></script>
+<script src="{{ asset('/node_modules/froala-editor/js/plugins/table.min.js') }}"></script>
+<script src="{{ asset('/node_modules/froala-editor/js/plugins/link.min.js') }}"></script>
+<script src="{{ asset('/node_modules/froala-editor/js/plugins/align.min.js') }}"></script>
+<script src="{{ asset('/node_modules/froala-editor/js/plugins/lists.min.js') }}"></script>
+
 <script src="{{ asset('/node_modules/tingle.js/dist/tingle.js') }}"></script>
 <script src="{{ asset('/node_modules/cropperjs/dist/cropper.min.js') }}"></script>
 <script src="{{ asset('/node_modules/image-crop-upload/dist/image-uploader.js') }}"></script>
