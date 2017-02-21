@@ -44,6 +44,9 @@ var PostPage = (function() {
         $('[name=content]').froalaEditor({
             language: 'fr',
             imageUploadURL: options.imageUploadURL,
+            toolbarButtons: ['paragraphFormat', 'bold', 'italic', 'underline', 'formatUL', 'align', '|', 'insertLink', 'insertTable', 'insertImage', '|', 'outdent', 'indent', 'insertTable', '|', 'fullscreen', 'undo', 'redo', 'clearFormatting'],
+            height: 300,
+            heightMax: 500
         });
     }
 
@@ -107,7 +110,7 @@ var PostPage = (function() {
     }
 
     function togglePublishedDate(state) {
-        var publishedInput = document.querySelector('[name=published_at]');
+        var publishedInput = document.querySelector('.js-published_at');
 
         if (state == STATE_SCHEDULED) {
             publishedInput.classList.remove('hidden');

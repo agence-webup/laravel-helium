@@ -58,7 +58,8 @@ use Webup\LaravelHelium\Blog\Values\State;
 
         {!! Form::create('date', 'published_at')
         ->label('Date de publication')
-        ->value($post->published_at) !!}
+        ->value($post->published_at)
+        ->wrapperClass('js-published_at') !!}
         <button type="submit" class="btn btn--primary">Enregistrer l'article</button>
     </div>
 </article>
