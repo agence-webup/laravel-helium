@@ -24,6 +24,6 @@ class Image extends Model
 
     public function getUrlAttribute()
     {
-        return url('/storage/'.$this->file);
+        return asset('/storage/'.$this->file);
     }
 }

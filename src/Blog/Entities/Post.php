@@ -35,12 +35,12 @@ class Post extends Model
 
     public function getThumbnailUrlAttribute()
     {
-        return url('/storage/'.$this->thumbnail);
+        return asset('/storage/'.$this->thumbnail);
     }
 
     public function getImageUrlAttribute()
     {
-        return url('/storage/'.$this->image);
+        return asset('/storage/'.$this->image);
     }
 
     public function getContentAttribute()
