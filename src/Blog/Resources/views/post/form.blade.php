@@ -17,7 +17,7 @@ use Webup\LaravelHelium\Blog\Values\State;
             <label for="image">Image de prévisualisation</label>
 
             <div data-js="upload-thumbnail" data-label="Choisir un fichier" data-url="{{ route('admin.post.image', ['id' => $post ? $post->id : null, 'name' => 'thumbnail']).'?_token='.csrf_token() }}" class="iu-container"></div>
-            <input type="hidden" name="thumbnail" value="{{ old('thumbnail', $post ? $post->thumbnail : null) }}">
+            <input type="hidden" name="thumbnail" value="{{ old('thumbnail', $post ? $post->thumbnailUrl : null) }}">
 
             @if($errors->has('thumbnail'))
             <ul class="f-error-message">
@@ -32,7 +32,7 @@ use Webup\LaravelHelium\Blog\Values\State;
             <label for="image">Image d'entête</label>
 
             <div data-js="upload-image" data-label="Choisir un fichier" data-url="{{ route('admin.post.image', ['id' => $post ? $post->id : null, 'name' => 'image']).'?_token='.csrf_token() }}" class="iu-container"></div>
-            <input type="hidden" name="image" value="{{ old('image', $post ? $post->image : null) }}">
+            <input type="hidden" name="image" value="{{ old('image', $post ? $post->imageUrl : null) }}">
 
             @if($errors->has('image'))
             <ul class="f-error-message">

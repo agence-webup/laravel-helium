@@ -106,7 +106,7 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        $validator = $this->validator($request->all(), $post);
+        $validator = $this->validator($request->except(['thumbnail', 'image']), $post);
         if ($validator->fails()) {
             throw new \Illuminate\Validation\ValidationException($validator);
         }
@@ -197,7 +197,6 @@ class PostController extends Controller
 
         return response()->json([
             'id' => $name,
-            'path' => $filename,
             'url' => $post->{$nameUrl},
         ]);
     }
@@ -237,6 +236,14 @@ class PostController extends Controller
             }
 
             $data = $validator->getData();
+
+            $asset = asset('/storage/');
+            if (array_key_exists('thumbnail', $data) && starts_with($data['thumbnail'], $asset)) {
+                $data['thumbnail'] = substr($data['thumbnail'], strlen($asset));
+            }
+            if (array_key_exists('image', $data) && starts_with($data['image'], $asset)) {
+                $data['image'] = substr($data['image'], strlen($asset));
+            }
 
             // update published date
             if ($data['state'] == State::DRAFT) {
