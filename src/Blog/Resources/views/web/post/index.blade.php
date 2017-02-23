@@ -24,9 +24,8 @@ SEO::metatags()
                 </article>
             @endforeach
         </div>
-        {{ $posts->links() }}
         <div class="txtcenter mt3">
-            <a class="blog-moreButton" href="">Afficher plus d'article</a>
+            {{ $posts->links() }}
         </div>
     </section>
 </div>
