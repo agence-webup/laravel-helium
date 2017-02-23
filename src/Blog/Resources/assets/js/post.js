@@ -33,7 +33,7 @@ var PostPage = (function() {
             cropper: true,
             deletable: false,
             cropperOptions: {
-                aspectRatio: 1000 / 300,
+                aspectRatio: 1920 / 300,
             },
             service: new AjaxService(el.dataset.url, document.querySelector('[name=image]')),
             max: 1,
