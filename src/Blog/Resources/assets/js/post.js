@@ -71,6 +71,7 @@ var PostPage = (function() {
         var slugInput = document.querySelector('[name=slug]');
         var slugButton = document.querySelector('[data-js=generate-slug]');
 
+        slug.defaults.mode = 'rfc3986';
         slugButton.addEventListener('click', function(event) {
             event.preventDefault();
             slugInput.value = slug(titleInput.value);
