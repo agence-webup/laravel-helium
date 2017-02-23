@@ -6,11 +6,13 @@ Dependencies
 composer require intervention/image
 
 npm:
-"datatables.net": "^1.10.13"
 "datatables.net-dt": "^2.1.1"
-"dropmic": "^0.1.5"
+"datatables.net": "^1.10.13"
+"dropmic": "^0.2.3",
 "froala-editor": "^2.4.1",
-"image-crop-upload": master
+"image-crop-upload": master,
+"slug": "^0.9.1",
+"tingle.js": "^0.9.0",
 
 
 Provider
