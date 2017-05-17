@@ -8,7 +8,7 @@
     @yield('css')
     <link rel="stylesheet" href="{{ asset('/node_modules/datatables.net-dt/css/jquery.dataTables.css') }}">
     <link rel="stylesheet" href="{{ asset('/node_modules/dropmic/dist/dropmic.css') }}">
-    <link rel="stylesheet" href="{{ asset('/node_modules/helium-admin/dist/css/style.css') }}"
+    <link rel="stylesheet" href="{{ asset('/node_modules/helium-admin/dist/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/admin/css/admin.css') }}" >
 
 </head>
