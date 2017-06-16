@@ -30,7 +30,7 @@ class ContactMessage extends Mailable
      */
     public function build()
     {
-        return $this->subject('[Site] contact')
+        return $this->subject('['.config('app.name').'] Contact')
             ->text('helium::emails.contact-message')
             ->with(['contact' => $this->contact]);
     }
