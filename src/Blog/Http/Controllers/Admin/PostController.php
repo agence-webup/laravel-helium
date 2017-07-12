@@ -227,7 +227,7 @@ class PostController extends Controller
             'seo_description' => 'max:255',
             'slug' => 'required|max:255|slug'.$uniqSlug,
             'state' => 'required|in:'.$states,
-            'published_at' => 'date|required_if:state,'.State::SCHEDULED,
+            'published_at' => 'nullable|date|required_if:state,'.State::SCHEDULED,
         ]);
 
         $validator->after(function ($validator) use ($post) {
