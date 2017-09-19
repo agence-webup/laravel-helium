@@ -5,7 +5,7 @@ namespace Webup\LaravelHelium\Contact\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Webup\LaravelHelium\Contact\Contracts\ContactService;
-use Yajra\Datatables\Datatables;
+use Yajra\DataTables\Facades\DataTables;
 
 class ContactController extends Controller
 {

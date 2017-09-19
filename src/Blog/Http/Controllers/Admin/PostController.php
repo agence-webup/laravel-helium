@@ -4,11 +4,11 @@ namespace Webup\LaravelHelium\Blog\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Intervention\Image\Facades\Image;
 use Validator;
 use Webup\LaravelHelium\Blog\Entities\Post;
 use Webup\LaravelHelium\Blog\Values\State;
-use Yajra\Datatables\Datatables;
-use Intervention\Image\Facades\Image;
+use Yajra\DataTables\Facades\DataTables;
 
 class PostController extends Controller
 {
