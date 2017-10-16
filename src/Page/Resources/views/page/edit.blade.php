@@ -2,6 +2,12 @@
 
 @section('content')
 @include('helium::elements.flash')
+<div class="menu">
+    @foreach($locales as $locale)
+    <a href="#" @if($page->locale == $locale->code)class="is-active"@endif>{{ $locale->name }}</a>
+    @endforeach
+</div>
+
 <article class="box">
     <header class="box__header">Modifier une page</header>
 

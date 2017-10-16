@@ -4,6 +4,7 @@ Provider
 
 ```php
 'providers' => [
+    Dimsav\Translatable\TranslatableServiceProvider::class,
     Webup\LaravelHelium\Page\PageServiceProvider::class,
 ],
 ```

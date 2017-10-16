@@ -102,7 +102,8 @@ class PageController extends Controller
     public function edit(Page $page)
     {
         return view('helium::page.edit', [
-            'page' => $page
+            'page' => $page,
+            'locales' => app(\Webup\LaravelHelium\Translation\LocaleRepository::class)->supportedLocales()
         ]);
     }
 
