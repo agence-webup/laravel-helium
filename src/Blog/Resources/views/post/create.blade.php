@@ -9,8 +9,7 @@
 @endsection
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('/node_modules/froala-editor/css/froala_editor.pkgd.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('/node_modules/froala-editor/css/froala_style.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('/vendor/redactor/redactor.css') }}" />
 
 <link rel="stylesheet" href="{{ asset('/node_modules/tingle.js/dist/tingle.css') }}" />
 <link rel="stylesheet" href="{{ asset('/node_modules/cropperjs/dist/cropper.css') }}" />
@@ -18,8 +17,8 @@
 @endsection
 
 @section('js')
-<script src="{{ asset('/node_modules/froala-editor/js/froala_editor.pkgd.min.js') }}"></script>
-<script src="{{ asset('/node_modules/froala-editor/js/languages/fr.js') }}"></script>
+<script src="{{ asset('/vendor/redactor/redactor.js') }}"></script>
+<script src="{{ asset('/vendor/redactor/fr.js') }}"></script>
 
 <script src="{{ asset('/node_modules/slug/slug-browser.js') }}"></script>
 <script src="{{ asset('/node_modules/tingle.js/dist/tingle.js') }}"></script>
