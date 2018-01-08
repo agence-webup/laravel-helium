@@ -45,6 +45,13 @@ class Translate
 
         app()->setLocale($locale->code);
 
+        //Temp fix for multilang
+        if ($locale->code == "fr") {
+            setlocale(LC_TIME, 'fr_FR.utf8');
+        } else {
+            setlocale(LC_TIME, 'en_GB.utf8');
+        }
+
         $this->view->share('locale', $locale);
 
         $this->view->share('supportedLocales', $localeRepository->supportedLocales());
