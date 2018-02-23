@@ -2,10 +2,10 @@
 
 Dependencies
 
-- [helium](https://github.com/agence-webup/helium) `npm install --save helium-admin@^2.0.0`
-- [dropmic](https://github.com/agence-webup/dropmic) `npm install --save dropmic@^0.2.4`
-- [jquery]() `npm install --save jquery@^3.1.1`
-- [datatables]() `npm install --save datatables.net@^1.10.13 datatables.net-dt@^1.10.13`
+- [helium](https://github.com/agence-webup/helium) `npm install --save helium-admin@^2.2.0`
+- [dropmic](https://github.com/agence-webup/dropmic) `npm install --save dropmic@^0.3.0`
+- [jquery]() `npm install --save jquery@^3.3.1`
+- [datatables]() `npm install --save datatables@^1.10.13`
 
 Provider
 

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
     @yield('css')
-    <link rel="stylesheet" href="{{ asset('/node_modules/datatables.net-dt/css/jquery.dataTables.css') }}">
+    <link rel="stylesheet" href="{{ asset('/node_modules/datatables/media/css/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/node_modules/dropmic/dist/dropmic.css') }}">
     <link rel="stylesheet" href="{{ asset('/node_modules/helium-admin/dist/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/admin/css/admin.css') }}" >
@@ -40,9 +40,9 @@
             @yield('content')
         </main>
     </div>
-    <script src="{{ asset('/node_modules/jquery/dist/jquery.js') }}"></script>
+    <script src="{{ asset('/node_modules/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('/node_modules/dropmic/dist/dropmic.js') }}"></script>
-    <script src="{{ asset('/node_modules/datatables.net/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('/node_modules/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('/assets/admin/js/modules/datatable.js') }}"></script>
     @yield('js')
 </body>
