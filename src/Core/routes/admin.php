@@ -2,7 +2,7 @@
 
 Route::group([
     'middleware' => ['web'],
-    'namespace' => '\Admin',
+    'namespace' => '\App\Http\Controllers\Admin',
     'prefix' => 'admin',
     'as' => 'admin.',
 ], function () {
@@ -11,8 +11,6 @@ Route::group([
     Route::post('/logout', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@logout')->name('logout');
 
     Route::group(['middleware' => 'admin.auth:admin'], function () {
-        Route::get('', function () {
-            return redirect()->route('admin.contact.index');
-        })->name('home');
+        Route::get('', "PagesController@home")->name('home');
     });
 });
