@@ -13,23 +13,3 @@ Publish migrations, views and translations
 ```bash
 $ php artisan vendor:publish --tag=helium
 ```
-
-Define admin login URL :
-Exception/Handle.php add into unauthenticated function
-
-```php
-if (in_array('admin', $exception->guards())) {
-    return redirect()->guest(route('admin.login'));
-}
-```
-Define redirect URL after admin login :
-Middleware/RedirectIfAuthenticated.php add into handle function
-
-```php
-if (Auth::guard($guard)->check()) {
-    if ($guard == 'admin') {
-        return redirect()->route('admin.home');
-    }
-    // ...
-}
-```
