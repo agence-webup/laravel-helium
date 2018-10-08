@@ -1,3 +1,9 @@
 <nav class="navigation">
-    <a href="#setting" class="{{ current_class('admin.setting', 'is-active') }}"><i class="fa fa-cog icon"></i> Paramètres</a>
+    <div class="container">
+        <a href="#" class="is-active"><i data-feather="home"></i> Dashboard</a>
+        <a href="#"><i data-feather="book-open"></i> Blog</a>
+        <a href="#"><i data-feather="user"></i> Users</a>
+        <a href="#"><i data-feather="pie-chart"></i> Stats</a>
+        <a href="#"><i data-feather="send"></i> Contact</a>
+    </div>
 </nav>

@@ -32,7 +32,6 @@ class CoreServiceProvider extends ServiceProvider
             __DIR__ . '/routes' => base_path('routes')
         ], 'helium');
 
-        $router->aliasMiddleware('admin.requirements', CheckRequirements::class);
         $router->aliasMiddleware('admin.auth', RedirectIfUnauthenticated::class);
         $router->aliasMiddleware('admin.guest', RedirectIfAuthenticated::class);
 
