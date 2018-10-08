@@ -15,5 +15,12 @@
     "config": {
         "sort-packages": true
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Webup\\LaravelHelium\\Core\\CoreServiceProvider"
+            ]
+        }
+    },
     "minimum-stability": "stable"
 }
