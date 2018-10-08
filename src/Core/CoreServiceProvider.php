@@ -102,7 +102,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->app['config']->set("auth.providers", array_merge([
             'admins' => [
                 'driver' => 'eloquent',
-                'model' => Webup\LaravelHelium\Core\Entities\AdminUser::class,
+                'model' => \Webup\LaravelHelium\Core\Entities\AdminUser::class,
             ],
         ], $providersConfig));
 
