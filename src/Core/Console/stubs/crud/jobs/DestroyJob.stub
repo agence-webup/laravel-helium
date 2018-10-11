@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Jobs\{{ Model }};
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Repositories\{{ Model }}Repository;
+
+class Delete{{ Model }} implements ShouldQueue
+{
+    use InteractsWithQueue, Queueable, SerializesModels;
+
+    private $id;
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle({{ Model }}Repository ${{ modelsingular }}Repo)
+    {
+        ${{ modelsingular }} = ${{ modelsingular }}Repo->get($this->id);
+
+        if (${{ modelsingular }}) {
+            ${{ modelsingular }}Repo->delete(${{ modelsingular }}->id);
+        }
+    }
+}

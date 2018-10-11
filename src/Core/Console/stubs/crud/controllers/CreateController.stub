@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Http\Controllers\Admin\{{ Model }};
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Jobs\{{ Model }}\Store{{ Model }};
+use App\Entities\{{ Model }};
+use App\Requests\{{ Model }}\Store as Store{{ Model }}Request;
+
+class CreateController extends Controller
+{
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('admin.{{ modelsingular }}.create', [
+            '{{ modelsingular }}' => new {{ Model }}(),
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  App\Jobs\{{ Model }}\Store  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Store{{ Model }}Request $request)
+    {
+        $data = $request->validated();
+        $this->dispatchNow(new Store{{ Model }}($data));
+
+        return redirect()->route('admin.{{ modelsingular }}.index');
+    }
+}

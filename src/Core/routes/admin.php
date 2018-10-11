@@ -12,5 +12,8 @@ Route::group([
 
     Route::group(['middleware' => 'admin.auth:admin'], function () {
         Route::get('', "PagesController@home")->name('home');
+
+        // {{ Helium Crud }} 
+        // Don't remove previous line if you are using larave-helium crud generator
     });
 });

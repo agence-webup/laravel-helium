@@ -1,0 +1,2 @@
+    //Delete
+    Route::delete('/{id}', 'DestroyController@destroy')->name('destroy');

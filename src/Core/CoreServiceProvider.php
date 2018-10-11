@@ -75,6 +75,7 @@ class CoreServiceProvider extends ServiceProvider
             \Webup\LaravelHelium\Core\Console\AdminDelete::class,
             \Webup\LaravelHelium\Core\Console\AdminList::class,
             \Webup\LaravelHelium\Core\Console\AdminUpdate::class,
+            \Webup\LaravelHelium\Core\Console\CrudCreate::class,
         ]);
     }
 

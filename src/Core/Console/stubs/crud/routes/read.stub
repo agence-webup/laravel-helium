@@ -1,0 +1,3 @@
+    //Read
+    Route::get('/', 'IndexController@index')->name('index');
+    Route::get('/datatable', 'IndexController@datatable')->name('datatable');

@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Http\Controllers\Admin\{{ Model }};
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Jobs\{{ Model }}\Update{{ Model }};
+use App\Entities\{{ Model }};
+use App\Requests\{{ Model }}\Update as Update{{ Model }}Request;
+
+class EditController extends Controller
+{
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        ${{ modelsingular }} = {{ Model }}::findOrFail($id);
+
+        return view('admin.{{ modelsingular }}.edit', [
+            '{{ modelsingular }}' => ${{ modelsingular }},
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  App\Jobs\{{ Model }}\Update  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Update{{ Model }}Request $request, $id)
+    {
+        $data = $request->validated();
+        $this->dispatchNow(new Update{{ Model }}($id, $data));
+
+        return redirect()->route('admin.{{ modelsingular }}.index');
+    }
+}

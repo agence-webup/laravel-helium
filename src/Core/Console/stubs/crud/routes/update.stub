@@ -1,0 +1,3 @@
+    //Update
+    Route::get('/edit/{id}', 'EditController@edit')->name('edit');
+    Route::post('/update/{id}', 'EditController@update')->name('update');

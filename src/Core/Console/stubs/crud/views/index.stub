@@ -1,0 +1,40 @@
+@extends('helium::layouts.master')
+
+@section('content')
+@include('helium::elements.flash')
+
+<article class="box">
+    <header class="box__header">Liste des {{ modelplural }}</header>
+    <div class="box__actions">
+        <a href="{{ route('admin.{{ modelsingular }}.create') }}" class="btn btn--primary">Ajouter une {{ modelsingular }}</a>
+    </div>
+    <div class="box__content">
+        <table data-js="datatable">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th class="table-150p txtcenter">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</article>
+@endsection
+
+@section('js')
+<script type="text/javascript">
+$('[data-js=datatable]').DataTable({
+    processing: true,
+    serverSide: true,
+    lengthChange: false, // select nombre item per page
+    ajax: "{{ route('admin.{{ modelsingular }}.datatable') }}",
+    columns: [
+        {data: 'id', name : 'id'}
+    ],
+    order: [[0, "desc"]],
+    pageLength: 20,
+});
+</script>
+@endsection

@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Controllers\Admin\{{ Model }};
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use DataTables;
+use App\Entities\{{ Model }};
+use DB;
+
+class IndexController extends Controller
+{
+    public function index()
+    {
+        return view('admin.{{ modelsingular }}.index');
+    }
+
+    public function datatable(Request $request)
+    {
+        ${{ modelplural }} = {{ Model }}::select("id");
+
+        return Datatables::of(${{ modelplural }})
+
+            ->make(true);
+    }
+}

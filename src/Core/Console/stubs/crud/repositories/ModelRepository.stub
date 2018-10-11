@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Entities\{{ Model }};
+
+class {{ Model }}Repository
+{
+    public function all()
+    {
+        return {{ Model }}::all();
+    }
+
+    public function save({{ Model }} ${{ modelsingular }})
+    {
+        ${{ modelsingular }}->save();
+    }
+}
