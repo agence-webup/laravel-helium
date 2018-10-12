@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>Helium : admin boilerplate</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @yield('css')
-    <link rel="stylesheet" href="{{ asset('/node_modules/datatables/media/css/jquery.dataTables.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('/node_modules/dropmic/dist/dropmic.css') }}">
-    <link rel="stylesheet" href="{{ asset('/assets/admin/css/admin.css') }}" >
-    <link rel="stylesheet" href="{{ asset('/node_modules/helium-admin/dist/css/style.css') }}" media="all">
+    <link rel="stylesheet" href="{{ asset('/node_modules/helium-admin/dist/css/helium-vendors.css') }}" media="all">
+    <link rel="stylesheet" href="{{ asset('/node_modules/helium-admin/dist/css/helium-base.css') }}" media="all">
     <script src="https://unpkg.com/feather-icons"></script>
+    @yield('css')
+
+
 </head>
 <body>
     <header class="header">
@@ -37,14 +37,12 @@
     
     <div class="container">
         <main class="content">            
-            <h1 class="title">Main title</h1>
             @yield('content')
         </main>
     </div>
+    <script src="{{ asset('/node_modules/helium-admin/dist/js/helium-vendors.js') }}"></script>
+    <script src="{{ asset('/node_modules/helium-admin/dist/js/helium-base.js') }}"></script>
     <script>feather.replace()</script>
-    <script src="{{ asset('/node_modules/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('/node_modules/dropmic/dist/dropmic.js') }}"></script>
-    <script src="{{ asset('/node_modules/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     @yield('js')
 </body>
 </html>

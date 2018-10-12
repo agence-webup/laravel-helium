@@ -1,0 +1,3 @@
+<li class="dropmic-menu__listItem" role="menuitem">
+    <a class="dropmic-menu__listContent" href="{{ route('admin.{{ modelsingular }}.edit', ['id' => ${{ modelsingular }}->id]) }}" tabindex="-1"><i class="fa fa-eye"></i> Editer</a>
+</li>

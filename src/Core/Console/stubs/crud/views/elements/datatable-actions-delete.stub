@@ -1,0 +1,7 @@
+<li class="dropmic-menu__listItem" role="menuitem">
+    <form action="{{ route('admin.{{ modelsingular }}.destroy', ['id' => ${{ modelsingular }}->id]) }}" method="post" class="inline">
+        {{ method_field('DELETE') }}
+        {{ csrf_field() }}
+        <button type="submit" class="dropmic-menu__listContent" tabindex="-1" data-js="confirm-delete"><i class="fa fa-trash"></i> Supprimer</button>
+    </form>
+</li>

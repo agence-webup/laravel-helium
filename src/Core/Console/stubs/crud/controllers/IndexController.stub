@@ -20,7 +20,10 @@ class IndexController extends Controller
         ${{ modelplural }} = {{ Model }}::select("id");
 
         return Datatables::of(${{ modelplural }})
-
+            ->rawColumns(['actions'])
+            ->addColumn('actions', function (${{ modelsingular }}) {
+                return view('admin.{{ modelsingular }}.elements.datatable-actions', ['{{ modelsingular }}' => ${{ modelsingular }}])->render();
+            })
             ->make(true);
     }
 }

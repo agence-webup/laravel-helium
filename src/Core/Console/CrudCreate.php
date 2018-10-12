@@ -29,6 +29,7 @@ class CrudCreate extends Command
     private $modelNameSingular = null;
 
     private $viewDirectory = null;
+    private $viewElementDirectory = null;
     private $controllerDirectory = null;
     private $jobDirectory = null;
     private $requestDirectory = null;
@@ -139,6 +140,35 @@ class CrudCreate extends Command
         }
 
         $this->processRoutes();
+
+        $this->processMenu();
+
+        $this->processDatatableActions();
+    }
+
+    private function processDatatableActions()
+    {
+        //If user want read and (update or delete)
+        if ($this->needRead && ($this->needUpdate || $this->needDelete)) {
+            $stubContent = file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions.stub');
+
+            $stubContent = str_replace('{{ EditBtn }}', $this->needUpdate ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions-edit.stub') : "", $stubContent);
+            $stubContent = str_replace('{{ DeleteBtn }}', $this->needDelete ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions-delete.stub') : "", $stubContent);
+
+
+            $generatedView = $this->replaceInStub($stubContent);
+
+            $destinationPath = $this->viewElementDirectory . "datatable-actions.blade.php";
+
+            if (file_exists($destinationPath)) {
+                if ($this->confirm("The [{$destinationPath}] view element already exists. Do you want to replace it?")) {
+                    file_put_contents($destinationPath, $generatedView);
+                }
+            } else {
+                file_put_contents($destinationPath, $generatedView);
+            }
+
+        }
     }
 
     private function processRoutes()
@@ -156,15 +186,36 @@ class CrudCreate extends Command
         $adminRouteFile = file_get_contents($adminRoutePath);
 
         if (strpos($adminRouteFile, '// {{ Helium Crud }}') === false) {
-            $this->error("Le fichier " . $adminRoutePath . " ne possède pas la chaine de caractère `// {{ Helium Crud }}` qui permet le bon fonctionnement du crud generator");
-            $this->comment("Veuillez ajouter les routes suivante à la main :");
+            $this->error("File " . $adminRoutePath . " doesn't have `// {{ Helium Crud }}` string which help Helium Crud Generator working");
+            $this->comment("Please manually add following routes :");
             $this->info($generatedRoutes);
         } else {
             $adminRouteFile = str_replace('// {{ Helium Crud }}', $generatedRoutes, $adminRouteFile);
             file_put_contents($adminRoutePath, $adminRouteFile);
         }
+    }
 
+    private function processMenu()
+    {
+        $stubContent = file_get_contents(__DIR__ . '/stubs/crud/views/elements/menu.stub');
 
+        $generatedMenu = $this->replaceInStub($stubContent);
+
+        $menuRoutePath = resource_path('views/vendor/helium/elements/menu.blade.php');
+        if (!file_exists($menuRoutePath)) {
+            $this->error("Unable to find " . $menuRoutePath . " file. Did you run `php artisan vendor:publish --tag=helium` command ?");
+            return;
+        }
+        $menuRouteFile = file_get_contents($menuRoutePath);
+
+        if (strpos($menuRouteFile, '{{-- Helium Crud --}}') === false) {
+            $this->error("File " . $menuRoutePath . " doesn't have `{{-- Helium Crud --}}` string which help Helium Crud Generator working");
+            $this->comment("Please manually add following menu :");
+            $this->info($generatedMenu);
+        } else {
+            $menuRouteFile = str_replace('{{-- Helium Crud --}}', $generatedMenu, $menuRouteFile);
+            file_put_contents($menuRoutePath, $menuRouteFile);
+        }
 
     }
 
@@ -249,6 +300,11 @@ class CrudCreate extends Command
         $this->viewDirectory = resource_path('views/admin/' . $this->modelNameSingular . '/');
         if (!is_dir($this->viewDirectory)) {
             mkdir($this->viewDirectory, 0755, true);
+        }
+        //Create views element directory
+        $this->viewElementDirectory = resource_path('views/admin/' . $this->modelNameSingular . '/elements/');
+        if (!is_dir($this->viewElementDirectory)) {
+            mkdir($this->viewElementDirectory, 0755, true);
         }
         //Create controllers directory
         $this->controllerDirectory = app_path('Http/Controllers/Admin/' . $this->modelName . '/');

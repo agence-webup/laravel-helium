@@ -3,17 +3,18 @@
 @section('content')
 @include('helium::elements.flash')
 
+<h1 class="title">Liste des {{ modelplural }}</h1>
+
 <article class="box">
-    <header class="box__header">Liste des {{ modelplural }}</header>
     <div class="box__actions">
         <a href="{{ route('admin.{{ modelsingular }}.create') }}" class="btn btn--primary">Ajouter une {{ modelsingular }}</a>
     </div>
     <div class="box__content">
-        <table data-js="datatable">
+        <table class="dataTable stripe hover">
             <thead>
                 <tr>
                     <th>id</th>
-                    <th class="table-150p txtcenter">Actions</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -25,16 +26,19 @@
 
 @section('js')
 <script type="text/javascript">
-$('[data-js=datatable]').DataTable({
+$('.dataTable').DataTable({
     processing: true,
     serverSide: true,
-    lengthChange: false, // select nombre item per page
+    responsive: true,
     ajax: "{{ route('admin.{{ modelsingular }}.datatable') }}",
     columns: [
-        {data: 'id', name : 'id'}
+        {data: 'id', name : 'id'},
+        {data: 'actions', name: 'actions', orderable: false, searchable: false},
     ],
+    rowCallback: function( row, data, index ) {
+        row.dataset.link = "{{ route('admin.{{ modelsingular }}.edit', ['id' => "%id%"]) }}".replace("%id%",data.id);
+    },
     order: [[0, "desc"]],
-    pageLength: 20,
 });
 </script>
 @endsection
