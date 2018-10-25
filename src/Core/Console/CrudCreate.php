@@ -114,29 +114,41 @@ class CrudCreate extends Command
                 if ($viewKey = array_get($data, "view", null)) {
                     $destinationPath = $this->viewDirectory . array_get($viewKey, "template");
                     $this->comment("Creating view `" . $destinationPath . "`");
-                    $stubPath = 'views/' . array_get($viewKey, "stub");
-                    $this->createFile($destinationPath, $this->compileStub($stubPath), "The [{$destinationPath}] view element already exists. Do you want to replace it?");
+                    $this->createFile(
+                        $destinationPath,
+                        $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/views/' . array_get($viewKey, "stub"))),
+                        "The [{$destinationPath}] view element already exists. Do you want to replace it?"
+                    );
                 }
                 //Check if choosen C/R/U/D need create controller
                 if ($controllerKey = array_get($data, "controller", null)) {
                     $destinationPath = $this->controllerDirectory . array_get($controllerKey, "template");
                     $this->comment("Creating controller `" . $destinationPath . "`");
-                    $stubPath = 'controllers/' . array_get($controllerKey, "stub");
-                    $this->createFile($destinationPath, $this->compileStub($stubPath), "The [{$destinationPath}] controller element already exists. Do you want to replace it?");
+                    $this->createFile(
+                        $destinationPath,
+                        $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/controllers/' . array_get($controllerKey, "stub"))),
+                        "The [{$destinationPath}] controller element already exists. Do you want to replace it?"
+                    );
                 }
                 //Check if choosen C/R/U/D need create job
                 if ($jobKey = array_get($data, "job", null)) {
                     $destinationPath = $this->jobDirectory . str_replace("Job", $this->modelName, array_get($jobKey, "template"));
                     $this->comment("Creating job `" . $destinationPath . "`");
-                    $stubPath = 'jobs/' . array_get($jobKey, "stub");
-                    $this->createFile($destinationPath, $this->compileStub($stubPath), "The [{$destinationPath}] job element already exists. Do you want to replace it?");
+                    $this->createFile(
+                        $destinationPath,
+                        $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/jobs/' . array_get($jobKey, "stub"))),
+                        "The [{$destinationPath}] job element already exists. Do you want to replace it?"
+                    );
                 }
                 //Check if choosen C/R/U/D need create request
                 if ($requestKey = array_get($data, "request", null)) {
                     $destinationPath = $this->requestDirectory . array_get($requestKey, "template");
                     $this->comment("Creating request `" . $destinationPath . "`");
-                    $stubPath = 'requests/' . array_get($requestKey, "stub");
-                    $this->createFile($destinationPath, $this->compileStub($stubPath), "The [{$destinationPath}] request element already exists. Do you want to replace it?");
+                    $this->createFile(
+                        $destinationPath,
+                        $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/requests/' . array_get($requestKey, "stub"))),
+                        "The [{$destinationPath}] request element already exists. Do you want to replace it?"
+                    );
                 }
                 $this->comment("");
             }
@@ -153,8 +165,7 @@ class CrudCreate extends Command
         $this->info("Step : Form");
         if ($this->needCreate || $this->needUpdate) {
             foreach (['form.stub' => 'form.blade.php', 'javascript.stub' => 'javascript.blade.php'] as $key => $value) {
-                $stubContent = file_get_contents(__DIR__ . '/stubs/crud/views/form/' . $key);
-                $generatedView = $this->replaceInStub($stubContent);
+                $generatedView = $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/views/form/' . $key));
                 $destinationPath = $this->viewFormDirectory . $value;
                 $this->comment("Creating view element `" . $destinationPath . "`");
                 $this->createFile($destinationPath, $generatedView, "The [{$destinationPath}] view form already exists. Do you want to replace it?");
@@ -168,8 +179,7 @@ class CrudCreate extends Command
     {
         $this->info("Step : Repository");
         if ($this->needCreate || $this->needRead || $this->needUpdate || $this->needDelete) {
-            $stubContent = file_get_contents(__DIR__ . '/stubs/crud/repositories/ModelRepository.stub');
-            $generatedView = $this->replaceInStub($stubContent);
+            $generatedView = $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/repositories/ModelRepository.stub'));
             $destinationPath = $this->repositoryDirectory . str_replace("Model", $this->modelName, "ModelRepository.php");
             $this->comment("Creating repository `" . $destinationPath . "`");
             $this->createFile($destinationPath, $generatedView, "The [{$destinationPath}] repository already exists. Do you want to replace it?");
@@ -181,8 +191,7 @@ class CrudCreate extends Command
     {
         $this->info("Step : Datatable action");
         if ($this->needRead) {
-            $stubContent = file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions.stub');
-            $generatedView = $this->replaceInStub($stubContent);
+            $generatedView = $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions.stub'));
             $destinationPath = $this->viewElementDirectory . "datatable-actions.blade.php";
             $this->comment("Creating view `" . $destinationPath . "`");
             $this->createFile($destinationPath, $generatedView, "The [{$destinationPath}] view element already exists. Do you want to replace it?");
@@ -194,8 +203,7 @@ class CrudCreate extends Command
     {
         $this->info("Step : Routes");
 
-        $stubContent = file_get_contents(__DIR__ . '/stubs/crud/routes/group.stub');
-        $generatedRoutes = $this->replaceInStub($stubContent);
+        $generatedRoutes = $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/routes/group.stub'));
         $adminRoutePath = base_path('routes/admin.php');
         $adminRouteFile = file_get_contents($adminRoutePath);
         if (strpos($adminRouteFile, '// {{ Helium Crud }}') === false) {
@@ -213,8 +221,7 @@ class CrudCreate extends Command
     private function processMenu()
     {
         $this->info("Step : Menu");
-        $stubContent = file_get_contents(__DIR__ . '/stubs/crud/views/elements/menu.stub');
-        $generatedMenu = $this->replaceInStub($stubContent);
+        $generatedMenu = $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/views/elements/menu.stub'));
         $menuRoutePath = resource_path('views/vendor/helium/elements/menu.blade.php');
         if (!file_exists($menuRoutePath)) {
             $this->error("Unable to find " . $menuRoutePath . " file. Did you run `php artisan vendor:publish --tag=helium` command ?");
