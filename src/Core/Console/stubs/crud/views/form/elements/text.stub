@@ -3,4 +3,3 @@
     ->value(${{ modelsingular }}->{{ property }})
     {{ required }}
 !!} 
-{{-- Helium Crud --}}

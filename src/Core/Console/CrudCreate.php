@@ -68,10 +68,10 @@ class CrudCreate extends Command
         $this->formatProperties();
 
         //Ask for C.R.U.D
-        $this->needCreate = $this->confirm("Need Create controller & views ?");
-        $this->needUpdate = $this->confirm("Need Update controller & views ?");
-        $this->needRead = $this->confirm("Need Index controller & views ?");
-        $this->needDelete = $this->confirm("Need Delete controller ?");
+        $this->needCreate = $this->confirm("Need Create controller & views ?", true);
+        $this->needUpdate = $this->confirm("Need Update controller & views ?", true);
+        $this->needRead = $this->confirm("Need Index controller & views ?", true);
+        $this->needDelete = $this->confirm("Need Delete controller ?", true);
 
         $this->createDirectories();
 
@@ -80,188 +80,157 @@ class CrudCreate extends Command
         $this->info("Helium CRUD was created");
     }
 
+    protected function createDirectories()
+    {
+        $directories = [
+            "viewDirectory" => resource_path('views/admin/' . $this->modelNameSingular . '/'),
+            "viewElementDirectory" => resource_path('views/admin/' . $this->modelNameSingular . '/elements/'),
+            "viewFormDirectory" => resource_path('views/admin/' . $this->modelNameSingular . '/form/'),
+            "controllerDirectory" => app_path('Http/Controllers/Admin/' . $this->modelName . '/'),
+            "jobDirectory" => app_path('Jobs/' . $this->modelName . '/'),
+            "requestDirectory" => app_path('Http/Requests/Admin/' . $this->modelName . '/'),
+            "repositoryDirectory" => app_path('Repositories/'),
+        ];
+
+        $this->info("Step : Directories");
+        foreach ($directories as $key => $directory) {
+            $this->{$key} = $directory;
+            if (!is_dir($this->{$key})) {
+                $this->comment("Creating `" . $this->{$key} . "` directory");
+                mkdir($this->{$key}, 0755, true);
+            }
+        }
+        $this->comment("");
+    }
+
+
     protected function processAnswers()
     {
-
         foreach ($this->parseAnswers() as $key => $data) {
             //Check if user want C/R/U/D.
             if (array_get($data, "need", false)) {
-
-                $this->comment("Step : " . ucfirst($key));
+                $this->info("Step : " . ucfirst($key));
                 //Check if choosen C/R/U/D need create view
                 if ($viewKey = array_get($data, "view", null)) {
                     $destinationPath = $this->viewDirectory . array_get($viewKey, "template");
                     $this->comment("Creating view `" . $destinationPath . "`");
                     $stubPath = 'views/' . array_get($viewKey, "stub");
-                    if (file_exists($destinationPath)) {
-                        if ($this->confirm("The [{$destinationPath}] view already exists. Do you want to replace it?")) {
-                            $this->createFile($stubPath, $destinationPath);
-                        }
-                    } else {
-                        $this->createFile($stubPath, $destinationPath);
-                    }
+                    $this->createFile($destinationPath, $this->compileStub($stubPath), "The [{$destinationPath}] view element already exists. Do you want to replace it?");
                 }
                 //Check if choosen C/R/U/D need create controller
                 if ($controllerKey = array_get($data, "controller", null)) {
                     $destinationPath = $this->controllerDirectory . array_get($controllerKey, "template");
                     $this->comment("Creating controller `" . $destinationPath . "`");
                     $stubPath = 'controllers/' . array_get($controllerKey, "stub");
-                    if (file_exists($destinationPath)) {
-                        if ($this->confirm("The [{$destinationPath}] controller already exists. Do you want to replace it?")) {
-                            $this->createFile($stubPath, $destinationPath);
-                        }
-                    } else {
-                        $this->createFile($stubPath, $destinationPath);
-                    }
+                    $this->createFile($destinationPath, $this->compileStub($stubPath), "The [{$destinationPath}] controller element already exists. Do you want to replace it?");
                 }
                 //Check if choosen C/R/U/D need create job
                 if ($jobKey = array_get($data, "job", null)) {
                     $destinationPath = $this->jobDirectory . str_replace("Job", $this->modelName, array_get($jobKey, "template"));
                     $this->comment("Creating job `" . $destinationPath . "`");
                     $stubPath = 'jobs/' . array_get($jobKey, "stub");
-                    if (file_exists($destinationPath)) {
-                        if ($this->confirm("The [{$destinationPath}] job already exists. Do you want to replace it?")) {
-                            $this->createFile($stubPath, $destinationPath);
-                        }
-                    } else {
-                        $this->createFile($stubPath, $destinationPath);
-                    }
+                    $this->createFile($destinationPath, $this->compileStub($stubPath), "The [{$destinationPath}] job element already exists. Do you want to replace it?");
                 }
                 //Check if choosen C/R/U/D need create request
                 if ($requestKey = array_get($data, "request", null)) {
                     $destinationPath = $this->requestDirectory . array_get($requestKey, "template");
                     $this->comment("Creating request `" . $destinationPath . "`");
                     $stubPath = 'requests/' . array_get($requestKey, "stub");
-                    if (file_exists($destinationPath)) {
-                        if ($this->confirm("The [{$destinationPath}] request already exists. Do you want to replace it?")) {
-                            $this->createFile($stubPath, $destinationPath);
-                        }
-                    } else {
-                        $this->createFile($stubPath, $destinationPath);
-                    }
+                    $this->createFile($destinationPath, $this->compileStub($stubPath), "The [{$destinationPath}] request element already exists. Do you want to replace it?");
                 }
                 $this->comment("");
             }
         }
         $this->processForm();
-
         $this->processRepository();
-
-        $this->processRoutes();
-
-        $this->processMenu();
-
-
         $this->processDatatableActions();
+        $this->processRoutes();
+        $this->processMenu();
     }
 
     private function processForm()
     {
+        $this->info("Step : Form");
         if ($this->needCreate || $this->needUpdate) {
             foreach (['form.stub' => 'form.blade.php', 'javascript.stub' => 'javascript.blade.php'] as $key => $value) {
                 $stubContent = file_get_contents(__DIR__ . '/stubs/crud/views/form/' . $key);
-                if ($key == "form.stub") {
-                    foreach ($this->modelProperties as $modelProperty) {
-                        $stubContent = str_replace('{{-- Helium Crud --}}', $this->replaceInFormStub($modelProperty), $stubContent);
-                    }
-                }
-
                 $generatedView = $this->replaceInStub($stubContent);
                 $destinationPath = $this->viewFormDirectory . $value;
-                if (file_exists($destinationPath)) {
-                    if ($this->confirm("The [{$destinationPath}] view form already exists. Do you want to replace it?")) {
-                        file_put_contents($destinationPath, $generatedView);
-                    }
-                } else {
-                    file_put_contents($destinationPath, $generatedView);
-                }
+                $this->comment("Creating view element `" . $destinationPath . "`");
+                $this->createFile($destinationPath, $generatedView, "The [{$destinationPath}] view form already exists. Do you want to replace it?");
             }
         }
-    }
+        $this->comment("");
 
+    }
 
     private function processRepository()
     {
+        $this->info("Step : Repository");
         if ($this->needCreate || $this->needRead || $this->needUpdate || $this->needDelete) {
             $stubContent = file_get_contents(__DIR__ . '/stubs/crud/repositories/ModelRepository.stub');
-
             $generatedView = $this->replaceInStub($stubContent);
-
             $destinationPath = $this->repositoryDirectory . str_replace("Model", $this->modelName, "ModelRepository.php");
             $this->comment("Creating repository `" . $destinationPath . "`");
-            $stubPath = '/repositories/ModelRepository.stub';
-            if (file_exists($destinationPath)) {
-                if ($this->confirm("The [{$destinationPath}] repository already exists. Do you want to replace it?")) {
-                    $this->createFile($stubPath, $destinationPath);
-                }
-            } else {
-                $this->createFile($stubPath, $destinationPath);
-            }
-
+            $this->createFile($destinationPath, $generatedView, "The [{$destinationPath}] repository already exists. Do you want to replace it?");
         }
+        $this->comment("");
     }
 
     private function processDatatableActions()
     {
-        //If user want read 
+        $this->info("Step : Datatable action");
         if ($this->needRead) {
             $stubContent = file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions.stub');
-
             $generatedView = $this->replaceInStub($stubContent);
-
             $destinationPath = $this->viewElementDirectory . "datatable-actions.blade.php";
-
-            if (file_exists($destinationPath)) {
-                if ($this->confirm("The [{$destinationPath}] view element already exists. Do you want to replace it?")) {
-                    file_put_contents($destinationPath, $generatedView);
-                }
-            } else {
-                file_put_contents($destinationPath, $generatedView);
-            }
-
+            $this->comment("Creating view `" . $destinationPath . "`");
+            $this->createFile($destinationPath, $generatedView, "The [{$destinationPath}] view element already exists. Do you want to replace it?");
         }
+        $this->comment("");
     }
 
     private function processRoutes()
     {
+        $this->info("Step : Routes");
+
         $stubContent = file_get_contents(__DIR__ . '/stubs/crud/routes/group.stub');
-
         $generatedRoutes = $this->replaceInStub($stubContent);
-
         $adminRoutePath = base_path('routes/admin.php');
         $adminRouteFile = file_get_contents($adminRoutePath);
-
         if (strpos($adminRouteFile, '// {{ Helium Crud }}') === false) {
             $this->error("File " . $adminRoutePath . " doesn't have `// {{ Helium Crud }}` string which help Helium Crud Generator working");
             $this->comment("Please manually add following routes :");
             $this->info($generatedRoutes);
         } else {
+            $this->comment("Updating route `" . $adminRoutePath . "`");
             $adminRouteFile = str_replace('// {{ Helium Crud }}', $generatedRoutes, $adminRouteFile);
             file_put_contents($adminRoutePath, $adminRouteFile);
         }
+        $this->comment("");
     }
 
     private function processMenu()
     {
+        $this->info("Step : Menu");
         $stubContent = file_get_contents(__DIR__ . '/stubs/crud/views/elements/menu.stub');
-
         $generatedMenu = $this->replaceInStub($stubContent);
-
         $menuRoutePath = resource_path('views/vendor/helium/elements/menu.blade.php');
         if (!file_exists($menuRoutePath)) {
             $this->error("Unable to find " . $menuRoutePath . " file. Did you run `php artisan vendor:publish --tag=helium` command ?");
             return;
         }
         $menuRouteFile = file_get_contents($menuRoutePath);
-
         if (strpos($menuRouteFile, '{{-- Helium Crud --}}') === false) {
             $this->error("File " . $menuRoutePath . " doesn't have `{{-- Helium Crud --}}` string which help Helium Crud Generator working");
             $this->comment("Please manually add following menu :");
             $this->info($generatedMenu);
         } else {
+            $this->comment("Updating menu `" . $menuRoutePath . "`");
             $menuRouteFile = str_replace('{{-- Helium Crud --}}', $generatedMenu, $menuRouteFile);
             file_put_contents($menuRoutePath, $menuRouteFile);
         }
+        $this->comment("");
 
     }
 
@@ -365,50 +334,6 @@ class CrudCreate extends Command
         ];
     }
 
-    /**
-     * Create the directories for the files.
-     *
-     * @return void
-     */
-    protected function createDirectories()
-    {
-        //Create views directory
-        $this->viewDirectory = resource_path('views/admin/' . $this->modelNameSingular . '/');
-        if (!is_dir($this->viewDirectory)) {
-            mkdir($this->viewDirectory, 0755, true);
-        }
-        //Create views element directory
-        $this->viewElementDirectory = resource_path('views/admin/' . $this->modelNameSingular . '/elements/');
-        if (!is_dir($this->viewElementDirectory)) {
-            mkdir($this->viewElementDirectory, 0755, true);
-        }
-        //Create views form directory
-        $this->viewFormDirectory = resource_path('views/admin/' . $this->modelNameSingular . '/form/');
-        if (!is_dir($this->viewFormDirectory)) {
-            mkdir($this->viewFormDirectory, 0755, true);
-        }
-        //Create controllers directory
-        $this->controllerDirectory = app_path('Http/Controllers/Admin/' . $this->modelName . '/');
-        if (!is_dir($this->controllerDirectory)) {
-            mkdir($this->controllerDirectory, 0755, true);
-        }
-        //Create jobs directory
-        $this->jobDirectory = app_path('Jobs/' . $this->modelName . '/');
-        if (!is_dir($this->jobDirectory)) {
-            mkdir($this->jobDirectory, 0755, true);
-        }
-        //Create requests directory
-        $this->requestDirectory = app_path('Http/Requests/Admin/' . $this->modelName . '/');
-        if (!is_dir($this->requestDirectory)) {
-            mkdir($this->requestDirectory, 0755, true);
-        }
-        //Create repositories directory
-        $this->repositoryDirectory = app_path('Repositories/');
-        if (!is_dir($this->repositoryDirectory)) {
-            mkdir($this->repositoryDirectory, 0755, true);
-        }
-    }
-
     private function getModelsList()
     {
         $result = [];
@@ -426,11 +351,14 @@ class CrudCreate extends Command
 
 
 
-    private function createFile($stubPath, $path)
+    private function createFile($destinationPath, $content, $confirm = false)
     {
-        $compiledFile = $this->compileStub($stubPath, $path);
-
-        file_put_contents($path, $compiledFile);
+        if (file_exists($destinationPath) && $confirm !== false) {
+            if (!$this->confirm($confirm)) {
+                return;
+            }
+        }
+        file_put_contents($destinationPath, $content);
     }
 
     protected function compileStub($path)
@@ -438,23 +366,27 @@ class CrudCreate extends Command
         return $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/' . $path));
     }
 
-    private function replaceInFormStub($modelProperty)
+    private function replaceInFormStub()
     {
-        $stubElementContent = file_get_contents(__DIR__ . '/stubs/crud/views/form/elements/' . $modelProperty['type'] . '.stub');
+        $result = "";
 
+        foreach ($this->modelProperties as $modelProperty) {
+            $stubElementContent = file_get_contents(__DIR__ . '/stubs/crud/views/form/elements/' . $modelProperty['type'] . '.stub');
 
-        $stubReplacers = [
-            '{{ property }}' => $modelProperty['name'],
-            '{{ type }}' => $modelProperty['type'],
-            '{{ required }}' => $modelProperty['required'] ? "->required()" : "",
-        ];
+            $stubReplacers = [
+                '{{ property }}' => $modelProperty['name'],
+                '{{ type }}' => $modelProperty['type'],
+                '{{ required }}' => $modelProperty['required'] ? "->required()" : "",
+            ];
 
-        foreach ($stubReplacers as $key => $value) {
-            $stubElementContent = str_replace($key, $value, $stubElementContent);
+            foreach ($stubReplacers as $key => $value) {
+                $stubElementContent = str_replace($key, $value, $stubElementContent);
+            }
+
+            $result .= $stubElementContent;
         }
 
-
-        return $stubElementContent;
+        return $result;
     }
 
     protected function createRequestModelProperties()
@@ -498,6 +430,7 @@ class CrudCreate extends Command
             '{{ DeleteRoutes }}' => ($this->needDelete) ? file_get_contents(__DIR__ . '/stubs/crud/routes/delete.stub') : "",
             '{{ RequestModelProperties }}' => $this->createRequestModelProperties(),
             '{{ JobModelPropertiesSetters }}' => $this->createJobModelPropertiesSetters(),
+            '{{-- Helium Crud Form --}}' => $this->replaceInFormStub()
         ];
 
         foreach ($extendedReplacers as $searchString => $replaceBy) {
