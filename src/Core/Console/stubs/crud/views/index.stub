@@ -3,7 +3,7 @@
 @section('content')
 
 <header class="title-wrapper">
-    <h1 class="title">Liste des {{ modelplural }}</h1>
+    <h1 class="title">Liste</h1>
     {{ AddBtn }}
 </header>
 

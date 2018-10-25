@@ -3,8 +3,8 @@
 @section('content')
 
 <header class="title-wrapper">
-    <h1 class="title">Création d'une {{ modelsingular }}</h1>
-    <button class="btn btn--primary" data-submit="create{{ Model }}">Créer la {{ modelsingular }}</button>
+    <h1 class="title">Création</h1>
+    <button class="btn btn--primary" data-submit="create{{ Model }}">Créer</button>
 </header>
 
 <form id="create{{ Model }}" class="" action="{{ route('admin.{{ modelsingular }}.store') }}" method="post">
@@ -18,7 +18,7 @@
     </article>
 
     <div class="box box--actions">
-        <button class="btn btn--primary" data-submit="create{{ Model }}">Créer la {{ modelsingular }}</button>
+        <button class="btn btn--primary" data-submit="create{{ Model }}">Créer</button>
     </div>
 </form>
 @endsection

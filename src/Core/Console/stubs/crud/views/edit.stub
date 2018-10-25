@@ -3,8 +3,8 @@
 @section('content')
 
 <header class="title-wrapper">
-    <h1 class="title">Edition de la {{ modelsingular }} `{{ ${{ modelsingular }}->id }}`</h1>
-    <button class="btn btn--primary" data-submit="edit{{ Model }}">Enregistrer la {{ modelsingular }}</button>
+    <h1 class="title">Edition `{{ ${{ modelsingular }}->id }}`</h1>
+    <button class="btn btn--primary" data-submit="edit{{ Model }}">Enregistrer</button>
 </header>
 
 <form id="edit{{ Model }}" action="{{ route('admin.{{ modelsingular }}.update',[${{ modelsingular }}->id]) }}" method="post">
@@ -20,8 +20,8 @@
     
 
     <div class="box box--actions">
-        <button class="btn btn--primary" data-submit="edit{{ Model }}">Enregistrer la {{ modelsingular }}</button>
-        <button class="btn btn--danger" data-confirm="Voulez vous vraiment supprimer ?" data-submit="delete{{ Model }}">Supprimer la {{ modelsingular }}</button>
+        <button class="btn btn--primary" data-submit="edit{{ Model }}">Enregistrer</button>
+        <button class="btn btn--danger" data-confirm="Voulez vous vraiment supprimer ?" data-submit="delete{{ Model }}">Supprimer</button>
     </div>
 
 </form>
