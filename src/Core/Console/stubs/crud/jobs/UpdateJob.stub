@@ -36,6 +36,8 @@ class Update{{ Model }} implements ShouldQueue
     {
         ${{ modelsingular }} = {{ Model }}::findOrFail($this->id);
         
+        {{ JobModelPropertiesSetters }}
+
         ${{ modelsingular }}Repo->save(${{ modelsingular }});
 
         return ${{ modelsingular }};

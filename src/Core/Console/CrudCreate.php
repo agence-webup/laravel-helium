@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Webup\LaravelHelium\Core\Entities\AdminUser;
 use File;
 use Illuminate\Support\Str;
+use DB;
 
 class CrudCreate extends Command
 {
@@ -27,9 +28,11 @@ class CrudCreate extends Command
     private $modelName = null;
     private $modelNamePlural = null;
     private $modelNameSingular = null;
+    private $modelProperties = [];
 
     private $viewDirectory = null;
     private $viewElementDirectory = null;
+    private $viewFormDirectory = null;
     private $controllerDirectory = null;
     private $jobDirectory = null;
     private $requestDirectory = null;
@@ -61,6 +64,8 @@ class CrudCreate extends Command
         $this->modelNamePlural = $this->selectedModel->getTable();
         //Get model singular name (for generating views)
         $this->modelNameSingular = Str::singular($this->modelNamePlural);
+
+        $this->formatProperties();
 
         //Ask for C.R.U.D
         $this->needCreate = $this->confirm("Need Create controller & views ?");
@@ -138,23 +143,69 @@ class CrudCreate extends Command
                 $this->comment("");
             }
         }
+        $this->processForm();
+
+        $this->processRepository();
 
         $this->processRoutes();
 
         $this->processMenu();
 
+
         $this->processDatatableActions();
+    }
+
+    private function processForm()
+    {
+        if ($this->needCreate || $this->needUpdate) {
+            foreach (['form.stub' => 'form.blade.php', 'javascript.stub' => 'javascript.blade.php'] as $key => $value) {
+                $stubContent = file_get_contents(__DIR__ . '/stubs/crud/views/form/' . $key);
+                if ($key == "form.stub") {
+                    foreach ($this->modelProperties as $modelProperty) {
+                        $stubContent = str_replace('{{-- Helium Crud --}}', $this->replaceInFormStub($modelProperty), $stubContent);
+                    }
+                }
+
+                $generatedView = $this->replaceInStub($stubContent);
+                $destinationPath = $this->viewFormDirectory . $value;
+                if (file_exists($destinationPath)) {
+                    if ($this->confirm("The [{$destinationPath}] view form already exists. Do you want to replace it?")) {
+                        file_put_contents($destinationPath, $generatedView);
+                    }
+                } else {
+                    file_put_contents($destinationPath, $generatedView);
+                }
+            }
+        }
+    }
+
+
+    private function processRepository()
+    {
+        if ($this->needCreate || $this->needRead || $this->needUpdate || $this->needDelete) {
+            $stubContent = file_get_contents(__DIR__ . '/stubs/crud/repositories/ModelRepository.stub');
+
+            $generatedView = $this->replaceInStub($stubContent);
+
+            $destinationPath = $this->repositoryDirectory . str_replace("Model", $this->modelName, "ModelRepository.php");
+            $this->comment("Creating repository `" . $destinationPath . "`");
+            $stubPath = '/repositories/ModelRepository.stub';
+            if (file_exists($destinationPath)) {
+                if ($this->confirm("The [{$destinationPath}] repository already exists. Do you want to replace it?")) {
+                    $this->createFile($stubPath, $destinationPath);
+                }
+            } else {
+                $this->createFile($stubPath, $destinationPath);
+            }
+
+        }
     }
 
     private function processDatatableActions()
     {
-        //If user want read and (update or delete)
-        if ($this->needRead && ($this->needUpdate || $this->needDelete)) {
+        //If user want read 
+        if ($this->needRead) {
             $stubContent = file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions.stub');
-
-            $stubContent = str_replace('{{ EditBtn }}', $this->needUpdate ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions-edit.stub') : "", $stubContent);
-            $stubContent = str_replace('{{ DeleteBtn }}', $this->needDelete ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions-delete.stub') : "", $stubContent);
-
 
             $generatedView = $this->replaceInStub($stubContent);
 
@@ -174,11 +225,6 @@ class CrudCreate extends Command
     private function processRoutes()
     {
         $stubContent = file_get_contents(__DIR__ . '/stubs/crud/routes/group.stub');
-
-        $stubContent = str_replace('{{ ReadRoutes }}', $this->needRead ? file_get_contents(__DIR__ . '/stubs/crud/routes/read.stub') : "", $stubContent);
-        $stubContent = str_replace('{{ CreateRoutes }}', $this->needCreate ? file_get_contents(__DIR__ . '/stubs/crud/routes/create.stub') : "", $stubContent);
-        $stubContent = str_replace('{{ UpdateRoutes }}', $this->needUpdate ? file_get_contents(__DIR__ . '/stubs/crud/routes/update.stub') : "", $stubContent);
-        $stubContent = str_replace('{{ DeleteRoutes }}', $this->needDelete ? file_get_contents(__DIR__ . '/stubs/crud/routes/delete.stub') : "", $stubContent);
 
         $generatedRoutes = $this->replaceInStub($stubContent);
 
@@ -217,6 +263,36 @@ class CrudCreate extends Command
             file_put_contents($menuRoutePath, $menuRouteFile);
         }
 
+    }
+
+    protected function formatProperties()
+    {
+        $exeptedProperties = ["id", "created_at", "updated_at"];
+        $dbProperties = DB::select("DESCRIBE $this->modelNamePlural");
+
+        foreach ($dbProperties as $key => $dbProperty) {
+            if (in_array($dbProperty->Field, $exeptedProperties)) {
+                continue;
+            }
+            $this->modelProperties[] = [
+                "name" => $dbProperty->Field,
+                "required" => $dbProperty->Null == "YES" ? false : true,
+                "type" => $this->parseDbTypeToHtmlInputType($dbProperty->Type)
+            ];
+        }
+    }
+
+    private function parseDbTypeToHtmlInputType($dbType)
+    {
+        switch (true) {
+            case strpos($dbType, "int(") !== false:
+                return "number";
+            case strpos($dbType, "varchar(") !== false:
+                return "text";
+            default:
+                return "text";
+                break;
+        }
     }
 
     protected function parseAnswers()
@@ -306,6 +382,11 @@ class CrudCreate extends Command
         if (!is_dir($this->viewElementDirectory)) {
             mkdir($this->viewElementDirectory, 0755, true);
         }
+        //Create views form directory
+        $this->viewFormDirectory = resource_path('views/admin/' . $this->modelNameSingular . '/form/');
+        if (!is_dir($this->viewFormDirectory)) {
+            mkdir($this->viewFormDirectory, 0755, true);
+        }
         //Create controllers directory
         $this->controllerDirectory = app_path('Http/Controllers/Admin/' . $this->modelName . '/');
         if (!is_dir($this->controllerDirectory)) {
@@ -348,6 +429,7 @@ class CrudCreate extends Command
     private function createFile($stubPath, $path)
     {
         $compiledFile = $this->compileStub($stubPath, $path);
+
         file_put_contents($path, $compiledFile);
     }
 
@@ -356,11 +438,77 @@ class CrudCreate extends Command
         return $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/' . $path));
     }
 
+    private function replaceInFormStub($modelProperty)
+    {
+        $stubElementContent = file_get_contents(__DIR__ . '/stubs/crud/views/form/elements/' . $modelProperty['type'] . '.stub');
+
+
+        $stubReplacers = [
+            '{{ property }}' => $modelProperty['name'],
+            '{{ type }}' => $modelProperty['type'],
+            '{{ required }}' => $modelProperty['required'] ? "->required()" : "",
+        ];
+
+        foreach ($stubReplacers as $key => $value) {
+            $stubElementContent = str_replace($key, $value, $stubElementContent);
+        }
+
+
+        return $stubElementContent;
+    }
+
+    protected function createRequestModelProperties()
+    {
+        $result = [];
+        $temp = [];
+        foreach ($this->modelProperties as $key => $modelProperty) {
+            $temp[array_get($modelProperty, 'name')] = array_get($modelProperty, 'required', false) ? "required" : "";
+        }
+        foreach ($temp as $key => $t) {
+            $result[] = '"' . $key . '" => "' . $t . '"';
+        }
+        return implode("," . PHP_EOL, $result);
+    }
+
+    protected function createJobModelPropertiesSetters()
+    {
+        $result = "";
+        foreach ($this->modelProperties as $key => $modelProperty) {
+            $result .= '$' . $this->modelNameSingular . '->' . array_get($modelProperty, "name") . ' = array_get($this->data,"' . array_get($modelProperty, "name") . '");' . PHP_EOL;
+        }
+        return $result;
+    }
+
     protected function replaceInStub($stubContent)
     {
-        $stubContent = str_replace('{{ Model }}', $this->modelName, $stubContent);
-        $stubContent = str_replace('{{ modelsingular }}', $this->modelNameSingular, $stubContent);
-        $stubContent = str_replace('{{ modelplural }}', $this->modelNamePlural, $stubContent);
+        $stubReplacers = [
+            '{{ Model }}' => $this->modelName,
+            '{{ modelsingular }}' => $this->modelNameSingular,
+            '{{ modelplural }}' => $this->modelNamePlural
+        ];
+
+        $extendedReplacers = [
+            '{{ IndexDataSetLink }}' => ($this->needUpdate) ? 'row.dataset.link = "{{ route("admin.{{ modelsingular }}.edit", ["id" => "%id%"]) }}".replace("%id%",data.id);' : "",
+            '{{ AddBtn }}' => ($this->needCreate) ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/addBtn.stub') : "",
+            '{{ DatatableEditBtn }}' => ($this->needUpdate) ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions-edit.stub') : "",
+            '{{ DatatableDeleteBtn }}' => ($this->needDelete) ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions-delete.stub') : "",
+            '{{ ReadRoutes }}' => ($this->needRead) ? file_get_contents(__DIR__ . '/stubs/crud/routes/read.stub') : "",
+            '{{ CreateRoutes }}' => ($this->needCreate) ? file_get_contents(__DIR__ . '/stubs/crud/routes/create.stub') : "",
+            '{{ UpdateRoutes }}' => ($this->needUpdate) ? file_get_contents(__DIR__ . '/stubs/crud/routes/update.stub') : "",
+            '{{ DeleteRoutes }}' => ($this->needDelete) ? file_get_contents(__DIR__ . '/stubs/crud/routes/delete.stub') : "",
+            '{{ RequestModelProperties }}' => $this->createRequestModelProperties(),
+            '{{ JobModelPropertiesSetters }}' => $this->createJobModelPropertiesSetters(),
+        ];
+
+        foreach ($extendedReplacers as $searchString => $replaceBy) {
+            if (strpos($stubContent, $searchString) !== false) {
+                $stubContent = str_replace($searchString, $this->replaceInStub($replaceBy), $stubContent);
+            }
+        }
+
+        foreach ($stubReplacers as $searchString => $replaceBy) {
+            $stubContent = str_replace($searchString, $replaceBy, $stubContent);
+        }
 
         return $stubContent;
     }

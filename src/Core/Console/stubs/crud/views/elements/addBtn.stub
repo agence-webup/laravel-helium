@@ -1,0 +1,1 @@
+<a href="{{ route('admin.{{ modelsingular }}.create') }}" class="btn btn--primary">Ajouter une {{ modelsingular }}</a>

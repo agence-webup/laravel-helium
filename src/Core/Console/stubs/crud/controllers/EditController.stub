@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Jobs\{{ Model }}\Update{{ Model }};
 use App\Entities\{{ Model }};
-use App\Requests\{{ Model }}\Update as Update{{ Model }}Request;
+use App\Http\Requests\Admin\{{ Model }}\Update as Update{{ Model }}Request;
 
 class EditController extends Controller
 {

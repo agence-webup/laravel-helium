@@ -1,0 +1,6 @@
+{!! Form::create('{{ type }}', '{{ property }}')
+    ->label('{{ property }}')
+    ->value(${{ modelsingular }}->{{ property }})
+    {{ required }}
+!!} 
+{{-- Helium Crud --}}

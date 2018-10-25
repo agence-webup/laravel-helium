@@ -1,0 +1,28 @@
+@extends('helium::layouts.master')
+
+@section('content')
+
+<header class="title-wrapper">
+    <h1 class="title">Création d'une {{ modelsingular }}</h1>
+    <button class="btn btn--primary" data-submit="create{{ Model }}">Créer la {{ modelsingular }}</button>
+</header>
+
+<form id="create{{ Model }}" class="" action="{{ route('admin.{{ modelsingular }}.store') }}" method="post">
+    {{ csrf_field() }}
+
+    <article class="box">
+        <header class="box__header">Informations communes</header>
+        <div class="box__content">    
+            @include('admin.{{ modelsingular }}.form.form')
+        </div>
+    </article>
+
+    <div class="box box--actions">
+        <button class="btn btn--primary" data-submit="create{{ Model }}">Créer la {{ modelsingular }}</button>
+    </div>
+</form>
+@endsection
+
+@section('js')
+@include("admin.{{ modelsingular }}.form.javascript")
+@endsection

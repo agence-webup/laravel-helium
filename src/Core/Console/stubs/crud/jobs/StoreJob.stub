@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Entities\{{ Model }};
 use App\Repositories\{{ Model }}Repository;
 
-class Create{{ Model }} implements ShouldQueue
+class Store{{ Model }} implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
@@ -33,6 +33,8 @@ class Create{{ Model }} implements ShouldQueue
     public function handle({{ Model }}Repository ${{ modelsingular }}Repo)
     {
         ${{ modelsingular }} = new {{ Model }}();
+
+        {{ JobModelPropertiesSetters }}
 
         ${{ modelsingular }}Repo->save(${{ modelsingular }});
 

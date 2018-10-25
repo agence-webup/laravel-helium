@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="{{ asset('/node_modules/helium-admin/dist/css/helium-base.css') }}" media="all">
     <script src="https://unpkg.com/feather-icons"></script>
     @yield('css')
-
-
 </head>
 <body>
     <header class="header">
@@ -35,14 +33,25 @@
     </header>
     @include('helium::elements.menu')
     
+    @include('helium::elements.notif')
+
     <div class="container">
         <main class="content">            
             @yield('content')
         </main>
     </div>
+    
     <script src="{{ asset('/node_modules/helium-admin/dist/js/helium-vendors.js') }}"></script>
     <script src="{{ asset('/node_modules/helium-admin/dist/js/helium-base.js') }}"></script>
     <script>feather.replace()</script>
+    <script>
+        $('tbody').on('click', '[data-confirm]', function (event) {
+            if(event.target.dataset.confirm && !confirm(event.target.dataset.confirm)){
+                event.preventDefault();
+                event.stopPropagation()
+            }            
+        });
+    </script>
     @yield('js')
 </body>
 </html>

@@ -8,7 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Repositories\{{ Model }}Repository;
 
-class Delete{{ Model }} implements ShouldQueue
+class Destroy{{ Model }} implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
@@ -31,10 +31,6 @@ class Delete{{ Model }} implements ShouldQueue
      */
     public function handle({{ Model }}Repository ${{ modelsingular }}Repo)
     {
-        ${{ modelsingular }} = ${{ modelsingular }}Repo->get($this->id);
-
-        if (${{ modelsingular }}) {
-            ${{ modelsingular }}Repo->delete(${{ modelsingular }}->id);
-        }
+        ${{ modelsingular }}Repo->deleteById($this->id);
     }
 }

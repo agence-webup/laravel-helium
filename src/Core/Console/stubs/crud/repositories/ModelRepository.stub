@@ -11,8 +11,27 @@ class {{ Model }}Repository
         return {{ Model }}::all();
     }
 
+    public function get($id)
+    {
+        return {{ Model }}::find($id);
+    }
+
     public function save({{ Model }} ${{ modelsingular }})
     {
         ${{ modelsingular }}->save();
+    }
+
+    public function delete({{ Model }} ${{ modelsingular }})
+    {
+        ${{ modelsingular }}->delete();
+    }
+
+    public function deleteById($id)
+    {
+        ${{ modelsingular }} = $this->get($id);
+        if(${{ modelsingular }}){
+            ${{ modelsingular }}->delete();
+        }
+        
     }
 }

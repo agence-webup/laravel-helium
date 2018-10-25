@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Jobs\{{ Model }}\Store{{ Model }};
 use App\Entities\{{ Model }};
-use App\Requests\{{ Model }}\Store as Store{{ Model }}Request;
+use App\Http\Requests\Admin\{{ Model }}\Store as Store{{ Model }}Request;
 
 class CreateController extends Controller
 {
@@ -33,6 +33,11 @@ class CreateController extends Controller
     {
         $data = $request->validated();
         $this->dispatchNow(new Store{{ Model }}($data));
+
+        $request->session()->flash('notif.default', [
+            'message' => "Modifications enregistrées.",
+            'level' => 'success',
+        ]);
 
         return redirect()->route('admin.{{ modelsingular }}.index');
     }
