@@ -17,11 +17,9 @@ $ php artisan vendor:publish --tag=helium
 
 ## How to use
  
-
 **⚠️ Important ⚠️**
 
-
-You need create migration & entity : Helium crud generator use class in entities ( `{your_project_path}/app/Entities`) folder for listing available crud and migration to create form.
+You need create migration & entity : Helium crud generator use class in entities folder ( `{your_project_path}/app/Entities`) for listing available crud and migration to create form.
 
 
 Then, you can run
