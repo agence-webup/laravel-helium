@@ -27,4 +27,13 @@ class Update extends FormRequest
             {{ RequestModelProperties }}
         ];
     }
+
+    protected function failedValidation(Validator $validator)
+    {
+        session()->flash('notif.default', [
+            'message' => "Les données sont invalides.",
+            'level' => 'error',
+        ]);
+        parent::failedValidation($validator);
+    }
 }

@@ -15,7 +15,7 @@ class CrudCreate extends Command
      *
      * @var string
      */
-    protected $signature = 'helium:crud';
+    protected $signature = 'helium:crud {--force}';
 
     /**
      * The console command description.
@@ -360,7 +360,7 @@ class CrudCreate extends Command
 
     private function createFile($destinationPath, $content, $confirm = false)
     {
-        if (file_exists($destinationPath) && $confirm !== false) {
+        if (file_exists($destinationPath) && $confirm !== false && !$this->option('force')) {
             if (!$this->confirm($confirm)) {
                 return;
             }
