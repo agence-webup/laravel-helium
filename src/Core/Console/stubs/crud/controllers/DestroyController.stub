@@ -18,6 +18,11 @@ class DestroyController extends Controller
                 ->withErrors($e->validator->errors());
         }
 
+        session()->flash('notif.default', [
+            'message' => "Élément supprimé avec succès.",
+            'level' => 'success',
+        ]);
+
         return redirect()->route('admin.{{ modelsingular }}.index');
     }
 }

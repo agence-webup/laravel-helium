@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\{{ Model }};
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class Store extends FormRequest
 {
@@ -34,6 +35,7 @@ class Store extends FormRequest
             'message' => "Les données sont invalides.",
             'level' => 'error',
         ]);
+        
         parent::failedValidation($validator);
     }
 }

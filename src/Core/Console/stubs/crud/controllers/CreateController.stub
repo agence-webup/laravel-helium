@@ -45,7 +45,7 @@ class CreateController extends Controller
         }     
 
         $request->session()->flash('notif.default', [
-            'message' => "Modifications enregistrées.",
+            'message' => "Élément ajouté avec succès.",
             'level' => 'success',
         ]);
 

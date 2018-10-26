@@ -49,7 +49,7 @@ class EditController extends Controller
         }  
 
         $request->session()->flash('notif.default', [
-            'message' => "Modifications enregistrées.",
+            'message' => "Modifications enregistrées avec succès.",
             'level' => 'success',
         ]);
 
