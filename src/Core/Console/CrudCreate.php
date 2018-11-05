@@ -345,12 +345,17 @@ class CrudCreate extends Command
     {
         $result = [];
         foreach (File::allFiles(app_path("Entities")) as $key => $entity) {
-            $classname = str_replace(".php", "", $entity->getFilename());
+            $classname = str_replace("/srv/http/app/Entities/", "", $entity->getRealPath());
+            $classname = str_replace("/", "\\", $classname);
+            $classname = str_replace(".php", "", $classname);
             $classnameWithNamespace = "\App\Entities\\" . $classname;
             try {
-                $result[$classname] = new $classnameWithNamespace();
+                $class = new $classnameWithNamespace();
+                if (is_subclass_of($class, "Illuminate\Database\Eloquent\Model")) {
+                    $result[$classname] = new $class();
+                }
+            } catch (\Throwable $e) {
             } catch (\Exception $e) {
-
             }
         }
         return $result;
