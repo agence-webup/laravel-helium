@@ -13,13 +13,15 @@ class CreateAdminUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('admin_users')) {
+            Schema::create('admin_users', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('email')->unique();
+                $table->string('password');
+                $table->rememberToken();
+                $table->timestamps();
+            });
+        }
     }
 
     /**
