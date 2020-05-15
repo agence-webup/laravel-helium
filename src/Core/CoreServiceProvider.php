@@ -27,6 +27,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/resources/lang/', 'helium');
 
         $this->publishes([
+            __DIR__ . '/Http/Controllers/Admin/PagesController.php' => app_path('Http/Controllers/Admin/PagesController.php'),
             __DIR__ . '/resources/lang' => resource_path('lang/vendor/helium'),
             __DIR__ . '/resources/views' => resource_path('views/vendor/helium'),
             __DIR__ . '/routes' => base_path('routes')
