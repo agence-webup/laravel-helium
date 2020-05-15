@@ -13,6 +13,14 @@ Publish migrations, views and translations
 $ php artisan vendor:publish --tag=helium
 ```
 
+# Redirections
+
+
+    protected $middleware = [
+        [...]
+        \Webup\LaravelHelium\Redirection\Http\Middleware\RedirectOldUrls::class
+    ];
+
 # Crud Generator
 
 ## How to use

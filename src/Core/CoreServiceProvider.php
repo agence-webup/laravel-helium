@@ -27,6 +27,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/resources/lang/', 'helium');
 
         $this->publishes([
+            __DIR__ . '/config/helium.php' => config_path('helium.php'),
             __DIR__ . '/Http/Controllers/Admin/PagesController.php' => app_path('Http/Controllers/Admin/PagesController.php'),
             __DIR__ . '/resources/lang' => resource_path('lang/vendor/helium'),
             __DIR__ . '/resources/views' => resource_path('views/vendor/helium'),
@@ -62,6 +63,15 @@ class CoreServiceProvider extends ServiceProvider
     public function register()
     {
         $this->defineAuth();
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/config/helium.php',
+            'helium'
+        );
+
+        if (config()->get('helium.modules.redirection.enabled', false)) {
+            $this->app->register('Webup\LaravelHelium\Redirection\RedirectionServiceProvider');
+        }
     }
 
     /**
@@ -106,7 +116,5 @@ class CoreServiceProvider extends ServiceProvider
                 'model' => \Webup\LaravelHelium\Core\Entities\AdminUser::class,
             ],
         ], $providersConfig));
-
-
     }
 }
