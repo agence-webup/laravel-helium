@@ -7,7 +7,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'admin',
-        'as' => 'admin.',
+        'as' => 'admin.tools.',
         'namespace' => "Admin"
     ], function () {
 

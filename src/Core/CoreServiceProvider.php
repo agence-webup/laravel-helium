@@ -7,6 +7,13 @@ use Illuminate\Support\ServiceProvider;
 use Webup\LaravelHelium\Core\Http\Middleware\RedirectIfUnauthenticated;
 use Webup\LaravelHelium\Core\Http\Middleware\RedirectIfAuthenticated;
 use File;
+use Illuminate\Support\Facades\Blade;
+use Webup\LaravelHelium\Core\Classes\Helium;
+use Webup\LaravelHelium\Core\Classes\HeliumBreadcrumb;
+use Webup\LaravelHelium\Core\Classes\HeliumHeader;
+use Webup\LaravelHelium\Core\Contracts\Helium as HeliumContract;
+use Webup\LaravelHelium\Core\Contracts\HeliumBreadcrumb as HeliumBreadcrumbContract;
+use Webup\LaravelHelium\Core\Contracts\HeliumHeader as HeliumHeaderContract;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -30,7 +37,10 @@ class CoreServiceProvider extends ServiceProvider
             __DIR__ . '/config/helium.php' => config_path('helium.php'),
             __DIR__ . '/Http/Controllers/Admin/PagesController.php' => app_path('Http/Controllers/Admin/PagesController.php'),
             __DIR__ . '/resources/lang' => resource_path('lang/vendor/helium'),
-            __DIR__ . '/resources/views' => resource_path('views/vendor/helium'),
+            __DIR__ . '/resources/views/auth' => resource_path('views/vendor/helium/auth'),
+            __DIR__ . '/resources/views/elements' => resource_path('views/vendor/helium/elements'),
+            __DIR__ . '/resources/views/home' => resource_path('views/vendor/helium/home'),
+            __DIR__ . '/resources/views/layouts' => resource_path('views/vendor/helium/layouts'),
             __DIR__ . '/routes' => base_path('routes')
         ], 'helium');
 
@@ -53,6 +63,14 @@ class CoreServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->registerCommands();
         }
+
+        $this->loadBladeComponents();
+    }
+
+    private function loadBladeComponents()
+    {
+        Blade::component('helium-box', \Webup\LaravelHelium\Core\Http\View\Components\Box::class);
+        Blade::component('helium-box-header', \Webup\LaravelHelium\Core\Http\View\Components\BoxHeader::class);
     }
 
     /**
@@ -62,6 +80,23 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton('helium', function ($app) {
+            return new Helium();
+        });
+
+        $this->app->singleton('helium.breadcrumb', function ($app) {
+            return new HeliumBreadcrumb();
+        });
+
+        $this->app->singleton('helium.header', function ($app) {
+            return new HeliumHeader();
+        });
+
+        $this->app->bind(HeliumBreadcrumbContract::class, 'helium.breadcrumb');
+        $this->app->bind(HeliumHeaderContract::class, 'helium.header');
+        $this->app->bind(HeliumContract::class, 'helium');
+
+
         $this->defineAuth();
 
         $this->mergeConfigFrom(
@@ -69,10 +104,38 @@ class CoreServiceProvider extends ServiceProvider
             'helium'
         );
 
+        $this->app->register('Webup\LaravelHelium\Core\Providers\ViewServiceProvider');
+
+
         if (config()->get('helium.modules.redirection.enabled', false)) {
             $this->app->register('Webup\LaravelHelium\Redirection\RedirectionServiceProvider');
+            $menuConfig = $this->app['config']->get("helium.menu.Outils", [
+                "current_route" => "admin.tools",
+                "icon" => "sliders",
+                "links" => [
+                    "Redirections" => "admin.tools.redirection.index",
+                ]
+            ]);
+            $this->app['config']->set("helium.menu.Outils", $menuConfig);
         }
     }
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides()
+    {
+        return [
+            HeliumContract::class,
+            HeliumBreadcrumbContract::class,
+            HeliumHeaderContract::class,
+            'helium',
+            'helium.breadcrumb',
+            'helium.header',
+        ];
+    }
+
 
     /**
      * Register the commands.

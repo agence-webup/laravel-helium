@@ -5,7 +5,7 @@
 
 Dependencies
 
-- [helium](https://github.com/agence-webup/helium) `npm install agence-webup/helium#v3 --save`
+- [helium](https://github.com/agence-webup/helium) `npm i -S helium-admin`
 
 Publish migrations, views and translations
 

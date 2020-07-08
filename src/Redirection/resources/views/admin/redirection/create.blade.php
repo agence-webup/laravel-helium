@@ -7,7 +7,7 @@
   <button class="btn btn--primary" data-submit="createRedirection">Créer la redirection</button>
 </header>
 
-<form id="createRedirection" class="" action="{{ route('admin.redirection.store') }}" method="post">
+<form id="createRedirection" class="" action="{{ route('admin.tools.redirection.store') }}" method="post">
   {{ csrf_field() }}
 
   <article class="box">

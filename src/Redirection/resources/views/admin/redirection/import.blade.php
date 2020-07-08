@@ -7,7 +7,7 @@
   <button class="btn btn--primary" data-submit="importRedirections">Importer les redirections</button>
 </header>
 
-<form id="importRedirections" class="" action="{{ route('admin.redirection.postImport') }}" method="post"
+<form id="importRedirections" class="" action="{{ route('admin.tools.redirection.postImport') }}" method="post"
   enctype="multipart/form-data">
   {{ csrf_field() }}
 

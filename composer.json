@@ -20,15 +20,18 @@
         "laravel/ui": "^2.0"
     },
     "autoload": {
-       "psr-4": {
-           "Webup\\LaravelHelium\\": "src/"
+        "psr-4": {
+            "Webup\\LaravelHelium\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
                 "Webup\\LaravelHelium\\Core\\CoreServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Helium": "Webup\\LaravelHelium\\Core\\Facades\\Helium"
+            }
         }
     },
     "minimum-stability": "dev"

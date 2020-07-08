@@ -1,6 +1,18 @@
 <?php
 
 return [
+    "tab" => "Administration : Helium",
+    "title" => "Administration",
+    "links" => [
+        "Aller sur le site" => "home",
+    ],
+    "menu" => [
+        "Dashboard" => [
+            "current-route" => "admin.home",
+            "icon" => "home",
+            "url" => 'admin.home',
+        ],
+    ],
     'modules' => [
         'contact' => [
             "enabled" => false,

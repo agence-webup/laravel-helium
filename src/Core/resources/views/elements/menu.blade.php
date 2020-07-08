@@ -1,10 +1,19 @@
-<nav class="navigation-wrapper">
-  <div class="container">
-    <div class="navigation">
-      <a href="{{ route('admin.home') }}" class="{{ current_class('admin.home',"is-active") }}"><i
-          data-feather="home"></i> Dashboard</a>
-      {{-- Helium Crud --}}
-      {{-- Don't remove previous line if you are using larave-helium crud generator --}}
-    </div>
+<div class="container">
+  <div class="navigation">
+    @foreach ($menu as $menuItem)
+    @if($menuItem->isDropdown)
+    <span class="{{ current_class($menuItem->currentRoute,"is-active") }}">
+      <i data-feather="{{ $menuItem->icon }}"></i> {{ $menuItem->label }}
+      <span class="navigation__sub">
+        @foreach($menuItem->urls as $submenuLabel => $submenuLink)
+        <a href="{{$submenuLink}}">{{$submenuLabel}}</a>
+        @endforeach
+      </span>
+    </span>
+    @else
+    <a href="{{ $menuItem->url }}" class="{{ current_class($menuItem->currentRoute,"is-active") }}"><i
+        data-feather="{{$menuItem->icon}}"></i> {{ $menuItem->label }}</a>
+    @endif
+    @endforeach
   </div>
-</nav>
+</div>

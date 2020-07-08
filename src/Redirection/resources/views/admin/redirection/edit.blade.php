@@ -7,7 +7,7 @@
   <button class="btn btn--primary" data-submit="editRedirection">Enregistrer la redirection</button>
 </header>
 
-<form id="editRedirection" action="{{ route('admin.redirection.update',[$redirection->id]) }}" method="post">
+<form id="editRedirection" action="{{ route('admin.tools.redirection.update',[$redirection->id]) }}" method="post">
 
   {{ csrf_field() }}
 
@@ -28,7 +28,7 @@
 </form>
 
 
-<form id="deleteRedirection" action="{{ route('admin.redirection.destroy', $redirection->id) }}" method="post">
+<form id="deleteRedirection" action="{{ route('admin.tools.redirection.destroy', $redirection->id) }}" method="post">
   {{ method_field('delete') }}
   {{ csrf_field() }}
 </form>
