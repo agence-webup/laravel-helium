@@ -1,34 +1,35 @@
+@php
+Helium::header()->title("Liste des redirections");
+Helium::header()->add("Ajouter une redirection","admin.tools.redirection.create");
+Helium::header()->contextual([
+"Supprimer toutes les redirections" => [
+"data-confirm" => "Voulez vous vraiment tout supprimer ?",
+"data-submit" => "deleteRedirections",
+"dangerous" => true
+],
+"Importer un csv" => [
+"route" => "admin.tools.redirection.import",
+]]
+);
+@endphp
+
 @extends('helium::layouts.master')
 
 @section('content')
 
-<header class="title-wrapper">
-  <h1 class="title">Liste des redirections</h1>
-  <div>
-    <button class="btn btn--danger" data-confirm="Voulez vous vraiment tout supprimer ?"
-      data-submit="deleteRedirections">Supprimer toutes les redirections</button>
-    <a href="{{ route('admin.tools.redirection.import') }}" class="btn btn--secondary">Importer un csv</a>
-    <a href="{{ route('admin.tools.redirection.create') }}" class="btn btn--primary">Ajouter une redirection</a>
-  </div>
-
-</header>
-
-
-<article class="box">
-  <div class="box__content">
-    <table class="dataTable stripe hover">
-      <thead>
-        <tr>
-          <th>Url à rediriger</th>
-          <th>Nouvelle url</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-  </div>
-</article>
+<x-helium-box>
+  <table class="dataTable stripe hover">
+    <thead>
+      <tr>
+        <th>Url à rediriger</th>
+        <th>Nouvelle url</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</x-helium-box>
 
 <form id="deleteRedirections" action="{{ route('admin.tools.redirection.destroyAll') }}" method="post">
   {{ method_field('delete') }}

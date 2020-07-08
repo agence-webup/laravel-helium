@@ -3,8 +3,12 @@
 namespace Webup\LaravelHelium\Core\Classes;
 
 use Webup\LaravelHelium\Core\Contracts\Helium as HeliumContract;
-use Webup\LaravelHelium\Core\Helpers\HeliumHelper;
 
+/**
+ * Helium helper
+ *
+ * Share Helium specifics helpers and make it easier to use
+ */
 class Helium implements HeliumContract
 {
     /**

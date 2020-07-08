@@ -5,12 +5,18 @@ namespace Webup\LaravelHelium\Core\Classes;
 use Webup\LaravelHelium\Core\Contracts\HeliumBreadcrumb as HeliumBreadcrumbContract;
 use Webup\LaravelHelium\Core\Helpers\HeliumHelper;
 
+/**
+ * Helium Breadcrumb helper
+ *
+ * Used to push items to breadcrumb and generate view
+ */
 class HeliumBreadcrumb implements HeliumBreadcrumbContract
 {
     protected $items = [];
 
     public function push(string $label, string $route)
     {
+
         $this->items[] = (object) [
             "label" => $label,
             "link" => HeliumHelper::formatLink($route)
@@ -18,7 +24,6 @@ class HeliumBreadcrumb implements HeliumBreadcrumbContract
 
         return $this;
     }
-
 
     public function generate()
     {

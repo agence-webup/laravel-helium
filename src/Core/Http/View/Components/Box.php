@@ -11,7 +11,7 @@ class Box extends Component
      *
      * @return void
      */
-    public function __construct(string $id, bool $padding = true, string $title = null)
+    public function __construct(string $id = null, bool $padding = true, string $title = null)
     {
         $this->id = $id;
         $this->padding = $padding;

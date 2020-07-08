@@ -5,15 +5,17 @@ namespace Webup\LaravelHelium\Core\Classes;
 use Webup\LaravelHelium\Core\Contracts\HeliumHeader as HeliumHeaderContract;
 use Webup\LaravelHelium\Core\Helpers\HeliumHelper;
 
+/**
+ * Helium Header helper
+ *
+ * Used to set header informations and actions
+ */
 class HeliumHeader implements HeliumHeaderContract
 {
 
     protected $title = null;
-
     protected $saveAction = null;
-
     protected $addAction = null;
-
     protected $contextualActions = [];
 
 
@@ -23,11 +25,11 @@ class HeliumHeader implements HeliumHeaderContract
         return $this;
     }
 
-    public function save(string $label, string $route)
+    public function save(string $label, string $formId)
     {
         $this->saveAction = (object) [
             "label" => $label,
-            "url" => HeliumHelper::formatLink($route),
+            "formId" => $formId,
         ];
 
         return $this;

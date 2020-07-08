@@ -1,8 +1,8 @@
 <header class="title-wrapper">
-  <h1 class="title">Dashboard</h1>
+  <h1 class="title">{{ $title }}</h1>
   <div>
     @if($saveAction)
-    <a href="{{ $saveAction->url }}" class="btn btn--primary" data-helium-save>{{ $saveAction->label }}</a>
+    <button class="btn btn--primary" data-helium-save="{{ $saveAction->formId }}">{{ $saveAction->label }}</button>
     @endif
 
     @if($addAction)
