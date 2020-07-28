@@ -16,8 +16,13 @@
     <div class="container">
       <div class="header__logo">
         {{ config("helium.main_title") }}
+        {{-- @if(config('app.env') == "local")
+        <a href="{{ route("crud.index") }}">
+        <i data-feather="plus-circle"></i>
+        </a>
+        @endif --}}
       </div>
-      <div class="header__infos">
+      <div class="header__nav">
         @include('helium::elements.keyboard-shorcuts')
         @include('helium::elements.shorcuts')
         @include('helium::elements.user-infos')
@@ -26,12 +31,12 @@
     </div>
   </header>
   @include('helium::elements.navigation')
+  {!! Helium::header()->generate() !!}
 
-  @include('helium::elements.notif')
+  {!! Helium::flash()->generate() !!}
 
   <div class="container">
     <main class="content">
-      {!! Helium::header()->generate() !!}
 
       @yield('content')
     </main>
@@ -48,6 +53,19 @@
     feather.replace()
   </script>
   <script>
+    [].forEach.call(document.querySelectorAll('[data-helium-save]'), function (el) {
+        el.addEventListener('click', function (event) {
+          event.preventDefault();
+          event.stopPropagation(); // if no confirmation
+          if (event.target.dataset.confirm && !confirm(event.target.dataset.confirm)) return; // let's submit the form
+          var form = document.getElementById(el.dataset.heliumSave);
+          if (form) {
+            form.submit();
+          }
+        });
+      });
+
+
     $('tbody').on('click', '[data-confirm]', function (event) {
             if(event.target.dataset.confirm && !confirm(event.target.dataset.confirm)){
                 event.preventDefault();

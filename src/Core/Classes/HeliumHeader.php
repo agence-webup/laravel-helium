@@ -48,16 +48,19 @@ class HeliumHeader implements HeliumHeaderContract
     public function contextual(array $actions)
     {
         $sortedActions = [];
+        $sortedWarning = [];
         $sortedDanger = [];
         foreach ($actions as $label => $action) {
-            if (is_array($action) && array_key_exists("dangerous", $action) && $action["dangerous"] == true) {
+            if (is_array($action) && array_key_exists("danger", $action) && $action["danger"] == true) {
                 $sortedDanger[] = HeliumHelper::formatActionForView($label, $action);
+            } else if (is_array($action) && array_key_exists("warning", $action) && $action["warning"] == true) {
+                $sortedWarning[] = HeliumHelper::formatActionForView($label, $action);
             } else {
                 $sortedActions[] = HeliumHelper::formatActionForView($label, $action);
             }
         }
 
-        $this->contextualActions = array_merge($sortedActions, $sortedDanger);
+        $this->contextualActions = array_merge($sortedActions, $sortedWarning, $sortedDanger);
         return $this;
     }
 

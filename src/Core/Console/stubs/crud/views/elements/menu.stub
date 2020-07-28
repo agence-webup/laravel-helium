@@ -1,2 +1,0 @@
- <a href="{{ route('admin.{{ modelsingular }}.index') }}" class="{{ current_class('admin.{{ modelsingular }}',"is-active") }}"><i data-feather="help-circle"></i> {{ Model }}</a>
- {{-- Helium Crud --}}

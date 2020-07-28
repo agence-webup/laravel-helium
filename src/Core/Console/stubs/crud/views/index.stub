@@ -1,31 +1,36 @@
-@extends('helium::layouts.master')
+@php
+Helium::header()->title("Liste des {{ userFriendlyNamePlurial }}");
+{{ AddBtn }}
+//Helium::breadcrumb()->push("{{ userFriendlyNamePlurial }}","admin.home");
+@endphp
 
-@section('content')
+@extends("helium::layouts.master")
 
-<header class="title-wrapper">
-    <h1 class="title">Liste</h1>
-    {{ AddBtn }}
-</header>
+@section("content")
 
-<article class="box">
-    <div class="box__content">
-        <table class="dataTable stripe hover">
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-</article>
+<x-helium-box id="test">
+    <x-slot name="header">
+    </x-slot>
+    <table class="dataTable dataTable--{{ modelsingular }} stripe hover">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</x-helium-box>
+
+
 @endsection
+
 
 @section('js')
 <script type="text/javascript">
-    $('.dataTable').DataTable({
+    $('.dataTable--{{ modelsingular }}').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,
@@ -44,6 +49,33 @@
         drawCallback: function(settings, json) {
             feather.replace()
         },
+        initComplete: function () {
+                let collumnsDefs = this.fnSettings().aoColumns;
+                if(collumnsDefs && collumnsDefs.length > 2){
+                    let newLine = document.createElement('tr')
+                    newLine.classList.add('searchLine')
+                    $(newLine).appendTo(this.api().table().header())
+                    this.api().columns().every(function () {
+                        let cell = document.createElement('th')
+                        let column = this;
+                        let collumnDef = collumnsDefs[column[0]];
+                        let headerSearchable = !$(column.header()).hasClass('table-actions')
+                        if (headerSearchable) {
+                            let input = document.createElement("input");
+                            input.placeholder = "Rechercher par " + column.header(column[0]).innerHTML.toLowerCase();
+                            input.classList.add("f-size-full");
+                            if (column.search()) {
+                                input.value = column.search();
+                            }
+                            var searchField = $(input).on('keyup change clear', function () {
+                                column.search($(this).val(), false, true, true).draw();
+                            })
+                            $(input).appendTo(cell)
+                        }
+                        $(cell).appendTo(newLine)
+                    });
+                }
+            },
         order: [[0, "desc"]],
     });
 </script>

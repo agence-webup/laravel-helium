@@ -3,10 +3,9 @@
 namespace Webup\LaravelHelium\Redirection\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Webup\LaravelHelium\Redirection\Http\Jobs\DestroyRedirection;
 use Webup\LaravelHelium\Redirection\Entities\Redirection;
+use Webup\LaravelHelium\Core\Facades\HeliumFlash;
 
 class DestroyController extends Controller
 {
@@ -14,25 +13,25 @@ class DestroyController extends Controller
     {
         try {
             $this->dispatchNow(new DestroyRedirection($id));
-        } catch (ValidationException $e) {
+        } catch (\Exception $e) {
+            HeliumFlash::error("Impossible de supprimer la redirection.");
             return redirect()->back();
         }
+        HeliumFlash::success("Redirection supprimée avec succès.");
 
-        session()->flash('notif.default', [
-            'message' => "Redirection supprimée avec succès.",
-            'level' => 'success',
-        ]);
-
-        return redirect()->route('admin.redirection.index');
+        return redirect()->route('admin.tools.redirection.index');
     }
 
     public function destroyAll()
     {
-        Redirection::truncate();
-        session()->flash('notif.default', [
-            'message' => "Redirections supprimées avec succès.",
-            'level' => 'success',
-        ]);
-        return redirect()->route('admin.redirection.index');
+        try {
+            Redirection::truncate();
+        } catch (\Exception $e) {
+            HeliumFlash::error("Impossible de supprimer les redirections.");
+            return redirect()->back();
+        }
+        HeliumFlash::success("Redirections supprimées avec succès.");
+
+        return redirect()->route('admin.tools.redirection.index');
     }
 }

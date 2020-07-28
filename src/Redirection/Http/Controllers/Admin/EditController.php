@@ -3,10 +3,10 @@
 namespace Webup\LaravelHelium\Redirection\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Validation\ValidationException;
 use Webup\LaravelHelium\Redirection\Http\Jobs\UpdateRedirection;
 use Webup\LaravelHelium\Redirection\Entities\Redirection;
 use Webup\LaravelHelium\Redirection\Http\Requests\Admin\Update as UpdateRedirectionRequest;
+use Webup\LaravelHelium\Core\Facades\HeliumFlash;
 
 class EditController extends Controller
 {
@@ -37,29 +37,14 @@ class EditController extends Controller
     {
         try {
             $this->dispatchNow(new UpdateRedirection($id, $request->validated()));
-        } catch (ValidationException $e) {
-            session()->flash('notif.default', [
-                'message' => "Une erreur est survenue.",
-                'level' => 'error',
-            ]);
-
-            return redirect()->back()
-                ->withInput($request->input())
-                ->withErrors($e->validator->errors());
         } catch (\Exception $e) {
-            session()->flash('notif.default', [
-                'message' => "Une erreur est survenue.",
-                'level' => 'error',
-            ]);
-
-            return redirect()->back();
+            HeliumFlash::error("Une erreur est survenue.");
+            return redirect()->back()
+                ->withInput($request->input());
         }
 
-        $request->session()->flash('notif.default', [
-            'message' => "Modifications enregistrées avec succès.",
-            'level' => 'success',
-        ]);
+        HeliumFlash::success("Redirection modifiée avec succès.");
 
-        return redirect()->route('admin.redirection.index');
+        return redirect()->route('admin.tools.redirection.index');
     }
 }

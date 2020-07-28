@@ -10,9 +10,11 @@ use File;
 use Illuminate\Support\Facades\Blade;
 use Webup\LaravelHelium\Core\Classes\Helium;
 use Webup\LaravelHelium\Core\Classes\HeliumBreadcrumb;
+use Webup\LaravelHelium\Core\Classes\HeliumFlash;
 use Webup\LaravelHelium\Core\Classes\HeliumHeader;
 use Webup\LaravelHelium\Core\Contracts\Helium as HeliumContract;
 use Webup\LaravelHelium\Core\Contracts\HeliumBreadcrumb as HeliumBreadcrumbContract;
+use Webup\LaravelHelium\Core\Contracts\HeliumFlash as HeliumFlashContract;
 use Webup\LaravelHelium\Core\Contracts\HeliumHeader as HeliumHeaderContract;
 
 class CoreServiceProvider extends ServiceProvider
@@ -41,7 +43,7 @@ class CoreServiceProvider extends ServiceProvider
             __DIR__ . '/resources/views/elements' => resource_path('views/vendor/helium/elements'),
             __DIR__ . '/resources/views/home' => resource_path('views/vendor/helium/home'),
             __DIR__ . '/resources/views/layouts' => resource_path('views/vendor/helium/layouts'),
-            __DIR__ . '/routes' => base_path('routes')
+            __DIR__ . '/routes/admin.php' => base_path('routes/admin.php')
         ], 'helium');
 
         $router->aliasMiddleware('admin.auth', RedirectIfUnauthenticated::class);
@@ -57,6 +59,10 @@ class CoreServiceProvider extends ServiceProvider
                 throw new \Exception("You need to publish laravel helium files (php artisan vendor:publish --tag=helium)", 42);
             }
             $this->loadRoutesFrom(base_path('routes') . '/admin.php');
+
+            if (config('app.env') == 'local') {
+                $this->loadRoutesFrom(__DIR__ . '/routes/crud.php');
+            }
         }
 
 
@@ -92,6 +98,11 @@ class CoreServiceProvider extends ServiceProvider
             return new HeliumHeader();
         });
 
+        $this->app->singleton('helium.flash', function ($app) {
+            return new HeliumFlash();
+        });
+
+        $this->app->bind(HeliumFlashContract::class, 'helium.flash');
         $this->app->bind(HeliumBreadcrumbContract::class, 'helium.breadcrumb');
         $this->app->bind(HeliumHeaderContract::class, 'helium.header');
         $this->app->bind(HeliumContract::class, 'helium');
@@ -130,9 +141,11 @@ class CoreServiceProvider extends ServiceProvider
             HeliumContract::class,
             HeliumBreadcrumbContract::class,
             HeliumHeaderContract::class,
+            HeliumFlashContract::class,
             'helium',
             'helium.breadcrumb',
             'helium.header',
+            'helium.flash',
         ];
     }
 

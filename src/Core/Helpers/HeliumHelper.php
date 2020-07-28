@@ -13,16 +13,19 @@ class HeliumHelper
         }
 
         $route = array_key_exists("route", $action) ? $action["route"] : null;
-        $dangerous = array_key_exists("dangerous", $action) && $action["dangerous"] == true;
+        $danger = array_key_exists("danger", $action) && $action["danger"] == true;
+        $warning = array_key_exists("warning", $action) && $action["warning"] == true;
+
         $cssClass = array_key_exists("class", $action) ? $action["class"] : null;
         unset($action['route']);
         unset($action['style']);
         unset($action['class']);
-        unset($action['dangerous']);
+        unset($action['danger']);
+        unset($action['warning']);
         return (object) [
             "label" => $label,
             "url" => $route ?  HeliumHelper::formatLink($route) : "",
-            "style" => $dangerous ? "danger" : "secondary",
+            "style" => $danger ? "red" : ($warning ? "orange" : ""),
             "cssClass" => $cssClass,
             "others" => $action
         ];

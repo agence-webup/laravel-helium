@@ -1,6 +1,6 @@
 @php
 Helium::header()->title("Création d'une redirection");
-Helium::header()->save("Créer la redirection","createRedirection");
+Helium::header()->save("Sauvegarder","createRedirection");
 @endphp
 
 @extends('helium::layouts.master')

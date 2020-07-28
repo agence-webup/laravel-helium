@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\{{ Model }};
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Jobs\{{ Model }}\Destroy{{ Model }};
+use Webup\LaravelHelium\Core\Facades\HeliumFlash;
 
 class DestroyController extends Controller
 {
@@ -12,16 +13,12 @@ class DestroyController extends Controller
     {
         try {
             $this->dispatchNow(new Destroy{{ Model }}($id));
-        } catch (ValidationException $e) {
-            return redirect()->back()
-                ->withInput($request->input())
-                ->withErrors($e->validator->errors());
+        } catch (\Exception $e) {
+            HeliumFlash::error("Impossible de supprimé l'élément.");
+            return redirect()->back();
         }
 
-        session()->flash('notif.default', [
-            'message' => "Élément supprimé avec succès.",
-            'level' => 'success',
-        ]);
+        HeliumFlash::success("{{ userFriendlyNameSingularUcfirst }} supprimé{{ genderPrefix }} avec succès.");
 
         return redirect()->route('admin.{{ modelsingular }}.index');
     }

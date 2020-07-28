@@ -1,0 +1,6 @@
+"{{ userFriendlyNamePlurialUcfirst }}" => [
+            "current_route" => "admin.{{ modelsingular }}",
+            "icon" => "help-circle",
+            "url" => "admin.{{ modelsingular }}.index",
+        ],
+        // {{ Helium Crud Menu }}

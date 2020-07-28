@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin\{{ Model }};
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Jobs\{{ Model }}\Store{{ Model }};
 use App\Entities\{{ Model }};
 use App\Http\Requests\Admin\{{ Model }}\Store as Store{{ Model }}Request;
+use Webup\LaravelHelium\Core\Facades\HeliumFlash;
 
 class CreateController extends Controller
 {
@@ -33,21 +33,13 @@ class CreateController extends Controller
     {
         try {
             $this->dispatchNow(new Store{{ Model }}($request->validated()));
-        } catch(\Exception $e){
-            session()->flash('notif.default', [
-                'message' => "Une erreur est survenue.",
-                'level' => 'error',
-            ]);
-
+        } catch (\Exception $e){
+            HeliumFlash::error("Une erreur est survenue.");
             return redirect()->back()
-                ->withInput($request->input())
-                ->withErrors($e->validator->errors());
-        }     
+                ->withInput($request->input());
+        }
 
-        $request->session()->flash('notif.default', [
-            'message' => "Élément ajouté avec succès.",
-            'level' => 'success',
-        ]);
+        HeliumFlash::success("{{ userFriendlyNameSingularUcfirst }} ajouté{{ genderPrefix }} avec succès.");
 
         return redirect()->route('admin.{{ modelsingular }}.index');
     }

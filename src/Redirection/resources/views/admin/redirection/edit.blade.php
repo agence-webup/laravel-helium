@@ -1,6 +1,6 @@
 @php
 Helium::header()->title("Edition de la redirection");
-Helium::header()->save("Enregistrer la redirection","editRedirection");
+Helium::header()->save("Sauvegarder","editRedirection");
 Helium::header()->contextual([
 "Supprimer la redirection" => [
 "data-confirm" => "Voulez vous vraiment supprimer ?",

@@ -1,11 +1,11 @@
 @php
 Helium::header()->title("Liste des redirections");
-Helium::header()->add("Ajouter une redirection","admin.tools.redirection.create");
+Helium::header()->add("Ajouter","admin.tools.redirection.create");
 Helium::header()->contextual([
 "Supprimer toutes les redirections" => [
 "data-confirm" => "Voulez vous vraiment tout supprimer ?",
 "data-submit" => "deleteRedirections",
-"dangerous" => true
+"danger" => true
 ],
 "Importer un csv" => [
 "route" => "admin.tools.redirection.import",
@@ -59,6 +59,31 @@ Helium::header()->contextual([
         },
         drawCallback: function(settings, json) {
             feather.replace()
+        },
+        initComplete: function () {
+            let collumnsDefs = this.fnSettings().aoColumns;
+            let newLine = document.createElement('tr')
+            newLine.classList.add('searchLine')
+            $(newLine).appendTo(this.api().table().header())
+            this.api().columns().every(function () {
+                let cell = document.createElement('th')
+                let column = this;
+                let collumnDef = collumnsDefs[column[0]];
+                let headerSearchable = !$(column.header()).hasClass('table-actions')
+                if (headerSearchable) {
+                    let input = document.createElement("input");
+                    input.placeholder = "Search by " + column.header(column[0]).innerHTML.toLowerCase();
+                    input.classList.add("f-size-full");
+                    if (column.search()) {
+                        input.value = column.search();
+                    }
+                    var searchField = $(input).on('keyup change clear', function () {
+                        column.search($(this).val(), false, true, true).draw();
+                    })
+                    $(input).appendTo(cell)
+                }
+                $(cell).appendTo(newLine)
+            });
         },
         order: [[0, "desc"]],
     });

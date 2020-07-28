@@ -1,1 +1,1 @@
-<a href="{{ route('admin.{{ modelsingular }}.create') }}" class="btn btn--primary">Ajouter</a>
+Helium::header()->add("Ajouter",'admin.{{ modelsingular }}.create');

@@ -26,4 +26,12 @@ class Helium implements HeliumContract
     {
         return app('helium.header');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flash()
+    {
+        return app('helium.flash');
+    }
 }

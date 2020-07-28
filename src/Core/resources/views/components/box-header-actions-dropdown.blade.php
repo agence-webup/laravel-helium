@@ -1,9 +1,9 @@
-<div class="dropmic title-nav__item" data-dropmic="title-nav-dropdown" data-dropmic-direction="bottom-left"
+<div class="dropmic ActionsBtnContainer" data-dropmic="title-nav-dropdown" data-dropmic-direction="bottom-left"
   role="navigation">
-  <button class="btn btn--secondary btn--bullet" title="Menu" aria-label="Menu" data-dropmic-btn>
-    <i data-feather="more-horizontal"></i>
+  <button class="box__headerActionsBtn" title="Actions" aria-label="Actions" data-dropmic-btn>
+    Actions
   </button>
-  <div class="dropmic-menu" aria-hidden="true">
+  <div class="dropmic-menu dropmic-menu--noradius" aria-hidden="true">
     <ul class="dropmic-menu__list" role="menu">
       @foreach ($actions as $action)
       <li class="dropmic-menu__listItem" role="menuitem">
@@ -15,9 +15,6 @@
           >{{ $action->label }}</button>
       </li>
       @endforeach
-
-
-
     </ul>
   </div>
 </div>

@@ -12,6 +12,7 @@ return [
             "icon" => "home",
             "url" => 'admin.home',
         ],
+        // {{ Helium Crud Menu }}
     ],
     'modules' => [
         'contact' => [

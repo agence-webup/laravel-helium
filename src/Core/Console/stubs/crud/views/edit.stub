@@ -1,40 +1,27 @@
+@php
+Helium::header()->title("Edition de {{ modelGenderDeterministic }}{{ userFriendlyNameSingular }}");
+{{ UpdateBtn }}
+@endphp
+
 @extends('helium::layouts.master')
 
 @section('content')
 
-<header class="title-wrapper">
-    <h1 class="title">Edition `{{ ${{ modelsingular }}->id }}`</h1>
-    <button class="btn btn--primary" data-submit="edit{{ Model }}">Enregistrer</button>
-</header>
+<form id="edit{{ Model }}" class="" action="{{ route('admin.{{ modelsingular }}.update',[${{ modelsingular }}->id]) }}" method="post">
+  {{ csrf_field() }}
 
-<form id="edit{{ Model }}" action="{{ route('admin.{{ modelsingular }}.update',[${{ modelsingular }}->id]) }}" method="post">
+  <x-helium-box>
+    <x-slot name="header">
+      <x-helium-box-header title="Informations" />
+    </x-slot>
+    @include('admin.{{ modelsingular }}.form.form')
+  </x-helium-box>
 
-    {{ csrf_field() }}
-    
-    <article class="box">
-        <header class="box__header">Informations communes</header>
-        <div class="box__content">    
-            @include('admin.{{ modelsingular }}.form.form')
-        </div>
-    </article>
-    
-
-    <div class="box box--actions">
-        <button class="btn btn--primary" data-submit="edit{{ Model }}">Enregistrer</button>
-        <button class="btn btn--danger" data-confirm="Voulez vous vraiment supprimer ?" data-submit="delete{{ Model }}">Supprimer</button>
-    </div>
-
-</form>
-
-
-<form id="delete{{ Model }}" action="{{ route('admin.{{ modelsingular }}.destroy', ${{ modelsingular }}->id) }}" method="post">
-    {{ method_field('delete') }}
-    {{ csrf_field() }}
 </form>
 
 
 @endsection
 
 @section('js')
-    @include("admin.{{ modelsingular }}.form.javascript")
+@include("admin.{{ modelsingular }}.form.javascript")
 @endsection

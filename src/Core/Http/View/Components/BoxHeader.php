@@ -26,10 +26,13 @@ class BoxHeader extends Component
     public function render()
     {
         $sortedActions = [];
+        $sortedWarning = [];
         $sortedDanger = [];
         foreach ($this->actions as $label => $action) {
-            if (is_array($action) && array_key_exists("dangerous", $action) && $action["dangerous"] == true) {
+            if (is_array($action) && array_key_exists("danger", $action) && $action["danger"] == true) {
                 $sortedDanger[] = HeliumHelper::formatActionForView($label, $action);
+            } else if (is_array($action) && array_key_exists("warning", $action) && $action["warning"] == true) {
+                $sortedWarning[] = HeliumHelper::formatActionForView($label, $action);
             } else {
                 $sortedActions[] = HeliumHelper::formatActionForView($label, $action);
             }
@@ -37,7 +40,7 @@ class BoxHeader extends Component
 
         return view('helium::components.box-header', [
             "title" => $this->title,
-            "actions" => array_merge($sortedActions, $sortedDanger)
+            "actions" => array_merge($sortedActions, $sortedWarning, $sortedDanger)
         ]);
     }
 }

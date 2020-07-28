@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Webup\LaravelHelium\Redirection\Http\Jobs\StoreRedirection;
 use Webup\LaravelHelium\Redirection\Entities\Redirection;
 use Webup\LaravelHelium\Redirection\Http\Requests\Admin\Store as StoreRedirectionRequest;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
+use Webup\LaravelHelium\Core\Facades\HeliumFlash;
 
 class CreateController extends Controller
 {
@@ -37,30 +35,14 @@ class CreateController extends Controller
     {
         try {
             $this->dispatchNow(new StoreRedirection($request->validated()));
-        } catch (ValidationException $e) {
-            session()->flash('notif.default', [
-                'message' => "Une erreur est survenue.",
-                'level' => 'error',
-            ]);
-
-            return redirect()->back()
-                ->withInput($request->input())
-                ->withErrors($e->validator->errors());
         } catch (\Exception $e) {
-            session()->flash('notif.default', [
-                'message' => "Une erreur est survenue.",
-                'level' => 'error',
-            ]);
-
+            HeliumFlash::error("Une erreur est survenue.");
             return redirect()->back();
         }
 
-        $request->session()->flash('notif.default', [
-            'message' => "Redirection ajoutée avec succès.",
-            'level' => 'success',
-        ]);
+        HeliumFlash::success("Redirection ajoutée avec succès.");
 
-        return redirect()->route('admin.redirection.index');
+        return redirect()->route('admin.tools.redirection.index');
     }
 
     public function import()
@@ -90,20 +72,12 @@ class CreateController extends Controller
         }
 
         if ($success > 0) {
-            $request->session()->flash('notif.default', [
-                'message' => $success . " redirection(s) ajoutée(s) avec succès.",
-                'level' => 'success',
-            ]);
-        } else {
-            $request->session()->flash('notif.default', [
-                'message' => $errors . " erreur(s) d'ajout.",
-                'level' => 'error',
-            ]);
+            HeliumFlash::success($success . " redirection(s) ajoutée(s) avec succès.");
+        }
+        if ($errors > 0) {
+            HeliumFlash::error($errors . " erreur(s) d'ajout.");
         }
 
-
-
-
-        return redirect()->route('admin.redirection.index');
+        return redirect()->route('admin.tools.redirection.index');
     }
 }

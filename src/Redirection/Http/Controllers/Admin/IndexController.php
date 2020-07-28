@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DataTables;
 use Webup\LaravelHelium\Redirection\Entities\Redirection;
-use DB;
 
 class IndexController extends Controller
 {

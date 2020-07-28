@@ -4,6 +4,7 @@ namespace Webup\LaravelHelium\Redirection\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Webup\LaravelHelium\Core\Facades\HeliumFlash;
 
 class Update extends FormRequest
 {
@@ -32,10 +33,7 @@ class Update extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        session()->flash('notif.default', [
-            'message' => "Les données sont invalides.",
-            'level' => 'error',
-        ]);
+        HeliumFlash::error("Les données du formulaire sont incorrectes.");
 
         parent::failedValidation($validator);
     }

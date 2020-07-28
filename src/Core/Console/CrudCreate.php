@@ -10,6 +10,10 @@ use DB;
 
 class CrudCreate extends Command
 {
+    const WORD_GENDER_FEMININE = "Feminine";
+    const WORD_GENDER_MASCULINE = "Masculine";
+
+
     /**
      * The name and signature of the console command.
      *
@@ -29,6 +33,8 @@ class CrudCreate extends Command
     private $modelNamePlural = null;
     private $modelNameSingular = null;
     private $modelProperties = [];
+    private $userFriendlyNameSingular = null;
+    private $userFriendlyNamePlurial = null;
 
     private $viewDirectory = null;
     private $viewElementDirectory = null;
@@ -62,10 +68,18 @@ class CrudCreate extends Command
 
         //Get model plural name (for generating views)
         $this->modelNamePlural = $this->selectedModel->getTable();
+
         //Get model singular name (for generating views)
         $this->modelNameSingular = Str::singular($this->modelNamePlural);
 
         $this->formatProperties();
+
+        $this->userFriendlyNameSingular = strtolower($this->ask("Name displayed in views (singular)"));
+        $this->userFriendlyNamePlurial = strtolower($this->ask("Name displayed in views (plurial)", $this->userFriendlyNameSingular . 's'));
+        $this->modelGender = $this->choice(
+            'What is the model gender?',
+            [self::WORD_GENDER_FEMININE, self::WORD_GENDER_MASCULINE],
+        );
 
         //Ask for C.R.U.D
         $this->needCreate = $this->confirm("Need Create controller & views ?", true);
@@ -172,7 +186,6 @@ class CrudCreate extends Command
             }
         }
         $this->comment("");
-
     }
 
     private function processRepository()
@@ -221,54 +234,57 @@ class CrudCreate extends Command
     private function processMenu()
     {
         $this->info("Step : Menu");
-        $generatedMenu = $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/views/elements/menu.stub'));
-        $menuRoutePath = resource_path('views/vendor/helium/elements/menu.blade.php');
-        if (!file_exists($menuRoutePath)) {
-            $this->error("Unable to find " . $menuRoutePath . " file. Did you run `php artisan vendor:publish --tag=helium` command ?");
-            return;
-        }
-        $menuRouteFile = file_get_contents($menuRoutePath);
-        if (strpos($menuRouteFile, '{{-- Helium Crud --}}') === false) {
-            $this->error("File " . $menuRoutePath . " doesn't have `{{-- Helium Crud --}}` string which help Helium Crud Generator working");
+
+        $generatedMenu = $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/config/menu.stub'));
+
+        $heliumConfigPath = config_path('helium.php');
+        $heliumConfigFile = file_get_contents($heliumConfigPath);
+        if (strpos($heliumConfigFile, '// {{ Helium Crud Menu }}') === false) {
+            $this->error("File " . $heliumConfigPath . " doesn't have `// {{ Helium Crud Menu }}` string which help Helium Crud Generator working");
             $this->comment("Please manually add following menu :");
             $this->info($generatedMenu);
         } else {
-            $this->comment("Updating menu `" . $menuRoutePath . "`");
-            $menuRouteFile = str_replace('{{-- Helium Crud --}}', $generatedMenu, $menuRouteFile);
-            file_put_contents($menuRoutePath, $menuRouteFile);
+            $this->comment("Updating route `" . $heliumConfigPath . "`");
+            $heliumConfigFile = str_replace('// {{ Helium Crud Menu }}', $generatedMenu, $heliumConfigFile);
+            file_put_contents($heliumConfigPath, $heliumConfigFile);
         }
         $this->comment("");
-
     }
 
     protected function formatProperties()
     {
         $exeptedProperties = ["id", "created_at", "updated_at"];
-        $dbProperties = DB::select("DESCRIBE $this->modelNamePlural");
+
+        $dbProperties = $this->selectedModel->getConnection()->select("select * from INFORMATION_SCHEMA.COLUMNS where table_name = '" . $this->modelNamePlural . "'");
+        // COLUMN_NAME
+        // IS_NULLABLE
+        // DATA_TYPE
 
         foreach ($dbProperties as $key => $dbProperty) {
-            if (in_array($dbProperty->Field, $exeptedProperties)) {
+            $temp = (array)$dbProperty;
+            $dbProperty = array_combine(array_map('strtolower', array_keys($temp)), $temp);
+
+            if (in_array($dbProperty["column_name"], $exeptedProperties)) {
                 continue;
             }
             $this->modelProperties[] = [
-                "name" => $dbProperty->Field,
-                "required" => $dbProperty->Null == "YES" ? false : true,
-                "type" => $this->parseDbTypeToHtmlInputType($dbProperty->Type)
+                "name" => $dbProperty["column_name"],
+                "required" => $dbProperty["is_nullable"] == "YES" ? false : true,
+                "type" => $this->parseDbTypeToHtmlInputType($dbProperty["data_type"])
             ];
         }
     }
 
     private function parseDbTypeToHtmlInputType($dbType)
     {
-        switch (true) {
-            case strpos($dbType, "int(") !== false:
-                return "number";
-            case strpos($dbType, "varchar(") !== false:
-                return "text";
-            default:
-                return "text";
-                break;
+        if (strpos($dbType, "int(") !== false) {
+            return "number";
         }
+        if (strpos($dbType, "varchar(") !== false) {
+            return "text";
+        }
+
+        return "text";
     }
 
     protected function parseAnswers()
@@ -428,12 +444,21 @@ class CrudCreate extends Command
         $stubReplacers = [
             '{{ Model }}' => $this->modelName,
             '{{ modelsingular }}' => $this->modelNameSingular,
-            '{{ modelplural }}' => $this->modelNamePlural
+            '{{ modelplural }}' => $this->modelNamePlural,
+            '{{ userFriendlyNameSingular }}' => $this->userFriendlyNameSingular,
+            '{{ userFriendlyNameSingularUcfirst }}' => ucfirst($this->userFriendlyNameSingular),
+            '{{ userFriendlyNamePlurial }}' => $this->userFriendlyNamePlurial,
+            '{{ userFriendlyNamePlurialUcfirst }}' => ucfirst($this->userFriendlyNamePlurial),
+            '{{ genderPrefix }}' => $this->modelGender == self::WORD_GENDER_FEMININE ? "e" : "",
+            '{{ modelGender }}' => $this->modelGender == self::WORD_GENDER_FEMININE ? "une" : "un",
+            '{{ modelGenderDeterministic }}' => in_array(substr($this->userFriendlyNameSingular, 0, 1), ["a", "e", "i", "o", "u", "y"]) ? "l'" : ($this->modelGender == self::WORD_GENDER_FEMININE ? "la " : "le "),
         ];
 
         $extendedReplacers = [
             '{{ IndexDataSetLink }}' => ($this->needUpdate) ? 'row.dataset.link = "{{ route("admin.{{ modelsingular }}.edit", ["id" => "%id%"]) }}".replace("%id%",data.id);' : "",
             '{{ AddBtn }}' => ($this->needCreate) ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/addBtn.stub') : "",
+            '{{ SaveBtn }}' => ($this->needCreate) ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/saveBtn.stub') : "",
+            '{{ UpdateBtn }}' => ($this->needUpdate) ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/updateBtn.stub') : "",
             '{{ DatatableEditBtn }}' => ($this->needUpdate) ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions-edit.stub') : "",
             '{{ DatatableDeleteBtn }}' => ($this->needDelete) ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/datatable-actions-delete.stub') : "",
             '{{ ReadRoutes }}' => ($this->needRead) ? file_get_contents(__DIR__ . '/stubs/crud/routes/read.stub') : "",
