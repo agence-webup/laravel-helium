@@ -28,11 +28,11 @@ class MigrationController extends Controller
 
         if (array_get($data, "migration", false) != false) {
             $name = array_get($data, "name");
-            Artisan::call('make:migration create_' . Str::plural($name) . '_table');
+            // Artisan::call('make:migration create_' . Str::plural($name) . '_table');
 
             CrudHelper::replaceInStubAndSave('/entities/model.stub', [
                 'Model' => ucfirst(Str::singular($name))
-            ], app_path('Entitites/' . ucfirst(Str::singular($name)) . ".php"));
+            ], app_path('Entities/' . ucfirst(Str::singular($name)) . ".php"));
             dd("create migration");
         } else {
             dd($data);

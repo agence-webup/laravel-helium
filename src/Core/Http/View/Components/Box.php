@@ -11,11 +11,9 @@ class Box extends Component
      *
      * @return void
      */
-    public function __construct(string $id = null, bool $padding = true, string $title = null)
+    public function __construct(bool $padding = true)
     {
-        $this->id = $id;
         $this->padding = $padding;
-        $this->title = $title;
     }
 
     /**
@@ -26,9 +24,7 @@ class Box extends Component
     public function render()
     {
         return view('helium::components.box', [
-            "id" => $this->id,
             "padding" => $this->padding,
-            "title" => $this->title,
         ]);
     }
 }

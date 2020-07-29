@@ -2,8 +2,24 @@
 
 namespace Webup\LaravelHelium\Core\Helpers;
 
+use Illuminate\Support\Arr;
+
 class HeliumHelper
 {
+
+    public static function current_class($routeName, $cssClass = 'is-active')
+    {
+        if (!$routeName) {
+            return '';
+        }
+
+        $currentRoute = app('router')->current()->getName();
+        $rootPath = substr($currentRoute, 0, strlen($routeName));
+
+        return ($rootPath == $routeName) ? $cssClass : '';
+    }
+
+
     public static function formatActionForView(string $label, $action)
     {
         if (!is_array($action)) {
@@ -40,7 +56,7 @@ class HeliumHelper
             "icon" => $configMenu["icon"],
             "url" => !$isDropdown ? HeliumHelper::formatLink($configMenu["url"]) : null,
             "urls" => $isDropdown ? array_map("self::formatLink", $configMenu["links"]) : [],
-            "currentRoute" => $configMenu["current_route"]
+            "currentRoute" => Arr::get($configMenu, "current_route")
         ];
     }
 
