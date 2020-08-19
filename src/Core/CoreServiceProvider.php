@@ -129,6 +129,18 @@ class CoreServiceProvider extends ServiceProvider
             ]);
             $this->app['config']->set("helium.menu.Outils", $menuConfig);
         }
+
+        // if (config()->get('helium.modules.setting.enabled', false)) {
+        //     $this->app->register('Webup\LaravelHelium\Setting\SettingServiceProvider');
+        //     $menuConfig = $this->app['config']->get("helium.menu.Outils", [
+        //         "current_route" => "admin.tools",
+        //         "icon" => "sliders",
+        //         "links" => [
+        //             "Paramètres" => "admin.tools.redirection.index",
+        //         ]
+        //     ]);
+        //     $this->app['config']->set("helium.menu.Outils", $menuConfig);
+        // }
     }
     /**
      * Get the services provided by the provider.

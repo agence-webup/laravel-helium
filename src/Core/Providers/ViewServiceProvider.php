@@ -30,7 +30,7 @@ class ViewServiceProvider extends ServiceProvider
             'Webup\LaravelHelium\Core\Http\View\Composers\MenuComposer'
         );
         View::composer(
-            'helium::elements.shorcuts',
+            'helium::elements.shortcuts',
             'Webup\LaravelHelium\Core\Http\View\Composers\ShortcutComposer'
         );
     }

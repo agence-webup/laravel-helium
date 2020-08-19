@@ -23,8 +23,8 @@
         @endif --}}
       </div>
       <div class="header__nav">
-        @include('helium::elements.keyboard-shorcuts')
-        @include('helium::elements.shorcuts')
+        @include('helium::elements.keyboard-shortcuts')
+        @include('helium::elements.shortcuts')
         @include('helium::elements.user-infos')
       </div>
 

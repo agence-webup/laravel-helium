@@ -4,39 +4,41 @@ namespace Webup\LaravelHelium\Core\Http\Controllers\Crud;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
-use Webup\LaravelHelium\Core\Helpers\CrudHelper;
 
 class MigrationController extends Controller
 {
     public function index()
     {
+        dd($this->getModelsList());
+        $availableModels = [
+            (object)[
+                "name" => "User",
+                "columns" => (object)[
+                    "id" => "integer",
+                    "name" => "string",
+                    "created_at" => "date",
+                    "updated_at" => "date",
+                ]
+            ]
+        ];
+
         return view('helium::crud.migration', [
-            "models" => $this->getModelsList()
+            "availableModels" => $availableModels,
+            "oldCustomColumns" => json_decode(old("customColumns", "[]")),
+            "oldCustomRelations" => json_decode(old("customRelations", "[]"))
         ]);
     }
 
     public function post(Request $request)
     {
-        $data = $request->validate([
-            "migration" => "",
-            "model" => "required_without:migration",
-            "name" => "required_with:migration,on",
-        ]);
-
-        if (array_get($data, "migration", false) != false) {
-            $name = array_get($data, "name");
-            // Artisan::call('make:migration create_' . Str::plural($name) . '_table');
-
-            CrudHelper::replaceInStubAndSave('/entities/model.stub', [
-                'Model' => ucfirst(Str::singular($name))
-            ], app_path('Entities/' . ucfirst(Str::singular($name)) . ".php"));
-            dd("create migration");
-        } else {
-            dd($data);
-        }
+        $data = $request->all();
+        array_set($data, 'enableId', array_get($data, 'enableId') == "on" ? true : false);
+        array_set($data, 'enableSoftDelete', array_get($data, 'enableSoftDelete') == "on" ? true : false);
+        array_set($data, 'enableTimestamps', array_get($data, 'enableTimestamps') == "on" ? true : false);
+        dd($data);
+        return redirect()->back()->withInput($data);
+        return view('helium::crud.migration');
     }
 
     private function getModelsList()

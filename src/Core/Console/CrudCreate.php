@@ -3,10 +3,9 @@
 namespace Webup\LaravelHelium\Core\Console;
 
 use Illuminate\Console\Command;
-use Webup\LaravelHelium\Core\Entities\AdminUser;
 use File;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use DB;
 
 class CrudCreate extends Command
 {
@@ -62,9 +61,20 @@ class CrudCreate extends Command
 
         $models = $this->getModelsList();
 
+        if (count($models) < 1) {
+            $this->error("No models found, please create model & migration before using helium CRUD generator");
+            return;
+        }
+
         //Get model instanciated from list model choice
         $this->modelName = $this->choice('Choose a model', array_keys($models));
         $this->selectedModel = $models[$this->modelName];
+
+        //Test if table exist
+        if (!Schema::hasTable($this->selectedModel->getTable())) {
+            $this->error("No '" . $this->selectedModel->getTable() . "' table found, please create migration before using helium CRUD generator");
+            return;
+        }
 
         //Get model plural name (for generating views)
         $this->modelNamePlural = $this->selectedModel->getTable();
@@ -452,6 +462,7 @@ class CrudCreate extends Command
             '{{ genderPrefix }}' => $this->modelGender == self::WORD_GENDER_FEMININE ? "e" : "",
             '{{ modelGender }}' => $this->modelGender == self::WORD_GENDER_FEMININE ? "une" : "un",
             '{{ modelGenderDeterministic }}' => in_array(substr($this->userFriendlyNameSingular, 0, 1), ["a", "e", "i", "o", "u", "y"]) ? "l'" : ($this->modelGender == self::WORD_GENDER_FEMININE ? "la " : "le "),
+            'de le' => "du",
         ];
 
         $extendedReplacers = [
@@ -467,7 +478,7 @@ class CrudCreate extends Command
             '{{ DeleteRoutes }}' => ($this->needDelete) ? file_get_contents(__DIR__ . '/stubs/crud/routes/delete.stub') : "",
             '{{ RequestModelProperties }}' => $this->createRequestModelProperties(),
             '{{ JobModelPropertiesSetters }}' => $this->createJobModelPropertiesSetters(),
-            '{{-- Helium Crud Form --}}' => $this->replaceInFormStub()
+            '{{-- Helium Crud Form --}}' => $this->replaceInFormStub(),
         ];
 
         foreach ($extendedReplacers as $searchString => $replaceBy) {

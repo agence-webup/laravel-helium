@@ -14,7 +14,7 @@ class ShortcutComposer
     public function compose(View $view)
     {
         $shortcuts = [];
-        foreach (config('helium.shortcuts') as $containers) {
+        foreach (config('helium.shortcuts', []) as $containers) {
             $containeur = [];
             foreach ($containers as $label => $route) {
                 $containeur[] = (object) [

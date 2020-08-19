@@ -1,3 +1,4 @@
+@if(count($shortcuts) > 0)
 <div class="header__navItem">
   <div class="dropmic" data-dropmic="header-nav-actions" data-dropmic-direction="bottom-left" role="navigation">
     <button class="btn--dropdown" data-dropmic-btn>Actions rapides</button>
@@ -12,3 +13,4 @@
     </div>
   </div>
 </div>
+@endif
