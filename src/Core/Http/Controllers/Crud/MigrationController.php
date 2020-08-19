@@ -5,24 +5,14 @@ namespace Webup\LaravelHelium\Core\Http\Controllers\Crud;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class MigrationController extends Controller
 {
     public function index()
     {
-        dd($this->getModelsList());
-        $availableModels = [
-            (object)[
-                "name" => "User",
-                "columns" => (object)[
-                    "id" => "integer",
-                    "name" => "string",
-                    "created_at" => "date",
-                    "updated_at" => "date",
-                ]
-            ]
-        ];
-
+        $availableModels = $this->getAvailableModels();
         return view('helium::crud.migration', [
             "availableModels" => $availableModels,
             "oldCustomColumns" => json_decode(old("customColumns", "[]")),
@@ -41,6 +31,27 @@ class MigrationController extends Controller
         return view('helium::crud.migration');
     }
 
+
+    private function getAvailableModels()
+    {
+        $availableModels = [];
+        $modelList = $this->getModelsList();
+        foreach ($modelList as $modelClass => $model) {
+            $modelTableName = $model->getTable();
+            $columns = Schema::getColumnListing($modelTableName);
+            $availableModels[] = (object)[
+                "filepath" => $modelClass . ".php",
+                "name" => $modelClass,
+                "nameWithoutNamespace" => str_replace("\App\Entities\\", "", $modelClass),
+                "nameSingular" => Str::singular($modelTableName),
+                "tablename" => $modelTableName,
+                "columns" => $columns
+            ];
+        }
+
+        return $availableModels;
+    }
+
     private function getModelsList()
     {
         $result = [];
@@ -52,7 +63,10 @@ class MigrationController extends Controller
             try {
                 $class = new $classnameWithNamespace();
                 if (is_subclass_of($class, "Illuminate\Database\Eloquent\Model")) {
-                    $result[$classnameWithNamespace] = $classname;
+                    $selectedModel = new $class();
+                    if (Schema::hasTable($selectedModel->getTable())) {
+                        $result[$classnameWithNamespace] = $selectedModel;
+                    }
                 }
             } catch (\Throwable $e) {
             } catch (\Exception $e) {

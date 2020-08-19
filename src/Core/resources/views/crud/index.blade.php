@@ -19,9 +19,7 @@ Helium::header()->save("Sauvegarder","createMigration");
       ->label('Model à utiliser')
       ->addOptions($models)
       !!}
-
       <a href="{{ route("crud.migration.index") }}">Créer un model</a>
-
     </div>
   </x-helium-box>
 
