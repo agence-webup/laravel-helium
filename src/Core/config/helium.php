@@ -10,6 +10,11 @@ return [
             "icon" => "home",
             "url" => 'admin.home',
         ],
+        "Administrateurs" => [
+            "current_route" => "admin.admin_user",
+            "icon" => "users",
+            "url" => 'admin.admin_user.index',
+        ],
         // {{ Helium Crud Menu }}
     ],
     "shortcuts" => [],
@@ -28,7 +33,7 @@ return [
                 config("app.url"),
                 str_replace('http://', "", config("app.url")),
                 str_replace('http://', "", config("app.url")),
-            ]
+            ],
         ],
-    ]
+    ],
 ];

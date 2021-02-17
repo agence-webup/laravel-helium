@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use DB;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAdminUsersTable extends Migration
 {
@@ -21,6 +22,11 @@ class CreateAdminUsersTable extends Migration
                 $table->rememberToken();
                 $table->timestamps();
             });
+
+            DB::table('admin_users')->insert([
+                'email' => 'admin',
+                'password' => bcrypt('changeme'),
+            ]);
         }
     }
 
