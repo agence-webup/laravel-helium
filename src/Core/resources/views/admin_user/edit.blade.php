@@ -1,5 +1,5 @@
 @php
-Helium::header()->title("Edition de l'adminstrateur");
+Helium::header()->title("Edition de l'admin");
 Helium::header()->save("Sauvegarder","editAdminUser");
 @endphp
 

@@ -10,7 +10,7 @@ return [
             "icon" => "home",
             "url" => 'admin.home',
         ],
-        "Administrateurs" => [
+        "Admins" => [
             "current_route" => "admin.admin_user",
             "icon" => "users",
             "url" => 'admin.admin_user.index',

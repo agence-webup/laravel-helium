@@ -1,7 +1,6 @@
 @php
-Helium::header()->title("Liste des administrateurs");
+Helium::header()->title("Liste des admins");
 Helium::header()->add("Ajouter",'admin.admin_user.create');
-Helium::breadcrumb()->push("administrateurs","admin.home");
 @endphp
 
 @extends("helium::layouts.master")
@@ -9,18 +8,18 @@ Helium::breadcrumb()->push("administrateurs","admin.home");
 @section("content")
 
 <x-helium-box id="test">
-    <x-slot name="header">
-    </x-slot>
-    <table class="dataTable dataTable--admins stripe hover">
-        <thead>
-            <tr>
-                <th>email</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+  <x-slot name="header">
+  </x-slot>
+  <table class="dataTable dataTable--admins stripe hover">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
 
 </x-helium-box>
 
@@ -30,7 +29,7 @@ Helium::breadcrumb()->push("administrateurs","admin.home");
 
 @section('js')
 <script type="text/javascript">
-    $('.dataTable--admins').DataTable({
+  $('.dataTable--admins').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,

@@ -46,7 +46,7 @@ class AdminUserController extends Controller
         $admin->password = bcrypt($data['password']);
         $admin->save();
 
-        HeliumFlash::success("L'administrateur a été modifié avec succès.");
+        HeliumFlash::success("L'admin a été modifié avec succès.");
 
         return redirect()->route('admin.admin_user.index');
     }
@@ -75,7 +75,7 @@ class AdminUserController extends Controller
         }
         $admin->save();
 
-        HeliumFlash::success("L'administrateur a été modifié avec succès.");
+        HeliumFlash::success("L'admin a été modifié avec succès.");
 
         return redirect()->route('admin.admin_user.index');
     }
@@ -84,7 +84,7 @@ class AdminUserController extends Controller
     {
         AdminUser::destroy($id);
 
-        HeliumFlash::success("L'administrateur a été supprimé avec succès.");
+        HeliumFlash::success("L'admin a été supprimé avec succès.");
 
         return redirect()->route('admin.admin_user.index');
     }

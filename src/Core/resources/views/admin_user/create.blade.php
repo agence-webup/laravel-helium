@@ -1,5 +1,5 @@
 @php
-Helium::header()->title("Création d'un administrateur");
+Helium::header()->title("Création d'un admin");
 Helium::header()->save("Sauvegarder", "createAdminUser");
 @endphp
 
