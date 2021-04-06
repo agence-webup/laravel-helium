@@ -369,24 +369,38 @@ class CrudCreate extends Command
 
     private function getModelsList()
     {
+        $newModels = $this->getModelsListFromFolder("Models");
+        $oldModels = $this->getModelsListFromFolder("Entities");
+        if (count($oldModels) > 0) {
+            $this->warn(count($oldModels) . " models are using old 'Entities‘ folder stucture.");
+            $this->warn("Please move them into 'Models' folder.");
+        }
+
+        return array_merge($newModels, $oldModels);
+    }
+
+    private function getModelsListFromFolder($folder)
+    {
         $result = [];
-        foreach (File::allFiles(app_path("Entities")) as $key => $entity) {
-            $classname = str_replace("/srv/http/app/Entities/", "", $entity->getRealPath());
-            $classname = str_replace("/", "\\", $classname);
-            $classname = str_replace(".php", "", $classname);
-            $classnameWithNamespace = "\App\Entities\\" . $classname;
-            try {
-                $class = new $classnameWithNamespace();
-                if (is_subclass_of($class, "Illuminate\Database\Eloquent\Model")) {
-                    $result[$classname] = new $class();
+        try {
+            foreach (File::allFiles(app_path($folder)) as $key => $entity) {
+                $classname = str_replace("/srv/http/app/" . $folder . "/", "", $entity->getRealPath());
+                $classname = str_replace("/", "\\", $classname);
+                $classname = str_replace(".php", "", $classname);
+                $classnameWithNamespace = "\App\\" . $folder . "\\" . $classname;
+                try {
+                    $class = new $classnameWithNamespace();
+                    if (is_subclass_of($class, "Illuminate\Database\Eloquent\Model")) {
+                        $result[$classname] = new $class();
+                    }
+                } catch (\Throwable $e) {
+                } catch (\Exception $e) {
                 }
-            } catch (\Throwable $e) {
-            } catch (\Exception $e) {
             }
+        } catch (\Throwable $th) {
         }
         return $result;
     }
-
 
 
     private function createFile($destinationPath, $content, $confirm = false)
