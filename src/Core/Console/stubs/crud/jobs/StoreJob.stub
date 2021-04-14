@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Entities\{{ Model }};
+use App\Models\{{ Model }};
 use App\Repositories\{{ Model }}Repository;
 
 class Store{{ Model }} implements ShouldQueue

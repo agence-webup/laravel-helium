@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\{{ Model }};
 
 use App\Http\Controllers\Controller;
 use App\Jobs\{{ Model }}\Update{{ Model }};
-use App\Entities\{{ Model }};
+use App\Models\{{ Model }};
 use App\Http\Requests\Admin\{{ Model }}\Update as Update{{ Model }}Request;
 use Webup\LaravelHelium\Core\Facades\HeliumFlash;
 

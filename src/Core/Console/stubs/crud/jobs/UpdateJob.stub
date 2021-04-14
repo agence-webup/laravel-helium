@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Entities\{{ Model }};
+use App\Models\{{ Model }};
 use App\Repositories\{{ Model }}Repository;
 
 class Update{{ Model }} implements ShouldQueue
@@ -35,7 +35,7 @@ class Update{{ Model }} implements ShouldQueue
     public function handle({{ Model }}Repository ${{ modelsingular }}Repo)
     {
         ${{ modelsingular }} = {{ Model }}::findOrFail($this->id);
-        
+
         {{ JobModelPropertiesSetters }}
 
         ${{ modelsingular }}Repo->save(${{ modelsingular }});

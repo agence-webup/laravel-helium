@@ -10,12 +10,12 @@ return [
             "icon" => "home",
             "url" => 'admin.home',
         ],
+        // {{ Helium Crud Menu }}
         "Admins" => [
             "current_route" => "admin.admin_user",
             "icon" => "users",
             "url" => 'admin.admin_user.index',
         ],
-        // {{ Helium Crud Menu }}
     ],
     "shortcuts" => [],
     'modules' => [

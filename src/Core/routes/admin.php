@@ -13,7 +13,7 @@ Route::group([
     Route::group(['middleware' => 'admin.auth:admin'], function () {
         Route::get('', "PagesController@home")->name('home');
 
-        Route::group(['prefix' => 'admins', 'as' => 'admin_user', 'namespace' => "\Webup\LaravelHelium\Core\Http\Controllers\Admin"], function () {
+        Route::group(['prefix' => 'admins', 'as' => 'admin_user.', 'namespace' => "\Webup\LaravelHelium\Core\Http\Controllers\Admin"], function () {
             Route::get('/', "AdminUserController@index")->name('index');
             Route::get('/datatable', "AdminUserController@datatable")->name('datatable');
             Route::get('/create', "AdminUserController@create")->name('create');
