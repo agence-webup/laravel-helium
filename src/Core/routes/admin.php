@@ -23,6 +23,16 @@ Route::group([
             Route::post('/{id}/destroy', "AdminUserController@destroy")->name('destroy');
         });
 
+        Route::group(['prefix' => 'roles', 'as' => 'role.', 'namespace' => "\Webup\LaravelHelium\Core\Http\Controllers\Admin"], function () {
+            Route::get('/', "RoleController@index")->name('index');
+            Route::get('/datatable', "RoleController@datatable")->name('datatable');
+            Route::get('/create', "RoleController@create")->name('create');
+            Route::post('/store', "RoleController@store")->name('store');
+            Route::get('/{id}/edit', "RoleController@edit")->name('edit');
+            Route::post('/{id}/update', "RoleController@update")->name('update');
+            Route::post('/{id}/destroy', "RoleController@destroy")->name('destroy');
+        });
+
         // {{ Helium Crud }}
         // Don't remove previous line if you are using larave-helium crud generator
     });

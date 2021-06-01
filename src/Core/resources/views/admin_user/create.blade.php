@@ -20,3 +20,7 @@ Helium::header()->save("Sauvegarder", "createAdminUser");
 </form>
 
 @endsection
+
+@section('js')
+@include('helium::admin_user.javascript')
+@endsection

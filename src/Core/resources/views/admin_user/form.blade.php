@@ -11,3 +11,10 @@
 {!! Form::create('password', 'password_confirmation')
 ->label('Mot de passe (confirmation)')
 !!}
+
+{!! Form::create('select', 'roles[]')
+->label('Rôles')
+->addOptions($roles)
+->attr(['multiple', 'data-js' => 'choices'])
+->value($adminRoles)
+!!}

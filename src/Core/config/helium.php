@@ -14,7 +14,10 @@ return [
         "Admins" => [
             "current_route" => "admin.admin_user",
             "icon" => "users",
-            "url" => 'admin.admin_user.index',
+            'links' => [
+                "Utilisateurs" => 'admin.admin_user.index',
+                "Rôles" => 'admin.role.index',
+            ]
         ],
     ],
     "shortcuts" => [],
