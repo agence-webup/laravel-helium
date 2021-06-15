@@ -9,6 +9,21 @@ class HeliumHelper
 
     public static function current_class($routeName, $cssClass = 'is-active')
     {
+        if (is_array($routeName)) {
+            $result = [];
+            foreach ($routeName as $key => $value) {
+                //Check if it's "routeName => class" or "routeName" format
+                if (is_string($key)) {
+                    $result[] = self::current_class($key, $value);
+                } else {
+                    $result[] = self::current_class($value, $cssClass);
+                }
+            }
+            // Keep one unique value for each values
+            $result = array_flip(array_flip($result));
+            return implode(" ", $result);
+        }
+
         if (!$routeName) {
             return '';
         }
@@ -50,14 +65,35 @@ class HeliumHelper
     public static function formatMenuForView(string $label, array $configMenu)
     {
         $isDropdown = array_key_exists('links', $configMenu);
+
         return (object) [
             "isDropdown" => $isDropdown,
             "label" => $label,
             "icon" => $configMenu["icon"],
             "url" => !$isDropdown ? HeliumHelper::formatLink($configMenu["url"]) : null,
-            "urls" => $isDropdown ? array_map("self::formatLink", $configMenu["links"]) : [],
-            "currentRoute" => Arr::get($configMenu, "current_route")
+            "urls" => $isDropdown ? collect($configMenu["links"])->map(function ($item) {
+                return (object) [
+                    "url" => HeliumHelper::formatLink(is_array($item) ? Arr::get($item, "url") : $item),
+                    "permissions" => HeliumHelper::formatPermissions($item),
+                ];
+            })->toArray() : [],
+            "currentRoute" => Arr::get($configMenu, "current_route"),
+            "permissions" => HeliumHelper::formatPermissions($configMenu),
         ];
+    }
+
+    public static function formatPermissions($configMenu)
+    {
+        $menuPermissions = [];
+        if (is_array($configMenu) && array_key_exists('permissions', $configMenu)) {
+            $permissions = Arr::get($configMenu, "permissions", []);
+            if (!is_array($permissions)) {
+                $permissions = [$permissions];
+            }
+            $menuPermissions = array_merge($menuPermissions, $permissions);
+        }
+
+        return $menuPermissions;
     }
 
     public static function formatLink(string $link)

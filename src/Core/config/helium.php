@@ -12,11 +12,20 @@ return [
         ],
         // {{ Helium Crud Menu }}
         "Admins" => [
-            "current_route" => "admin.admin_user",
             "icon" => "users",
+            "current_route" => [
+                "admin.admin_user",
+                "admin.role"
+            ],
             'links' => [
-                "Utilisateurs" => 'admin.admin_user.index',
-                "Rôles" => 'admin.role.index',
+                "Utilisateurs" => [
+                    "url" => "admin.admin_user.index",
+                    "permissions" => "admin_users.read",
+                ],
+                "Rôles" => [
+                    "url" => "admin.role.index",
+                    "permissions" => "roles.read",
+                ],
             ]
         ],
     ],
