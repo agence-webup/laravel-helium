@@ -1,3 +1,5 @@
-    //Create
-    Route::get('/create', 'CreateController@create')->name('create');
-    Route::post('/store', 'CreateController@store')->name('store');
+        //Create
+        Route::group(["middleware" => "admin.can:{{ modelplural }}.create"], function () {
+            Route::get('/create', 'CreateController@create')->name('create');
+            Route::post('/store', 'CreateController@store')->name('store');
+        });

@@ -1,3 +1,4 @@
+@if($heliumUser->can("{{ modelplural }}.delete"))
 <li class="dropmic-menu__listItem" role="menuitem">
     <form action="{{ route('admin.{{ modelsingular }}.destroy', ${{ modelsingular }}->id) }}" method="post" class="inline">
         {{ method_field('delete') }}
@@ -5,3 +6,4 @@
         <button class="dropmic-menu__listContent" data-confirm="Êtes vous certain de vouloir supprimer ?">Supprimer</button>
     </form>
 </li>
+@endif

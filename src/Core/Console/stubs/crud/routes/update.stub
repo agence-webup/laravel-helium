@@ -1,3 +1,5 @@
-    //Update
-    Route::get('/edit/{id}', 'EditController@edit')->name('edit');
-    Route::post('/update/{id}', 'EditController@update')->name('update');
+        //Update
+        Route::group(["middleware" => "admin.can:{{ modelplural }}.update"], function () {
+            Route::get('/edit/{id}', 'EditController@edit')->name('edit');
+            Route::post('/update/{id}', 'EditController@update')->name('update');
+        });

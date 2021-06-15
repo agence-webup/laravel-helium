@@ -16,7 +16,7 @@ class IndexController extends Controller
 
     public function datatable(Request $request)
     {
-        ${{ modelplural }} = {{ Model }}::select("id");
+        ${{ modelplural }} = {{ Model }}::select("{{ DatatableControllerCollumns }}");
 
         return Datatables::of(${{ modelplural }})
             ->rawColumns(['actions'])

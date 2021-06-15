@@ -1,12 +1,9 @@
-//{{ Model }}
-Route::group(['prefix' => '{{ modelplural }}', 'as' => '{{ modelsingular }}.', 'namespace' => "{{ Model }}"], function () {
-{{ ReadRoutes }}
-    
-{{ CreateRoutes }}
+        //{{ Model }}
+        Route::group(['prefix' => '{{ modelplural }}', 'as' => '{{ modelsingular }}.', 'namespace' => "{{ Model }}"], function () {
+        {{ ReadRoutes }}
+        {{ CreateRoutes }}
+        {{ UpdateRoutes }}
+        {{ DeleteRoutes }}
+        });
 
-{{ UpdateRoutes }}
-
-{{ DeleteRoutes }}
-});
-
-// {{ Helium Crud }}
+        // {{ Helium Crud }}

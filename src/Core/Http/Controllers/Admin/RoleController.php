@@ -3,19 +3,17 @@
 namespace Webup\LaravelHelium\Core\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use DataTables;
 use Illuminate\Http\Request;
 use Webup\LaravelHelium\Core\Facades\HeliumFlash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Arr;
+use Yajra\DataTables\DataTables;
 
 class RoleController extends Controller
 {
     public function index(Request $request)
     {
-        abort_if($request->user('admin')->cannot('roles.read'), 403);
-
         return view('helium::role.index');
     }
 
@@ -23,9 +21,7 @@ class RoleController extends Controller
     {
         $roles = Role::select("id", "name");
 
-        abort_if($request->user('admin')->cannot('roles.read'), 403);
-
-        return Datatables::of($roles)
+        return DataTables::of($roles)
             ->rawColumns(['actions'])
             ->addColumn('actions', function ($role) {
                 return view('helium::role.datatable-actions', ['role' => $role])->render();
@@ -35,8 +31,6 @@ class RoleController extends Controller
 
     public function create(Request $request)
     {
-        abort_if($request->user('admin')->cannot('roles.write'), 403);
-
         $permissions = Permission::where('guard_name', 'admin')->pluck('title', 'name')->all();
 
         return view('helium::role.create', [
@@ -48,8 +42,6 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        abort_if($request->user('admin')->cannot('roles.write'), 403);
-
         $data = $this->validate($request, [
             'name' => 'required|unique:roles,name',
             'permissions.*' => 'exists:permissions,name',
@@ -69,8 +61,6 @@ class RoleController extends Controller
 
     public function edit(Request $request, $id)
     {
-        abort_if($request->user('admin')->cannot('roles.write'), 403);
-
         $role = Role::findOrFail($id);
         $rolePermissions = $role->getPermissionNames()->join(',');
         $permissions = Permission::where('guard_name', 'admin')->pluck('title', 'name')->all();
@@ -84,8 +74,6 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
-        abort_if($request->user('admin')->cannot('roles.write'), 403);
-
         $role = Role::findOrFail($id);
 
         $data = $this->validate($request, [
@@ -106,8 +94,6 @@ class RoleController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        abort_if($request->user('admin')->cannot('roles.write'), 403);
-
         Role::destroy($id);
 
         HeliumFlash::success("Le rôle a été supprimé avec succès.");

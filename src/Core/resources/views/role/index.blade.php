@@ -1,6 +1,8 @@
 @php
 Helium::header()->title("Liste des rôles");
+if($heliumUser->can("roles.write")){
 Helium::header()->add("Ajouter",'admin.role.create');
+}
 @endphp
 
 @extends("helium::layouts.master")
@@ -8,18 +10,18 @@ Helium::header()->add("Ajouter",'admin.role.create');
 @section("content")
 
 <x-helium-box id="test">
-  <x-slot name="header">
-  </x-slot>
-  <table class="dataTable dataTable--admins stripe hover">
-    <thead>
-      <tr>
-        <th>Nom</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
+    <x-slot name="header">
+    </x-slot>
+    <table class="dataTable dataTable--admins stripe hover">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 
 </x-helium-box>
 
@@ -29,7 +31,7 @@ Helium::header()->add("Ajouter",'admin.role.create');
 
 @section('js')
 <script type="text/javascript">
-  $('.dataTable--admins').DataTable({
+    $('.dataTable--admins').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,

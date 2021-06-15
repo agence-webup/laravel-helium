@@ -16,6 +16,8 @@ use Webup\LaravelHelium\Core\Contracts\Helium as HeliumContract;
 use Webup\LaravelHelium\Core\Contracts\HeliumBreadcrumb as HeliumBreadcrumbContract;
 use Webup\LaravelHelium\Core\Contracts\HeliumFlash as HeliumFlashContract;
 use Webup\LaravelHelium\Core\Contracts\HeliumHeader as HeliumHeaderContract;
+use Webup\LaravelHelium\Core\Http\Middleware\AuthorizeAdmin;
+use Webup\LaravelHelium\Core\Http\Middleware\ShareAdminUser;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -48,6 +50,7 @@ class CoreServiceProvider extends ServiceProvider
 
         $router->aliasMiddleware('admin.auth', RedirectIfUnauthenticated::class);
         $router->aliasMiddleware('admin.guest', RedirectIfAuthenticated::class);
+        $router->aliasMiddleware('admin.can', AuthorizeAdmin::class);
 
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations/');
 

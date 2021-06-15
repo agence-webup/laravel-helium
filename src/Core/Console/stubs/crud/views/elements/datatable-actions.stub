@@ -2,11 +2,11 @@
     <span data-dropmic-btn onclick="event.preventDefault();event.stopPropagation()"><i data-feather="more-horizontal"></i></span>
     <div class="dropmic-menu" aria-hidden="true">
         <ul class="dropmic-menu__list" role="menu">
-        
+
         {{ DatatableEditBtn }}
 
         {{ DatatableDeleteBtn }}
-        
+
         </ul>
     </div>
 </span>

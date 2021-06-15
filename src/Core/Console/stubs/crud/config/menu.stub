@@ -2,5 +2,6 @@
             "current_route" => "admin.{{ modelsingular }}",
             "icon" => "help-circle",
             "url" => "admin.{{ modelsingular }}.index",
+            "permissions" => "{{ modelplural }}.read",
         ],
         // {{ Helium Crud Menu }}

@@ -1,3 +1,5 @@
-    //Read
-    Route::get('/', 'IndexController@index')->name('index');
-    Route::get('/datatable', 'IndexController@datatable')->name('datatable');
+        //Read
+        Route::group(["middleware" => "admin.can:{{ modelplural }}.read"], function () {
+            Route::get('/', 'IndexController@index')->name('index');
+            Route::get('/datatable', 'IndexController@datatable')->name('datatable');
+        });
