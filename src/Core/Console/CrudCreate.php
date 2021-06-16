@@ -7,6 +7,7 @@ use File;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
+use Webup\LaravelHelium\Core\Console\helpers\FeatherIcons;
 
 class CrudCreate extends Command
 {
@@ -38,6 +39,7 @@ class CrudCreate extends Command
 
     private $modelFormProperties = [];
     private $modelDataTableProperties = [];
+    private $menuIcon = null;
 
 
     private $viewDirectory = null;
@@ -77,7 +79,7 @@ class CrudCreate extends Command
 
         //Test if table exist
         if (!Schema::hasTable($this->selectedModel->getTable())) {
-            $this->error("Aucune table '" . $this->selectedModel->getTable() . "' trouvée, veuillez créer la migration et l'executer avec d'utiliser le crud generator");
+            $this->error("Aucune table '" . $this->selectedModel->getTable() . "' trouvée, veuillez créer la migration et l'executer avant d'utiliser le crud generator");
             return;
         }
 
@@ -136,6 +138,7 @@ class CrudCreate extends Command
     protected function processAnswers()
     {
         $this->processModelPropertiesFilter();
+
         $this->processPermissions();
 
         foreach ($this->parseAnswers() as $key => $data) {
@@ -233,15 +236,12 @@ class CrudCreate extends Command
         if ($this->needCreate) {
             $this->createOrUpdatePermission("create", $this->replaceInStub("Créer des {{ userFriendlyNamePlurial }}"));
         }
-
         if ($this->needUpdate) {
-            $this->createOrUpdatePermission("update", $this->replaceInStub("Mettre à jour des {{ userFriendlyNamePlurial }}"));
+            $this->createOrUpdatePermission("update", $this->replaceInStub("Mettre à jour les {{ userFriendlyNamePlurial }}"));
         }
-
         if ($this->needDelete) {
-            $this->createOrUpdatePermission("delete", $this->replaceInStub("Supprimer des {{ userFriendlyNamePlurial }}"));
+            $this->createOrUpdatePermission("delete", $this->replaceInStub("Supprimer les {{ userFriendlyNamePlurial }}"));
         }
-
         if ($this->needRead) {
             $this->createOrUpdatePermission("read", $this->replaceInStub("Voir les {{ userFriendlyNamePlurial }}"));
         }
@@ -329,6 +329,9 @@ class CrudCreate extends Command
     private function processMenu()
     {
         $this->info("Étape : Menu");
+
+
+        $this->menuIcon = $this->askWithCompletion("Icône à utiliser pour le menu : ( https://feathericons.com/ )", FeatherIcons::ICONS, "help-circle");
 
         $generatedMenu = $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/config/menu.stub'));
 
@@ -588,6 +591,7 @@ class CrudCreate extends Command
             '{{ modelGender }}' => $this->modelGender == self::WORD_GENDER_FEMININE ? "une" : "un",
             '{{ modelGenderDeterministic }}' => in_array(substr($this->userFriendlyNameSingular, 0, 1), ["a", "e", "i", "o", "u", "y"]) ? "l'" : ($this->modelGender == self::WORD_GENDER_FEMININE ? "la " : "le "),
             'de le' => "du",
+            '{{ menuIcon }}' => $this->menuIcon,
         ];
 
         $extendedReplacers = [

@@ -23,19 +23,40 @@ class SeedAdminUser extends Migration
             'title' => 'Voir les administrateurs'
         ]);
         Permission::create([
-            'name' => 'admin_users.write',
+            'name' => 'admin_users.create',
             'guard_name' => 'admin',
-            'title' => 'Editer les administrateurs'
+            'title' => 'Créer des administrateurs'
         ]);
+        Permission::create([
+            'name' => 'admin_users.update',
+            'guard_name' => 'admin',
+            'title' => 'Mettre à jour les administrateurs'
+        ]);
+        Permission::create([
+            'name' => 'admin_users.delete',
+            'guard_name' => 'admin',
+            'title' => 'Supprimer les administrateurs'
+        ]);
+
         Permission::create([
             'name' => 'roles.read',
             'guard_name' => 'admin',
-            'title' => 'Voirs les rôles'
+            'title' => 'Voir les rôles'
         ]);
         Permission::create([
-            'name' => 'roles.write',
+            'name' => 'roles.create',
             'guard_name' => 'admin',
-            'title' => 'Editer les rôles'
+            'title' => 'Créer des rôles'
+        ]);
+        Permission::create([
+            'name' => 'roles.update',
+            'guard_name' => 'admin',
+            'title' => 'Mettre à jour les rôles'
+        ]);
+        Permission::create([
+            'name' => 'roles.delete',
+            'guard_name' => 'admin',
+            'title' => 'Supprimer les rôles'
         ]);
 
         $superAdminRole = Role::where('name', 'Super Admin')->first();
@@ -44,7 +65,7 @@ class SeedAdminUser extends Migration
         }
 
         $admin = AdminUser::where('email', 'admin')->first();
-        
+
         if (!$admin) {
             $admin = new AdminUser();
             $admin->email = 'admin';

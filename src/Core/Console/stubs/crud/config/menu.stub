@@ -1,6 +1,6 @@
 "{{ userFriendlyNamePlurialUcfirst }}" => [
             "current_route" => "admin.{{ modelsingular }}",
-            "icon" => "help-circle",
+            "icon" => "{{ menuIcon }}",
             "url" => "admin.{{ modelsingular }}.index",
             "permissions" => "{{ modelplural }}.read",
         ],
