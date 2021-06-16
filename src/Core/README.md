@@ -11,31 +11,9 @@ Publish migrations, views and translations
 
 ```bash
 $ php artisan vendor:publish --tag=helium
-$ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
-```
-
-AuthServiceProvider
-```php
-use Illuminate\Support\Facades\Gate;
-
-class AuthServiceProvider extends ServiceProvider
-{
-    public function boot()
-    {
-        $this->registerPolicies();
-
-        // Implicitly grant "Super Admin" role all permissions
-        // This works in the app by using gate-related functions like auth()->user->can() and @can()
-        Gate::before(function ($user, $ability) {
-            return $user->hasRole('Super Admin') ? true : null;
-        });
-    }
-}
 ```
 
 # Redirections
-
-
     protected $middleware = [
         [...]
         \Webup\LaravelHelium\Redirection\Http\Middleware\RedirectOldUrls::class

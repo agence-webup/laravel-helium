@@ -119,6 +119,7 @@ class CoreServiceProvider extends ServiceProvider
         );
 
         $this->app->register('Webup\LaravelHelium\Core\Providers\ViewServiceProvider');
+        $this->app->register('Webup\LaravelHelium\Core\Providers\AuthServiceProvider');
 
 
         if (config()->get('helium.modules.redirection.enabled', false)) {
