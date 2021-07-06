@@ -2,6 +2,7 @@
 
 namespace Webup\LaravelHelium\Core\Console;
 
+use Exception;
 use Illuminate\Console\Command;
 use File;
 use Illuminate\Support\Facades\Schema;
@@ -13,6 +14,7 @@ class CrudCreate extends Command
 {
     const WORD_GENDER_FEMININE = "Feminin";
     const WORD_GENDER_MASCULINE = "Masculin";
+    const WORD_GENDER_NO = "Non genré";
 
 
     /**
@@ -40,6 +42,7 @@ class CrudCreate extends Command
     private $modelFormProperties = [];
     private $modelDataTableProperties = [];
     private $menuIcon = null;
+    private $permissionsString = null;
 
 
     private $viewDirectory = null;
@@ -89,13 +92,15 @@ class CrudCreate extends Command
         //Get model singular name (for generating views)
         $this->modelNameSingular = Str::singular($this->modelNamePlural);
 
+
+
         $this->formatProperties();
 
         $this->userFriendlyNameSingular = strtolower($this->ask("Nom utilisé pour les vues (singulier)"));
         $this->userFriendlyNamePlurial = strtolower($this->ask("Nom utilisé pour le vues (pluriel)", $this->userFriendlyNameSingular . 's'));
         $this->modelGender = $this->choice(
             "Quel est le genre du mot '" . $this->userFriendlyNameSingular . "' ?",
-            [self::WORD_GENDER_FEMININE, self::WORD_GENDER_MASCULINE],
+            [self::WORD_GENDER_FEMININE, self::WORD_GENDER_MASCULINE, self::WORD_GENDER_NO],
         );
 
         //Ask for C.R.U.D
@@ -107,8 +112,6 @@ class CrudCreate extends Command
         $this->createDirectories();
 
         $this->processAnswers();
-
-        $this->info("Helium CRUD was created");
     }
 
     protected function createDirectories()
@@ -193,6 +196,14 @@ class CrudCreate extends Command
         $this->processDatatableActions();
         $this->processRoutes();
         $this->processMenu();
+
+        if ($this->permissionsString != null) {
+            if ($this->confirm("Les permissions nécessite de lancer la commande `php artisan migrate`. Executer maintenant ?", true)) {
+                $this->call("migrate");
+            } else {
+                $this->comment("Veuillez executer la commande `php artisan migrate`");
+            }
+        }
     }
 
     private function processModelPropertiesFilter()
@@ -233,41 +244,75 @@ class CrudCreate extends Command
     {
         $this->info("Étape : Permissions");
 
+        $permissions = [];
+
         if ($this->needCreate) {
-            $this->createOrUpdatePermission("create", $this->replaceInStub("Créer des {{ userFriendlyNamePlurial }}"));
+            $permissions[] = $this->preparePermission("create", $this->replaceInStub("Créer des {{ userFriendlyNamePlurial }}"));
         }
         if ($this->needUpdate) {
-            $this->createOrUpdatePermission("update", $this->replaceInStub("Mettre à jour les {{ userFriendlyNamePlurial }}"));
+            $permissions[] = $this->preparePermission("update", $this->replaceInStub("Mettre à jour les {{ userFriendlyNamePlurial }}"));
         }
         if ($this->needDelete) {
-            $this->createOrUpdatePermission("delete", $this->replaceInStub("Supprimer les {{ userFriendlyNamePlurial }}"));
+            $permissions[] = $this->preparePermission("delete", $this->replaceInStub("Supprimer les {{ userFriendlyNamePlurial }}"));
         }
         if ($this->needRead) {
-            $this->createOrUpdatePermission("read", $this->replaceInStub("Voir les {{ userFriendlyNamePlurial }}"));
+            $permissions[] = $this->preparePermission("read", $this->replaceInStub("Voir les {{ userFriendlyNamePlurial }}"));
+        }
+        do {
+            $morePermission = $this->confirm("Voulez vous ajouter une permission ?");
+            if (!$morePermission) {
+                break;
+            }
+            $prefix = $this->modelNamePlural . ".";
+            $permissionKey = Str::slug($this->ask("Identifiant de la permission (sera préfixé par '" . $prefix . "')"));
+            $permissionKey = str_replace($prefix, "", $permissionKey);
+            $permissions[] = $this->preparePermission($permissionKey, "");
+        } while ($morePermission);
+
+        if (count($permissions) > 0) {
+            $this->comment("Création de " . count($permissions) . " permission(s)");
+            $this->permissionsString = "";
+            foreach ($permissions as $key => $permissionData) {
+                $stubElementContent = file_get_contents(__DIR__ . '/stubs/crud/permissions/Permission.stub');
+                $stubReplacers = [
+                    '{{ permission_name }}' => $permissionData['name'],
+                    '{{ permission_guard_name }}' => $permissionData['guard_name'],
+                    '{{ permission_title }}' => $permissionData['title'],
+                ];
+                foreach ($stubReplacers as $key => $value) {
+                    $stubElementContent = str_replace($key, $value, $stubElementContent);
+                }
+                $this->permissionsString .= $stubElementContent;
+            }
+            $destinationPath = database_path('/migrations/' . date('Y_m_d_His') . "_create_" . $this->modelNameSingular . "_permissions.php");
+
+            $this->createFile(
+                $destinationPath,
+                $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/database/permissions.stub')),
+            );
         }
     }
 
-    private function createOrUpdatePermission($key, $title)
+    private function preparePermission($key, $title)
     {
         $name = $this->modelNamePlural . "." . $key;
 
         try {
             $permission = Permission::findByName($name, "admin");
-            $this->warn("La permission `" . $name . "` existe déjà: si vous validez le descriptif, elle sera remplacé.");
+            $this->warn("La permission `" . $name . "` existe déjà: seule la description sera mise à jour.");
             $title = $permission->title;
         } catch (\Throwable $th) {
         }
 
         $title = $this->ask("Descriptif de la permission `" . $name . "`", $title);
-
-        Permission::updateOrCreate([
-            'name' => $name,
-        ], [
+        return [
             'name' => $name,
             'guard_name' => 'admin',
             'title' => $title
-        ]);
+        ];
     }
+
+
 
     private function processForm()
     {
@@ -313,16 +358,21 @@ class CrudCreate extends Command
 
         $generatedRoutes = $this->replaceInStub(file_get_contents(__DIR__ . '/stubs/crud/routes/group.stub'));
         $adminRoutePath = base_path('routes/admin.php');
-        $adminRouteFile = file_get_contents($adminRoutePath);
-        if (strpos($adminRouteFile, '// {{ Helium Crud }}') === false) {
-            $this->error("Le fichier " . $adminRoutePath . " ne possède pas la ligne `// {{ Helium Crud }}` qui permet au crud generator de fonctionner");
+        try {
+            $adminRouteFile = file_get_contents($adminRoutePath);
+            if (strpos($adminRouteFile, '// {{ Helium Crud }}') === false) {
+                throw new Exception();
+            } else {
+                $this->comment("Ajout des routes au fichier `" . $adminRoutePath . "`");
+                $adminRouteFile = str_replace('// {{ Helium Crud }}', $generatedRoutes, $adminRouteFile);
+                file_put_contents($adminRoutePath, $adminRouteFile);
+            }
+        } catch (\Throwable $th) {
+            $this->error("Le fichier " . $adminRoutePath . " n'existe pas ou ne possède pas la ligne `// {{ Helium Crud }}` qui permet au crud generator de fonctionner");
             $this->comment("Veuillez ajouter manuellement les routes suivantes :");
             $this->info($generatedRoutes);
-        } else {
-            $this->comment("Ajout des routes au fichier `" . $adminRoutePath . "`");
-            $adminRouteFile = str_replace('// {{ Helium Crud }}', $generatedRoutes, $adminRouteFile);
-            file_put_contents($adminRoutePath, $adminRouteFile);
         }
+
         $this->comment("");
     }
 
@@ -587,11 +637,12 @@ class CrudCreate extends Command
             '{{ userFriendlyNameSingularUcfirst }}' => ucfirst($this->userFriendlyNameSingular),
             '{{ userFriendlyNamePlurial }}' => $this->userFriendlyNamePlurial,
             '{{ userFriendlyNamePlurialUcfirst }}' => ucfirst($this->userFriendlyNamePlurial),
-            '{{ genderPrefix }}' => $this->modelGender == self::WORD_GENDER_FEMININE ? "e" : "",
-            '{{ modelGender }}' => $this->modelGender == self::WORD_GENDER_FEMININE ? "une" : "un",
+            '{{ genderPrefix }}' => $this->modelGender == self::WORD_GENDER_NO ? "•e" : ($this->modelGender == self::WORD_GENDER_FEMININE ? "e" : ""),
+            '{{ modelGender }}' => $this->modelGender == self::WORD_GENDER_NO ? "un•e" : ($this->modelGender == self::WORD_GENDER_FEMININE ? "une" : "un"),
             '{{ modelGenderDeterministic }}' => in_array(substr($this->userFriendlyNameSingular, 0, 1), ["a", "e", "i", "o", "u", "y"]) ? "l'" : ($this->modelGender == self::WORD_GENDER_FEMININE ? "la " : "le "),
             'de le' => "du",
             '{{ menuIcon }}' => $this->menuIcon,
+            '{{ permissions }}' => $this->permissionsString,
         ];
 
         $extendedReplacers = [
