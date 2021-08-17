@@ -3,7 +3,6 @@
     "license": "MIT",
     "require": {
         "php": ">=5.6.4",
-        "anlutro/l4-settings": "^0.6.0",
         "webup/laravel-form": "1.*",
         "yajra/laravel-datatables-oracle": "9.*"
     },
