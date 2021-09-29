@@ -14,7 +14,7 @@ class DestroyController extends Controller
         try {
             $this->dispatchNow(new Destroy{{ Model }}($id));
         } catch (\Exception $e) {
-            HeliumFlash::error("Impossible de supprimé l'élément.");
+            HeliumFlash::error("Impossible de supprimer l'élément.");
             return redirect()->back();
         }
 
