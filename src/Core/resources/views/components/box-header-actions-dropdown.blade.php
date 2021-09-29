@@ -7,12 +7,12 @@
     <ul class="dropmic-menu__list" role="menu">
       @foreach ($actions as $action)
       <li class="dropmic-menu__listItem" role="menuitem">
-        <button href="{{ $action->url }}"
+        <a href="{{ $action->url }}"
           class="dropmic-menu__listContent dropmic-menu__listContent--{{$action->style}} {{$action->cssClass}}"
           @foreach($action->others as $key => $value)
           {{$key}}="{{ $value }}"
           @endforeach
-          >{{ $action->label }}</button>
+          >{{ $action->label }}</a>
       </li>
       @endforeach
     </ul>
