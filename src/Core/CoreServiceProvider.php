@@ -45,10 +45,7 @@ class CoreServiceProvider extends ServiceProvider
             __DIR__ . '/resources/views/elements' => resource_path('views/vendor/helium/elements'),
             __DIR__ . '/resources/views/home' => resource_path('views/vendor/helium/home'),
             __DIR__ . '/resources/views/layouts' => resource_path('views/vendor/helium/layouts'),
-            __DIR__ . '/routes/admin.php' => base_path('routes/admin.php'),
-             __DIR__ . '/database/migrations/create_admin_users_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_admin_users_table.php'),
-             __DIR__ . '/database/migrations/create_permission_tables.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_permission_tables.php'),
-             __DIR__ . '/database/migrations/seed_admin_user.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_seed_admin_user.php'),
+            __DIR__ . '/routes/admin.php' => base_path('routes/admin.php')
         ], 'helium');
 
         $router->aliasMiddleware('admin.auth', RedirectIfUnauthenticated::class);
