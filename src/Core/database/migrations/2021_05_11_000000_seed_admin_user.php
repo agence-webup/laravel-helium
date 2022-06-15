@@ -17,47 +17,54 @@ class SeedAdminUser extends Migration
      */
     public function up()
     {
-        Permission::create([
-            'name' => 'admin_users.read',
-            'guard_name' => 'admin',
-            'title' => 'Voir les administrateurs'
-        ]);
-        Permission::create([
-            'name' => 'admin_users.create',
-            'guard_name' => 'admin',
-            'title' => 'Créer des administrateurs'
-        ]);
-        Permission::create([
-            'name' => 'admin_users.update',
-            'guard_name' => 'admin',
-            'title' => 'Mettre à jour les administrateurs'
-        ]);
-        Permission::create([
-            'name' => 'admin_users.delete',
-            'guard_name' => 'admin',
-            'title' => 'Supprimer les administrateurs'
-        ]);
+        $permissions = [
+            [
+                'name' => 'admin_users.read',
+                'guard_name' => 'admin',
+                'title' => 'Voir les administrateurs'
+            ],
+            [
+                'name' => 'admin_users.create',
+                'guard_name' => 'admin',
+                'title' => 'Créer des administrateurs'
+            ],
+            [
+                'name' => 'admin_users.update',
+                'guard_name' => 'admin',
+                'title' => 'Mettre à jour les administrateurs'
+            ],
+            [
+                'name' => 'admin_users.delete',
+                'guard_name' => 'admin',
+                'title' => 'Supprimer les administrateurs'
+            ],
+            [
+                'name' => 'roles.read',
+                'guard_name' => 'admin',
+                'title' => 'Voir les rôles'
+            ],
+            [
+                'name' => 'roles.create',
+                'guard_name' => 'admin',
+                'title' => 'Créer des rôles'
+            ],
+            [
+                'name' => 'roles.update',
+                'guard_name' => 'admin',
+                'title' => 'Mettre à jour les rôles'
+            ],
+            [
+                'name' => 'roles.delete',
+                'guard_name' => 'admin',
+                'title' => 'Supprimer les rôles'
+            ]
+        ];
 
-        Permission::create([
-            'name' => 'roles.read',
-            'guard_name' => 'admin',
-            'title' => 'Voir les rôles'
-        ]);
-        Permission::create([
-            'name' => 'roles.create',
-            'guard_name' => 'admin',
-            'title' => 'Créer des rôles'
-        ]);
-        Permission::create([
-            'name' => 'roles.update',
-            'guard_name' => 'admin',
-            'title' => 'Mettre à jour les rôles'
-        ]);
-        Permission::create([
-            'name' => 'roles.delete',
-            'guard_name' => 'admin',
-            'title' => 'Supprimer les rôles'
-        ]);
+        foreach ($permissions as $permission) {
+            if (!Permission::getPermission(['name' => $permission["name"], 'guard_name' => $permission["guard_name"]])) {
+                Permission::create($permission);
+            }
+        }
 
         $superAdminRole = Role::where('name', 'Super Admin')->first();
         if (!$superAdminRole) {
