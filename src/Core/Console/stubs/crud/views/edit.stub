@@ -7,7 +7,7 @@ Helium::header()->title("Edition de {{ modelGenderDeterministic }}{{ userFriendl
 
 @section('content')
 
-<form id="edit{{ Model }}" class="" action="{{ route('admin.{{ modelsingular }}.update',[${{ modelsingular }}->id]) }}" method="post">
+<form id="edit{{ Model }}" class="" action="{{ helium_route('{{ modelsingular }}.update',[${{ modelsingular }}->id]) }}" method="post">
   {{ csrf_field() }}
 
   <x-helium-box>

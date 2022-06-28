@@ -1,7 +1,7 @@
 "{{ userFriendlyNamePlurialUcfirst }}" => [
-            "current_route" => "admin.{{ modelsingular }}",
+            "current_route" => "{{ helium_route_name('{{ modelsingular }}') }}",
             "icon" => "{{ menuIcon }}",
-            "url" => "admin.{{ modelsingular }}.index",
+            "url" => "{{ helium_route_name('{{ modelsingular }}.index') }}",
             "permissions" => "{{ modelplural }}.read",
         ],
         // {{ Helium Crud Menu }}

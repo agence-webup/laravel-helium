@@ -7,7 +7,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'admin',
-        'as' => 'admin.tools.',
+        'as' => helium_route_name('tools.'),
         'namespace' => "Admin"
     ], function () {
 

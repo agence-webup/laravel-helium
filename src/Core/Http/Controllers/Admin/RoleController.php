@@ -56,7 +56,7 @@ class RoleController extends Controller
 
         HeliumFlash::success("Le rôle a été modifié avec succès.");
 
-        return redirect()->route('admin.role.index');
+        return redirect()->route(helium_route_name('role.index'));
     }
 
     public function edit(Request $request, $id)
@@ -89,7 +89,7 @@ class RoleController extends Controller
 
         HeliumFlash::success("Le rôle a été modifié avec succès.");
 
-        return redirect()->route('admin.role.index');
+        return redirect()->route(helium_route_name('role.index'));
     }
 
     public function destroy(Request $request, $id)
@@ -98,6 +98,6 @@ class RoleController extends Controller
 
         HeliumFlash::success("Le rôle a été supprimé avec succès.");
 
-        return redirect()->route('admin.role.index');
+        return redirect()->route(helium_route_name('role.index'));
     }
 }

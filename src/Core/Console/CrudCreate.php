@@ -646,7 +646,7 @@ class CrudCreate extends Command
         ];
 
         $extendedReplacers = [
-            '{{ IndexDataSetLink }}' => ($this->needUpdate) ? 'row.dataset.link = "{{ route("admin.{{ modelsingular }}.edit", ["id" => "%id%"]) }}".replace("%id%",data.id);' : "",
+            '{{ IndexDataSetLink }}' => ($this->needUpdate) ? 'row.dataset.link = "{{ helium_route("{{ modelsingular }}.edit", ["id" => "%id%"]) }}".replace("%id%",data.id);' : "",
             '{{ AddBtn }}' => ($this->needCreate) ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/addBtn.stub') : "",
             '{{ SaveBtn }}' => ($this->needCreate) ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/saveBtn.stub') : "",
             '{{ UpdateBtn }}' => ($this->needUpdate) ? file_get_contents(__DIR__ . '/stubs/crud/views/elements/updateBtn.stub') : "",

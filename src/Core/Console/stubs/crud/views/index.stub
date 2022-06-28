@@ -33,7 +33,7 @@ Helium::header()->title("Liste des {{ userFriendlyNamePlurial }}");
         processing: true,
         serverSide: true,
         responsive: true,
-        ajax: "{{ route('admin.{{ modelsingular }}.datatable') }}",
+        ajax: "{{ helium_route('{{ modelsingular }}.datatable') }}",
         columns: [
             {{ DatatableJavacriptCollumns }}
             {data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'table-actions'},

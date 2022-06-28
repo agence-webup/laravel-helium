@@ -1,74 +1,81 @@
 @php
-Helium::header()->title("Liste des rôles");
-if($heliumUser->can("roles.create")){
-Helium::header()->add("Ajouter",'admin.role.create');
+Helium::header()->title('Liste des rôles');
+if ($heliumUser->can('roles.create')) {
+    Helium::header()->add('Ajouter', helium_route_name('role.create'));
 }
 @endphp
 
-@extends("helium::layouts.master")
+@extends('helium::layouts.master')
 
-@section("content")
+@section('content')
+    <x-helium-box id="test">
+        <x-slot name="header">
+        </x-slot>
+        <table class="dataTable dataTable--admins stripe hover">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
 
-<x-helium-box id="test">
-    <x-slot name="header">
-    </x-slot>
-    <table class="dataTable dataTable--admins stripe hover">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-
-</x-helium-box>
-
-
+    </x-helium-box>
 @endsection
 
 
 @section('js')
-<script type="text/javascript">
-    $('.dataTable--admins').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        ajax: "{{ route('admin.role.datatable') }}",
-        columns: [
-            {data: 'name', name : 'name'},
-            {data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'table-actions'},
-        ],
-        rowCallback: function( row, data, index ) {
-            row.dataset.link = "{{ route("admin.role.edit", ["id" => "%id%"]) }}".replace("%id%",data.id);
-            let dropmicEl = row.querySelector('[data-dropmic]')
-            if(dropmicEl){
-                new Dropmic(dropmicEl);
-            }
-        },
-        drawCallback: function(settings, json) {
-            feather.replace()
-        },
-        initComplete: function () {
+    <script type="text/javascript">
+        $('.dataTable--admins').DataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax: "{{ helium_route('role.datatable') }}",
+            columns: [{
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'actions',
+                    name: 'actions',
+                    orderable: false,
+                    searchable: false,
+                    className: 'table-actions'
+                },
+            ],
+            rowCallback: function(row, data, index) {
+                row.dataset.link = "{{ helium_route('role.edit', ['id' => '%id%']) }}".replace("%id%", data
+                    .id);
+                let dropmicEl = row.querySelector('[data-dropmic]')
+                if (dropmicEl) {
+                    new Dropmic(dropmicEl);
+                }
+            },
+            drawCallback: function(settings, json) {
+                feather.replace()
+            },
+            initComplete: function() {
                 let collumnsDefs = this.fnSettings().aoColumns;
-                if(collumnsDefs && collumnsDefs.length > 2){
+                if (collumnsDefs && collumnsDefs.length > 2) {
                     let newLine = document.createElement('tr')
                     newLine.classList.add('searchLine')
                     $(newLine).appendTo(this.api().table().header())
-                    this.api().columns().every(function () {
+                    this.api().columns().every(function() {
                         let cell = document.createElement('th')
                         let column = this;
                         let collumnDef = collumnsDefs[column[0]];
                         let headerSearchable = !$(column.header()).hasClass('table-actions')
                         if (headerSearchable) {
                             let input = document.createElement("input");
-                            input.placeholder = "Rechercher par " + column.header(column[0]).innerHTML.toLowerCase();
+                            input.placeholder = "Rechercher par " + column.header(column[0]).innerHTML
+                                .toLowerCase();
                             input.classList.add("f-size-full");
                             if (column.search()) {
                                 input.value = column.search();
                             }
-                            var searchField = $(input).on('keyup change clear', function () {
+                            var searchField = $(input).on('keyup change clear', function() {
                                 column.search($(this).val(), false, true, true).draw();
                             })
                             $(input).appendTo(cell)
@@ -77,7 +84,9 @@ Helium::header()->add("Ajouter",'admin.role.create');
                     });
                 }
             },
-        order: [[0, "desc"]],
-    });
-</script>
+            order: [
+                [0, "desc"]
+            ],
+        });
+    </script>
 @endsection

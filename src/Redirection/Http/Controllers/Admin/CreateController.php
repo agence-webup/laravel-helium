@@ -42,7 +42,7 @@ class CreateController extends Controller
 
         HeliumFlash::success("Redirection ajoutée avec succès.");
 
-        return redirect()->route('admin.tools.redirection.index');
+        return redirect()->route(helium_route_name('tools.redirection.index'));
     }
 
     public function import()
@@ -78,6 +78,6 @@ class CreateController extends Controller
             HeliumFlash::error($errors . " erreur(s) d'ajout.");
         }
 
-        return redirect()->route('admin.tools.redirection.index');
+        return redirect()->route(helium_route_name('tools.redirection.index'));
     }
 }

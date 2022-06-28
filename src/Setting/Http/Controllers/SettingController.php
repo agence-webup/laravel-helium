@@ -70,7 +70,7 @@ class SettingController extends Controller
             'level' => 'success',
         ]);
 
-        return redirect()->route('admin.setting.edit');
+        return redirect()->route(helium_route_name('setting.edit'));
     }
 
     /**

@@ -3,8 +3,8 @@
 Route::group([
     'middleware' => ['web'],
     'namespace' => '\App\Http\Controllers\Admin',
-    'prefix' => 'admin',
-    'as' => 'admin.',
+    'prefix' =>  config("helium.admin.prefix"),
+    'as' =>  config("helium.admin.as"),
 ], function () {
     Route::get('/login', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@showLoginForm')->name('login');
     Route::post('/login', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@login')->name('postLogin');

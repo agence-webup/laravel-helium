@@ -79,7 +79,7 @@ class PageController extends Controller
             'level' => 'success',
         ]);
 
-        return redirect()->route('admin.page.index');
+        return redirect()->route(helium_route_name('page.index'));
     }
 
     /**
@@ -133,7 +133,7 @@ class PageController extends Controller
             'level' => 'success',
         ]);
 
-        return redirect()->route('admin.page.index');
+        return redirect()->route(helium_route_name('page.index'));
     }
 
     /**
@@ -153,7 +153,7 @@ class PageController extends Controller
             'level' => 'success',
         ]);
 
-        return redirect()->route('admin.page.index');
+        return redirect()->route(helium_route_name('page.index'));
     }
 
     /**

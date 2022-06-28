@@ -41,6 +41,6 @@ class CreateController extends Controller
 
         HeliumFlash::success("{{ userFriendlyNameSingularUcfirst }} ajouté{{ genderPrefix }} avec succès.");
 
-        return redirect()->route('admin.{{ modelsingular }}.index');
+        return redirect()->route(helium_route_name('{{ modelsingular }}.index'));
     }
 }

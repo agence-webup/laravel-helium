@@ -19,7 +19,7 @@ class DestroyController extends Controller
         }
         HeliumFlash::success("Redirection supprimée avec succès.");
 
-        return redirect()->route('admin.tools.redirection.index');
+        return redirect()->route(helium_route_name('tools.redirection.index'));
     }
 
     public function destroyAll()
@@ -32,6 +32,6 @@ class DestroyController extends Controller
         }
         HeliumFlash::success("Redirections supprimées avec succès.");
 
-        return redirect()->route('admin.tools.redirection.index');
+        return redirect()->route(helium_route_name('tools.redirection.index'));
     }
 }

@@ -57,7 +57,7 @@ class AdminUserController extends Controller
 
         HeliumFlash::success("L'admin a été modifié avec succès.");
 
-        return redirect()->route('admin.admin_user.index');
+        return redirect()->route(helium_route_name('admin_user.index'));
     }
 
     public function edit(Request $request, $id)
@@ -94,7 +94,7 @@ class AdminUserController extends Controller
 
         HeliumFlash::success("L'admin a été modifié avec succès.");
 
-        return redirect()->route('admin.admin_user.index');
+        return redirect()->route(helium_route_name('admin_user.index'));
     }
 
     public function destroy(Request $request, $id)
@@ -103,6 +103,6 @@ class AdminUserController extends Controller
 
         HeliumFlash::success("L'admin a été supprimé avec succès.");
 
-        return redirect()->route('admin.admin_user.index');
+        return redirect()->route(helium_route_name('admin_user.index'));
     }
 }

@@ -1,26 +1,24 @@
 @php
 Helium::header()->title("Edition d'un rôle");
-Helium::header()->save("Sauvegarder","editRole");
+Helium::header()->save('Sauvegarder', 'editRole');
 @endphp
 
 @extends('helium::layouts.master')
 
 @section('content')
+    <form id="editRole" class="" action="{{ helium_route('role.update', [$role->id]) }}" method="post">
+        {{ csrf_field() }}
 
-<form id="editRole" class="" action="{{ route('admin.role.update',[$role->id]) }}" method="post">
-  {{ csrf_field() }}
+        <x-helium-box>
+            <x-slot name="header">
+                <x-helium-box-header title="Informations" />
+            </x-slot>
+            @include('helium::role.form')
+        </x-helium-box>
 
-  <x-helium-box>
-    <x-slot name="header">
-      <x-helium-box-header title="Informations" />
-    </x-slot>
-    @include('helium::role.form')
-  </x-helium-box>
-
-</form>
-
+    </form>
 @endsection
 
 @section('js')
-@include('helium::role.javascript')
+    @include('helium::role.javascript')
 @endsection

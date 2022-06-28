@@ -24,7 +24,10 @@
     "autoload": {
         "psr-4": {
             "Webup\\LaravelHelium\\": "src/"
-        }
+        },
+        "files": [
+            "./src/Core/helpers.php"
+        ]
     },
     "extra": {
         "laravel": {

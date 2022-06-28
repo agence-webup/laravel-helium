@@ -7,7 +7,7 @@ Helium::header()->title("Création d'{{ modelGender }} {{ userFriendlyNameSingul
 
 @section('content')
 
-<form id="create{{ Model }}" class="" action="{{ route('admin.{{ modelsingular }}.store') }}" method="post">
+<form id="create{{ Model }}" class="" action="{{ helium_route('{{ modelsingular }}.store') }}" method="post">
   {{ csrf_field() }}
 
   <x-helium-box>

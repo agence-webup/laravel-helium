@@ -45,6 +45,6 @@ class EditController extends Controller
 
         HeliumFlash::success("Redirection modifiée avec succès.");
 
-        return redirect()->route('admin.tools.redirection.index');
+        return redirect()->route(helium_route_name('tools.redirection.index'));
     }
 }

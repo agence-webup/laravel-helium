@@ -22,7 +22,7 @@ class RedirectIfUnauthenticated
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->guest(route('admin.login'));
+                return redirect()->guest(route(helium_route_name('login')));
             }
         }
 

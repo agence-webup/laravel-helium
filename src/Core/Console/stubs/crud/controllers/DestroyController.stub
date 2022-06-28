@@ -20,6 +20,6 @@ class DestroyController extends Controller
 
         HeliumFlash::success("{{ userFriendlyNameSingularUcfirst }} supprimé{{ genderPrefix }} avec succès.");
 
-        return redirect()->route('admin.{{ modelsingular }}.index');
+        return redirect()->route(helium_route_name('{{ modelsingular }}.index');
     }
 }

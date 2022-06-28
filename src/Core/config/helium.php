@@ -1,6 +1,11 @@
 <?php
 
 return [
+    "admin" => [
+        "prefix" => "admin",
+        "as" => "admin.",
+    ],
+
     "title" => "Administration",
     "main_title" => "Administration",
 

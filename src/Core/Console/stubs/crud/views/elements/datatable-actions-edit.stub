@@ -1,5 +1,5 @@
 @if($heliumUser->can("{{ modelplural }}.update"))
 <li class="dropmic-menu__listItem" role="menuitem">
-    <a class="dropmic-menu__listContent" href="{{ route('admin.{{ modelsingular }}.edit', ['id' => ${{ modelsingular }}->id]) }}" tabindex="-1">Editer</a>
+    <a class="dropmic-menu__listContent" href="{{ helium_route('{{ modelsingular }}.edit', ['id' => ${{ modelsingular }}->id]) }}" tabindex="-1">Editer</a>
 </li>
 @endif
