@@ -1,19 +1,11 @@
 # laravel-helium
 
+
+## Installation
+
 Dependencies
 
-- [helium](https://github.com/agence-webup/helium) `npm install --save helium-admin@^2.2.0`
-- [dropmic](https://github.com/agence-webup/dropmic) `npm install --save dropmic@^0.3.0`
-- [jquery]() `npm install --save jquery@^3.3.1`
-- [datatables]() `npm install --save datatables@^1.10.13`
-
-Provider
-
-```php
-'providers' => [
-    Webup\LaravelHelium\Core\CoreServiceProvider::class,
-],
-```
+- [helium](https://github.com/agence-webup/helium) `npm i -S helium-admin`
 
 Publish migrations, views and translations
 
@@ -21,80 +13,51 @@ Publish migrations, views and translations
 $ php artisan vendor:publish --tag=helium
 ```
 
-Routes
+# Redirections
+    protected $middleware = [
+        [...]
+        \Webup\LaravelHelium\Redirection\Http\Middleware\RedirectOldUrls::class
+    ];
 
-```php
-Route::get('/login', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@showLoginForm')->name('login');
-Route::post('/login', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@login')->name('postLogin');
-Route::post('/logout', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@logout')->name('logout');
+# Crud Generator
 
-Route::group(['middleware' => 'auth:admin'], function () {
-    Route::get('', function () {
-        return redirect()->route('admin.contact.index');
-    })->name('home');
-});
+## How to use
+ 
+**⚠️ Important ⚠️**
+
+You need create migration & entity : Helium crud generator use class in entities folder ( `{your_project_path}/app/Entities`) for listing available crud and migration to create form.
+
+
+Then, you can run
+
+```bash
+$ php artisan helium:crud
 ```
+You can add `--force` argument to auto-replace file if already exists (except Repository).
 
-RouteServiceProvider.php
+### After creating crud
 
-```php
-    /**
-     * Define the "admin" routes for the application.
-     *
-     * These routes are typically stateless.
-     *
-     * @return void
-     */
-    protected function mapAdminRoutes()
-    {
-        Route::group([
-            'middleware' => 'web',
-            'namespace' => $this->namespace.'\Admin',
-            'prefix' => 'admin',
-            'as' => 'admin.',
-        ], function ($router) {
-            require base_path('routes/admin.php');
-        });
-    }
-```
+You need manually to update following file: 
 
-config/auth.php
+- Menu (`{your_project_path}/resources/views/vendor/helium/elements/menu.blade.php`): 
+    - Menu icon
+    - Menu label
 
-```
-'providers' => [
-    // ...
-    'admins' => [
-        'driver' => 'eloquent',
-        'model' => Webup\LaravelHelium\Core\Entities\AdminUser::class,
-    ],
-],
+- Index (`{your_project_path}/resources/views/admin/{your_model_name}/index.blade.php`): 
+    - Title 
+    - Add button label 
+    - Datatable collumns 
+        - View 
+        - Javascript 
+        - Controller : update select request in `datatable` function (`{your_project_path}/app/Http/Controllers/Admin/{your_model_name}/IndexController.php`)
 
-'guards' => [
-    // ...
+- Create (`{your_project_path}/resources/views/admin/{your_model_name}/create.blade.php`): 
+    - Title 
+    - Create button label 
 
-    'admin' => [
-        'driver' => 'session',
-        'provider' => 'admins',
-    ],
-],
-```
+ - Edit (`{your_project_path}/resources/views/admin/{your_model_name}/edit.blade.php`): 
+    - Title 
+    - Edit button label 
 
-Define admin login URL :
-Exception/Handle.php add into unauthenticated function
-
-```php
-if (in_array('admin', $exception->guards())) {
-    return redirect()->guest(route('admin.login'));
-}
-```
-Define redirect URL after admin login :
-Middleware/RedirectIfAuthenticated.php add into handle function
-
-```php
-if (Auth::guard($guard)->check()) {
-    if ($guard == 'admin') {
-        return redirect()->route('admin.home');
-    }
-    // ...
-}
-```
+ - Form (`{your_project_path}/resources/views/admin/{your_model_name}/form/form.blade.php`): 
+    - Customize (fields, box, validation, ...)

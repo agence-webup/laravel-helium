@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\{{ Model }};
+
+class {{ Model }}Repository
+{
+    public function all()
+    {
+        return {{ Model }}::all();
+    }
+
+    public function get($id)
+    {
+        return {{ Model }}::find($id);
+    }
+
+    public function save({{ Model }} ${{ modelsingular }})
+    {
+        ${{ modelsingular }}->save();
+    }
+
+    public function delete({{ Model }} ${{ modelsingular }})
+    {
+        ${{ modelsingular }}->delete();
+    }
+
+    public function deleteById($id)
+    {
+        ${{ modelsingular }} = $this->get($id);
+        if(${{ modelsingular }}){
+            ${{ modelsingular }}->delete();
+        }
+
+    }
+}

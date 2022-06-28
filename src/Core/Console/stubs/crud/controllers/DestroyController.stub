@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Http\Controllers\Admin\{{ Model }};
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Jobs\{{ Model }}\Destroy{{ Model }};
+use Webup\LaravelHelium\Core\Facades\HeliumFlash;
+
+class DestroyController extends Controller
+{
+    public function destroy($id)
+    {
+        try {
+            $this->dispatchNow(new Destroy{{ Model }}($id));
+        } catch (\Exception $e) {
+            HeliumFlash::error("Impossible de supprimer l'élément.");
+            return redirect()->back();
+        }
+
+        HeliumFlash::success("{{ userFriendlyNameSingularUcfirst }} supprimé{{ genderPrefix }} avec succès.");
+
+        return redirect()->route('admin.{{ modelsingular }}.index');
+    }
+}

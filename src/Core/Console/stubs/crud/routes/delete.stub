@@ -1,0 +1,4 @@
+        //Delete
+        Route::group(["middleware" => "admin.can:{{ modelplural }}.delete"], function () {
+            Route::delete('/{id}', 'DestroyController@destroy')->name('destroy');
+        });

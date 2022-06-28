@@ -1,0 +1,4 @@
+if($heliumUser->can("{{ modelplural }}.create")){
+Helium::header()->add("Ajouter",'admin.{{ modelsingular }}.create');
+}
+

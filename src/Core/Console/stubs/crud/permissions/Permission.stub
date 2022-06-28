@@ -1,0 +1,7 @@
+Permission::updateOrCreate([
+    'name' => "{{ permission_name }}",
+], [
+    'name' => "{{ permission_name }}",
+    'guard_name' => "{{ permission_guard_name }}",
+    'title' => "{{ permission_title }}"
+]);

@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Jobs\{{ Model }};
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\{{ Model }};
+use App\Repositories\{{ Model }}Repository;
+
+class Update{{ Model }} implements ShouldQueue
+{
+    use InteractsWithQueue, Queueable, SerializesModels;
+
+    private $id;
+    private $data;
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($id, $data)
+    {
+        $this->id = $id;
+        $this->data = $data;
+    }
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle({{ Model }}Repository ${{ modelsingular }}Repo)
+    {
+        ${{ modelsingular }} = {{ Model }}::findOrFail($this->id);
+
+        {{ JobModelPropertiesSetters }}
+
+        ${{ modelsingular }}Repo->save(${{ modelsingular }});
+
+        return ${{ modelsingular }};
+    }
+}
