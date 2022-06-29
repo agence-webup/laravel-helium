@@ -70,7 +70,7 @@ class LegalsController extends Controller
             'level' => 'success',
         ]);
 
-        return redirect()->route('admin.legals.edit');
+        return redirect()->route(helium_route_name('legals.edit'));
     }
 
     /**

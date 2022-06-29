@@ -32,7 +32,7 @@ class CreateController extends Controller
     public function store(Store{{ Model }}Request $request)
     {
         try {
-            $this->dispatchNow(new Store{{ Model }}($request->validated()));
+            $this->dispatchSync(new Store{{ Model }}($request->validated()));
         } catch (\Exception $e){
             HeliumFlash::error("Une erreur est survenue.");
             return redirect()->back()

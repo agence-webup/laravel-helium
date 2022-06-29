@@ -1,4 +1,4 @@
 if($heliumUser->can("{{ modelplural }}.create")){
-Helium::header()->add("Ajouter",{{ helium_route_name('{{ modelsingular }}.create') }});
+Helium::header()->add("Ajouter","{{ modelsingular }}.create");
 }
 

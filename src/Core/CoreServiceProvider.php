@@ -19,6 +19,8 @@ use Webup\LaravelHelium\Core\Contracts\HeliumHeader as HeliumHeaderContract;
 use Webup\LaravelHelium\Core\Http\Middleware\AuthorizeAdmin;
 use Webup\LaravelHelium\Core\Http\Middleware\ShareAdminUser;
 
+
+
 class CoreServiceProvider extends ServiceProvider
 {
     /**
@@ -35,6 +37,7 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
+
         $this->loadTranslationsFrom(__DIR__ . '/resources/lang/', 'helium');
 
         $this->publishes([
@@ -89,6 +92,8 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        require_once("helpers.php");
+
         $this->app->singleton('helium', function ($app) {
             return new Helium();
         });
@@ -121,14 +126,13 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->register('Webup\LaravelHelium\Core\Providers\ViewServiceProvider');
         $this->app->register('Webup\LaravelHelium\Core\Providers\AuthServiceProvider');
 
-
         if (config()->get('helium.modules.redirection.enabled', false)) {
             $this->app->register('Webup\LaravelHelium\Redirection\RedirectionServiceProvider');
             $menuConfig = $this->app['config']->get("helium.menu.Outils", [
-                "current_route" => "admin.tools",
+                "current_route" => "tools",
                 "icon" => "sliders",
                 "links" => [
-                    "Redirections" => "admin.tools.redirection.index",
+                    "Redirections" => "tools.redirection.index",
                 ]
             ]);
             $this->app['config']->set("helium.menu.Outils", $menuConfig);

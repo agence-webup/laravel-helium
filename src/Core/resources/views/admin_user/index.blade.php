@@ -1,7 +1,7 @@
 @php
 Helium::header()->title('Liste des admins');
 if ($heliumUser->can('admin_users.create')) {
-    Helium::header()->add('Ajouter', helium_route_name('admin_user.create'));
+    Helium::header()->add('Ajouter', 'admin_user.create');
 }
 @endphp
 

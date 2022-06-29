@@ -1,7 +1,7 @@
 @php
 Helium::header()->title('Liste des rôles');
 if ($heliumUser->can('roles.create')) {
-    Helium::header()->add('Ajouter', helium_route_name('role.create'));
+    Helium::header()->add('Ajouter', 'role.create');
 }
 @endphp
 

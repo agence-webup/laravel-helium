@@ -11,24 +11,24 @@ return [
 
     "menu" => [
         "Dashboard" => [
-            "current_route" => "admin.home",
+            "current_route" => "home",
             "icon" => "home",
-            "url" => 'admin.home',
+            "url" => "home",
         ],
         // {{ Helium Crud Menu }}
         "Admins" => [
             "icon" => "users",
             "current_route" => [
-                "admin.admin_user",
-                "admin.role"
+                "admin_user",
+                "role"
             ],
             'links' => [
                 "Utilisateurs" => [
-                    "url" => "admin.admin_user.index",
+                    "url" => "admin_user.index",
                     "permissions" => "admin_users.read",
                 ],
                 "Rôles" => [
-                    "url" => "admin.role.index",
+                    "url" => "role.index",
                     "permissions" => "roles.read",
                 ],
             ]

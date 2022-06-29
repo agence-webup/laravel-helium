@@ -36,7 +36,7 @@ class EditController extends Controller
     public function update(Update{{ Model }}Request $request, $id)
     {
         try {
-            $this->dispatchNow(new Update{{ Model }}($id, $request->validated()));
+            $this->dispatchSync(new Update{{ Model }}($id, $request->validated()));
         } catch (\Exception $e){
             HeliumFlash::error("Une erreur est survenue.");
             return redirect()->back()
@@ -45,6 +45,6 @@ class EditController extends Controller
 
         HeliumFlash::success("{{ userFriendlyNameSingularUcfirst }} modifié{{ genderPrefix }} avec succès.");
 
-        return redirect()->route(helium_route_name('{{ modelsingular }}.index');
+        return redirect()->route(helium_route_name('{{ modelsingular }}.index'));
     }
 }

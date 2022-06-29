@@ -12,7 +12,7 @@ class DestroyController extends Controller
     public function destroy($id)
     {
         try {
-            $this->dispatchNow(new Destroy{{ Model }}($id));
+            $this->dispatchSync(new Destroy{{ Model }}($id));
         } catch (\Exception $e) {
             HeliumFlash::error("Impossible de supprimer l'élément.");
             return redirect()->back();
@@ -20,6 +20,6 @@ class DestroyController extends Controller
 
         HeliumFlash::success("{{ userFriendlyNameSingularUcfirst }} supprimé{{ genderPrefix }} avec succès.");
 
-        return redirect()->route(helium_route_name('{{ modelsingular }}.index');
+        return redirect()->route(helium_route_name('{{ modelsingular }}.index'));
     }
 }

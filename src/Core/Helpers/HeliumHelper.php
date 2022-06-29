@@ -29,8 +29,8 @@ class HeliumHelper
         }
 
         $currentRoute = app('router')->current()->getName();
+        $routeName = helium_route_name($routeName);
         $rootPath = substr($currentRoute, 0, strlen($routeName));
-
         return ($rootPath == $routeName) ? $cssClass : '';
     }
 
@@ -77,7 +77,7 @@ class HeliumHelper
                     "permissions" => HeliumHelper::formatPermissions($item),
                 ];
             })->toArray() : [],
-            "currentRoute" => Arr::get($configMenu, "current_route"),
+            "currentRoute" => Arr::get($configMenu, "current_route", ""),
             "permissions" => HeliumHelper::formatPermissions($configMenu),
         ];
     }
@@ -98,6 +98,6 @@ class HeliumHelper
 
     public static function formatLink(string $link)
     {
-        return substr($link, 0, 4) == "http" ? $link : route($link);
+        return substr($link, 0, 4) == "http" ? $link : helium_route($link);
     }
 }
