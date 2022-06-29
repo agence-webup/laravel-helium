@@ -62,6 +62,6 @@ class AuthController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        return redirect()->to(helium_route_name("home"));
+        return redirect()->route(helium_route_name("home"));
     }
 }
