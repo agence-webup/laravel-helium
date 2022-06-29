@@ -87,12 +87,10 @@ class CrudCreate extends Command
         }
 
         //Get model plural name (for generating views)
-        $this->modelNamePlural = $this->selectedModel->getTable();
+        $this->modelNamePlural = $this->ask("Nom du model au pluriel utilisé pour les permissions, variables, ... (habituellement le nom de la table)", $this->selectedModel->getTable());
 
         //Get model singular name (for generating views)
-        $this->modelNameSingular = Str::singular($this->modelNamePlural);
-
-
+        $this->modelNameSingular = $this->ask("Nom du model au singulier utilisé pour les routes, variables, ... ", Str::singular($this->modelNamePlural));
 
         $this->formatProperties();
 
@@ -402,7 +400,7 @@ class CrudCreate extends Command
     protected function formatProperties()
     {
 
-        $dbProperties = $this->selectedModel->getConnection()->select("select * from INFORMATION_SCHEMA.COLUMNS where table_name = '" . $this->modelNamePlural . "'");
+        $dbProperties = $this->selectedModel->getConnection()->select("select * from INFORMATION_SCHEMA.COLUMNS where table_name = '" . $this->selectedModel->getTable() . "'");
         // COLUMN_NAME
         // IS_NULLABLE
         // DATA_TYPE
@@ -512,8 +510,10 @@ class CrudCreate extends Command
         $newModels = $this->getModelsListFromFolder("Models");
         $oldModels = $this->getModelsListFromFolder("Entities");
         if (count($oldModels) > 0) {
-            $this->warn(count($oldModels) . " models utilisent l'ancien dossier 'Entities‘.");
-            $this->warn("Veuillez les déplacer dans le dossier 'Models'.");
+            $this->error("******************************************************************");
+            $this->warn("\t" . count($oldModels) . " models utilisent l'ancien dossier 'Entities‘.");
+            $this->warn("\t" . "Veuillez les déplacer dans le dossier 'Models'.");
+            $this->error("******************************************************************");
         }
 
         return array_merge($newModels, $oldModels);
