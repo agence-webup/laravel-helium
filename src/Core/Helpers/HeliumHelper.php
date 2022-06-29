@@ -77,6 +77,7 @@ class HeliumHelper
                     "permissions" => HeliumHelper::formatPermissions($item),
                 ];
             })->toArray() : [],
+            "displayChevron" => Arr::get($configMenu, "displayChevron", $isDropdown),
             "currentRoute" => Arr::get($configMenu, "current_route", ""),
             "permissions" => HeliumHelper::formatPermissions($configMenu),
         ];
