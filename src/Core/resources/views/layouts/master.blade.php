@@ -23,7 +23,7 @@
         @endif --}}
             </div>
             <div class="header__nav">
-                @include('helium::elements.keyboard-shortcuts')
+                {{-- @include('helium::elements.keyboard-shortcuts') --}}
                 @include('helium::elements.shortcuts')
                 @include('helium::elements.user-infos')
             </div>
@@ -58,7 +58,7 @@
                 event.preventDefault();
                 event.stopPropagation(); // if no confirmation
                 if (event.target.dataset.confirm && !confirm(event.target.dataset.confirm))
-            return; // let's submit the form
+                    return; // let's submit the form
                 var form = document.getElementById(el.dataset.heliumSave);
                 if (form) {
                     form.submit();
