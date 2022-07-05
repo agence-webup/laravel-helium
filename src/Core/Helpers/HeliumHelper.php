@@ -99,6 +99,10 @@ class HeliumHelper
 
     public static function formatLink(string $link)
     {
-        return substr($link, 0, 4) == "http" ? $link : helium_route($link);
+        try {
+            return helium_route($link);
+        } catch (\Throwable $th) {
+            return $link;
+        }
     }
 }
