@@ -79,20 +79,17 @@ class CrudCreate extends Command
         //Get model instanciated from list model choice
         $this->modelName = $this->choice('Choisissez le model', array_keys($models));
         $this->selectedModel = $models[$this->modelName];
-
         //Test if table exist
-        if (!Schema::hasTable($this->selectedModel->getTable())) {
+        if (!Schema::connection($this->selectedModel->getConnectionName())->hasTable($this->selectedModel->getTable())) {
             $this->error("Aucune table '" . $this->selectedModel->getTable() . "' trouvée, veuillez créer la migration et l'executer avant d'utiliser le crud generator");
             return;
         }
-
+        $this->formatProperties();
         //Get model plural name (for generating views)
         $this->modelNamePlural = $this->ask("Nom du model au pluriel utilisé pour les permissions, variables, ... (habituellement le nom de la table)", $this->selectedModel->getTable());
 
         //Get model singular name (for generating views)
         $this->modelNameSingular = $this->ask("Nom du model au singulier utilisé pour les routes, variables, ... ", Str::singular($this->modelNamePlural));
-
-        $this->formatProperties();
 
         $this->userFriendlyNameSingular = strtolower($this->ask("Nom utilisé pour les vues (singulier)"));
         $this->userFriendlyNamePlurial = strtolower($this->ask("Nom utilisé pour le vues (pluriel)", $this->userFriendlyNameSingular . 's'));
@@ -390,7 +387,7 @@ class CrudCreate extends Command
             $this->comment("Veuillez ajouter manuellement le menu suivant :");
             $this->info($generatedMenu);
         } else {
-            $this->comment("Ajout du menu au fichier `" . $heliumConfigPath . "`");
+            $this->comment("Ajout du menu    protected function formatProperties() au fichier `" . $heliumConfigPath . "`");
             $heliumConfigFile = str_replace('// {{ Helium Crud Menu }}', $generatedMenu, $heliumConfigFile);
             file_put_contents($heliumConfigPath, $heliumConfigFile);
         }
@@ -399,17 +396,22 @@ class CrudCreate extends Command
 
     protected function formatProperties()
     {
+        $connection = $this->selectedModel->getConnection();
+        $databaseName = $connection->getTablePrefix() . $this->selectedModel->getTable();
 
-        $dbProperties = $this->selectedModel->getConnection()->select("select * from INFORMATION_SCHEMA.COLUMNS where table_name = '" . $this->selectedModel->getTable() . "'");
+        $dbProperties = $this->selectedModel->getConnection()->select("select * from INFORMATION_SCHEMA.COLUMNS where table_name = '" . $databaseName . "'");
         // COLUMN_NAME
         // IS_NULLABLE
         // DATA_TYPE
-        $databaseName = $this->selectedModel->getConnection()->getDatabaseName();
+
         foreach ($dbProperties as $key => $dbProperty) {
             $temp = (array)$dbProperty;
-
             $dbProperty = array_combine(array_map('strtolower', array_keys($temp)), $temp);
-            if ($dbProperty["table_schema"] != $databaseName) {
+            if ($dbProperty["table_schema"] != $databaseName && $dbProperty["table_name"] != $databaseName) {
+                continue;
+            }
+
+            if ($dbProperty["table_schema"] == "performance_schema") { //Mysql hack
                 continue;
             }
 
