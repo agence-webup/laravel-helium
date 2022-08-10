@@ -11,9 +11,10 @@ class Box extends Component
      *
      * @return void
      */
-    public function __construct(bool $padding = true)
+    public function __construct(bool $padding = true, string $class = "")
     {
         $this->padding = $padding;
+        $this->class = $class;
     }
 
     /**
@@ -25,6 +26,7 @@ class Box extends Component
     {
         return view('helium::components.box', [
             "padding" => $this->padding,
+            "class" => $this->class,
         ]);
     }
 }
