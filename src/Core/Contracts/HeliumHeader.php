@@ -35,6 +35,17 @@ interface HeliumHeader
     public function add(string $label, string $route);
 
     /**
+     * Set custom action
+     *
+     * @param string $label Custom button label
+     * @param array $attrs html attributes
+     * @param string $icon Feather icon name
+     *
+     * @return \Webup\LaravelHelium\Core\Classes\HeliumHeader
+     */
+    public function custom(string $label, array $attrs = [], string $icon = null);
+
+    /**
      * Set contextual actions
      *
      * Example usage:

@@ -16,6 +16,7 @@ class HeliumHeader implements HeliumHeaderContract
     protected $title = null;
     protected $saveAction = null;
     protected $addAction = null;
+    protected $customAction = null;
     protected $contextualActions = [];
 
 
@@ -40,6 +41,17 @@ class HeliumHeader implements HeliumHeaderContract
         $this->addAction = (object) [
             "label" => $label,
             "url" => HeliumHelper::formatLink($route),
+        ];
+
+        return $this;
+    }
+
+    public function custom(string $label, array $attrs = [], string $icon = null)
+    {
+        $this->customAction = (object) [
+            "attrs" => collect($attrs)->map(fn ($value, $key) => $key . '="' . $value . '"')->implode(" "),
+            "icon" => $icon,
+            "label" => $label,
         ];
 
         return $this;
@@ -70,6 +82,7 @@ class HeliumHeader implements HeliumHeaderContract
             "title" => $this->title,
             "saveAction" => $this->saveAction,
             "addAction" => $this->addAction,
+            "customAction" => $this->customAction,
             "contextualActions" => $this->contextualActions
         ]);
     }
