@@ -37,7 +37,7 @@ class EditController extends Controller
     {
         try {
             $this->dispatchSync(new Update{{ Model }}($id, $request->validated()));
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             HeliumFlash::error("Une erreur est survenue.");
             return redirect()->back()
                 ->withInput($request->input());

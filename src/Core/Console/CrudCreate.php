@@ -660,7 +660,7 @@ class CrudCreate extends Command
             '{{ DeleteRoutes }}' => ($this->needDelete) ? file_get_contents(__DIR__ . '/stubs/crud/routes/delete.stub') : "",
             '{{ RequestModelProperties }}' => $this->createRequestModelProperties(),
             '{{ JobModelPropertiesSetters }}' => $this->createJobModelPropertiesSetters(),
-            '{{ DatatableControllerCollumns }}' => implode('","', $this->modelDataTableProperties),
+            '{{ DatatableControllerCollumns }}' => implode('", "', $this->modelDataTableProperties),
             '{{ DatatableHtmlCollumns }}' => $this->getDatatableHtmlCollumns(),
             '{{ DatatableJavacriptCollumns }}' => $this->getDatatableJavacriptCollumns(),
             '{{-- Helium Crud Form --}}' => $this->replaceInFormStub(),

@@ -1,27 +1,25 @@
 @php
 Helium::header()->title("Edition de {{ modelGenderDeterministic }}{{ userFriendlyNameSingular }}");
 {{ UpdateBtn }}
+
 @endphp
 
 @extends('helium::layouts.master')
 
 @section('content')
+    <form id="edit{{ Model }}" class="" action="{{ helium_route('{{ modelsingular }}.update',[${{ modelsingular }}->id]) }}" method="post">
+        {{ csrf_field() }}
 
-<form id="edit{{ Model }}" class="" action="{{ helium_route('{{ modelsingular }}.update',[${{ modelsingular }}->id]) }}" method="post">
-  {{ csrf_field() }}
+        <x-helium-box>
+            <x-slot name="header">
+            <x-helium-box-header title="Informations" />
+            </x-slot>
+            @include('admin.{{ modelsingular }}.form.form')
+        </x-helium-box>
 
-  <x-helium-box>
-    <x-slot name="header">
-      <x-helium-box-header title="Informations" />
-    </x-slot>
-    @include('admin.{{ modelsingular }}.form.form')
-  </x-helium-box>
-
-</form>
-
-
+    </form>
 @endsection
 
 @section('js')
-@include("admin.{{ modelsingular }}.form.javascript")
+    @include("admin.{{ modelsingular }}.form.javascript")
 @endsection

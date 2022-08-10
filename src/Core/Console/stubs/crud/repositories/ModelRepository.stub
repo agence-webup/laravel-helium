@@ -29,9 +29,8 @@ class {{ Model }}Repository
     public function deleteById($id)
     {
         ${{ modelsingular }} = $this->get($id);
-        if(${{ modelsingular }}){
+        if (${{ modelsingular }}) {
             ${{ modelsingular }}->delete();
         }
-
     }
 }
