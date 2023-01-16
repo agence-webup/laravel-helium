@@ -44,10 +44,7 @@ class CoreServiceProvider extends ServiceProvider
             __DIR__ . '/config/helium.php' => config_path('helium.php'),
             __DIR__ . '/Http/Controllers/Admin/PagesController.php' => app_path('Http/Controllers/Admin/PagesController.php'),
             __DIR__ . '/resources/lang' => resource_path('lang/vendor/helium'),
-            __DIR__ . '/resources/views/auth' => resource_path('views/vendor/helium/auth'),
-            __DIR__ . '/resources/views/elements' => resource_path('views/vendor/helium/elements'),
-            __DIR__ . '/resources/views/home' => resource_path('views/vendor/helium/home'),
-            __DIR__ . '/resources/views/layouts' => resource_path('views/vendor/helium/layouts'),
+            __DIR__ . '/resources/views' => resource_path('views/vendor/helium'),
             __DIR__ . '/routes/admin.php' => base_path('routes/admin.php')
         ], 'helium');
 
