@@ -58,11 +58,19 @@ class HeliumHeader implements HeliumHeaderContract
         return $this;
     }
 
-    public function pushCustom(string $html)
+    public function pushAction(string $label, string $modifier = "primary", string $icon = null, array $attrs = [])
     {
-        $this->customElems[] = $html;
+        $this->customElems = (object) [
+            "attrs" => collect($attrs)->map(fn ($value, $key) => $key . '="' . $value . '"')->implode(" "),
+            "icon" => $icon,
+            "label" => $label,
+            "modifier" => $modifier,
+            "isLink" => $attrs["href"] ?? null,
+        ];
+
         return $this;
     }
+
 
     public function contextual(array $actions)
     {
@@ -91,7 +99,7 @@ class HeliumHeader implements HeliumHeaderContract
             "addAction" => $this->addAction,
             "customAction" => $this->customAction,
             "customElems" => $this->customElems,
-            "contextualActions" => $this->contextualActions
+            "contextualActions" => $this->contextualActions,
         ]);
     }
 }

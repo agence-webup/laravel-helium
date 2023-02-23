@@ -52,7 +52,8 @@ interface HeliumHeader
      *
      * @return \Webup\LaravelHelium\Core\Classes\HeliumHeader
      */
-    public function pushCustom(string $html);
+    public function pushAction(string $label, string $modifier = "primary", string $icon = null, array $attrs = []);
+
 
     /**
      * Set contextual actions
