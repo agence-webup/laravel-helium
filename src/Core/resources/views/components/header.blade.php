@@ -23,7 +23,7 @@
                 </button>
             @endif
 
-            @foreach ($customElems as $customElem)
+            @foreach ($customElems as $custom)
                 {{-- attrs --}}
                 {{-- icon --}}
                 {{-- label --}}

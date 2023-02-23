@@ -60,12 +60,12 @@ class HeliumHeader implements HeliumHeaderContract
 
     public function pushAction(string $label, string $modifier = "primary", string $icon = null, array $attrs = [])
     {
-        $this->customElems = (object) [
+        $this->customElems[] = (object) [
             "attrs" => collect($attrs)->map(fn ($value, $key) => $key . '="' . $value . '"')->implode(" "),
             "icon" => $icon,
             "label" => $label,
             "modifier" => $modifier,
-            "isLink" => $attrs["href"] ?? null,
+            "isLink" => isset($attrs["href"]),
         ];
 
         return $this;
