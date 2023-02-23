@@ -23,6 +23,11 @@
                 </button>
             @endif
 
+            @foreach ($customElems as $customElem)
+                {!! $customElem !!}
+            @endforeach
+
+
             @if (count($contextualActions) > 0)
                 @include('helium::components.actions-dropdown', ['actions' => $contextualActions])
             @endif

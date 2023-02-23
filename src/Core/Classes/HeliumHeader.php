@@ -17,6 +17,7 @@ class HeliumHeader implements HeliumHeaderContract
     protected $saveAction = null;
     protected $addAction = null;
     protected $customAction = null;
+    protected $customElems = [];
     protected $contextualActions = [];
 
 
@@ -57,6 +58,12 @@ class HeliumHeader implements HeliumHeaderContract
         return $this;
     }
 
+    public function pushCustom(string $html)
+    {
+        $this->customElems[] = $html;
+        return $this;
+    }
+
     public function contextual(array $actions)
     {
         $sortedActions = [];
@@ -83,6 +90,7 @@ class HeliumHeader implements HeliumHeaderContract
             "saveAction" => $this->saveAction,
             "addAction" => $this->addAction,
             "customAction" => $this->customAction,
+            "customElems" => $this->customElems,
             "contextualActions" => $this->contextualActions
         ]);
     }

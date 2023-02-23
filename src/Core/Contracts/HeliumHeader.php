@@ -46,6 +46,15 @@ interface HeliumHeader
     public function custom(string $label, array $attrs = [], string $icon = null);
 
     /**
+     * Set custom action
+     *
+     * @param string $html Html of element
+     *
+     * @return \Webup\LaravelHelium\Core\Classes\HeliumHeader
+     */
+    public function pushCustom(string $html);
+
+    /**
      * Set contextual actions
      *
      * Example usage:
