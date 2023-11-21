@@ -12,7 +12,7 @@ class DestroyController extends Controller
     public function destroy($id)
     {
         try {
-            $this->dispatchNow(new DestroyRedirection($id));
+            $this->dispatchSync(new DestroyRedirection($id));
         } catch (\Exception $e) {
             HeliumFlash::error("Impossible de supprimer la redirection.");
             return redirect()->back();

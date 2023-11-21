@@ -36,7 +36,7 @@ class EditController extends Controller
     public function update(UpdateRedirectionRequest $request, $id)
     {
         try {
-            $this->dispatchNow(new UpdateRedirection($id, $request->validated()));
+            $this->dispatchSync(new UpdateRedirection($id, $request->validated()));
         } catch (\Exception $e) {
             HeliumFlash::error("Une erreur est survenue.");
             return redirect()->back()

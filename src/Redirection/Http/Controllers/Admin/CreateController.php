@@ -34,7 +34,7 @@ class CreateController extends Controller
     public function store(StoreRedirectionRequest $request)
     {
         try {
-            $this->dispatchNow(new StoreRedirection($request->validated()));
+            $this->dispatchSync(new StoreRedirection($request->validated()));
         } catch (\Exception $e) {
             HeliumFlash::error("Une erreur est survenue.");
             return redirect()->back();
@@ -58,7 +58,7 @@ class CreateController extends Controller
             while (($data = fgetcsv($handle, 0, ';')) !== FALSE) {
                 DB::transaction(function () use ($data, &$success, &$errors) {
                     try {
-                        $this->dispatchNow(new StoreRedirection([
+                        $this->dispatchSync(new StoreRedirection([
                             "from" => $data[0],
                             "to" => $data[1],
                         ]));
