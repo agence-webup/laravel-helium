@@ -42,7 +42,7 @@ class AdminUserController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->validate($request, [
+        $data = $request->validate([
             'email' => 'required|unique:admin_users,email',
             'password' => 'required|confirmed',
             'roles.*' => 'exists:roles,name',
@@ -77,14 +77,14 @@ class AdminUserController extends Controller
     {
         $admin = AdminUser::findOrFail($id);
 
-        $data = $this->validate($request, [
+        $data = $request->validate([
             'email' => 'required|unique:admin_users,email,' . $id,
             'password' => 'sometimes|confirmed',
             'roles.*' => 'exists:roles,name',
         ]);
 
         $admin->email = $data['email'];
-        if ($data['password']) {
+        if (!empty($data['password'])) {
             $admin->password = bcrypt($data['password']);
         }
         $admin->save();

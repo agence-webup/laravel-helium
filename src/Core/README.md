@@ -13,6 +13,21 @@ Publish migrations, views and translations
 $ php artisan vendor:publish --tag=helium
 ```
 
+`webup/laravel-form` is registered by Helium itself (provider + `Form` alias),
+so there is nothing to add to `config/app.php` — which Laravel 11 removed anyway.
+
+## Upgrading an existing project to Laravel 11+
+
+Two published files are not updated by `composer update`, so merge them by hand:
+
+- `routes/admin.php` — the two `/login` routes now carry `->middleware('admin.guest:admin')`.
+  Laravel 11 removed `Controller::middleware()`, so the guest redirect is declared on
+  the routes instead of in `AuthController`'s constructor.
+- `resources/lang/vendor/helium` — Laravel moved the lang directory to the project
+  root in Laravel 9. Move your translation overrides to `lang/vendor/helium`, then
+  delete `resources/lang` if it is otherwise empty (as long as that directory exists,
+  Laravel uses it as the lang path for the whole application).
+
 # Redirections
     protected $middleware = [
         [...]

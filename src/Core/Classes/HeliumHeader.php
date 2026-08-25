@@ -47,7 +47,7 @@ class HeliumHeader implements HeliumHeaderContract
         return $this;
     }
 
-    public function custom(string $label, array $attrs = [], string $icon = null)
+    public function custom(string $label, array $attrs = [], ?string $icon = null)
     {
         $this->customAction = (object) [
             "attrs" => collect($attrs)->map(fn ($value, $key) => $key . '="' . $value . '"')->implode(" "),
@@ -58,7 +58,7 @@ class HeliumHeader implements HeliumHeaderContract
         return $this;
     }
 
-    public function pushAction(string $label, string $modifier = "primary", string $icon = null, array $attrs = [])
+    public function pushAction(string $label, string $modifier = "primary", ?string $icon = null, array $attrs = [])
     {
         $this->customElems[] = (object) [
             "attrs" => collect($attrs)->map(fn ($value, $key) => $key . '="' . $value . '"')->implode(" "),

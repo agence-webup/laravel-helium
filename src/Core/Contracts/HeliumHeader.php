@@ -43,7 +43,7 @@ interface HeliumHeader
      *
      * @return \Webup\LaravelHelium\Core\Classes\HeliumHeader
      */
-    public function custom(string $label, array $attrs = [], string $icon = null);
+    public function custom(string $label, array $attrs = [], ?string $icon = null);
 
     /**
      * Set custom action
@@ -52,7 +52,7 @@ interface HeliumHeader
      *
      * @return \Webup\LaravelHelium\Core\Classes\HeliumHeader
      */
-    public function pushAction(string $label, string $modifier = "primary", string $icon = null, array $attrs = []);
+    public function pushAction(string $label, string $modifier = "primary", ?string $icon = null, array $attrs = []);
 
 
     /**

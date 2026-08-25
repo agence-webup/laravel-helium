@@ -61,7 +61,13 @@ class SeedAdminUser extends Migration
         ];
 
         foreach ($permissions as $permission) {
-            if (!Permission::getPermission(['name' => $permission["name"], 'guard_name' => $permission["guard_name"]])) {
+            // Permission::getPermission() is protected in spatie/laravel-permission,
+            // so go through the query builder to test for existence.
+            $exists = Permission::where('name', $permission["name"])
+                ->where('guard_name', $permission["guard_name"])
+                ->exists();
+
+            if (!$exists) {
                 Permission::create($permission);
             }
         }

@@ -30,7 +30,13 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('admin.guest:admin', ['except' => 'logout']);
+        // Laravel 11 removed Controller::middleware(). Since Helium ships (and
+        // publishes) routes/admin.php, the guest middleware is declared there
+        // instead. The call below is kept for applications still running on
+        // Laravel 10 with an already published route file.
+        if (method_exists($this, 'middleware')) {
+            $this->middleware('admin.guest:admin', ['except' => 'logout']);
+        }
     }
 
     /**

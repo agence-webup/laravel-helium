@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Webup\LaravelHelium\Core\Http\Middleware\RedirectIfUnauthenticated;
 use Webup\LaravelHelium\Core\Http\Middleware\RedirectIfAuthenticated;
 use File;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Blade;
 use Webup\LaravelHelium\Core\Classes\Helium;
 use Webup\LaravelHelium\Core\Classes\HeliumBreadcrumb;
@@ -43,7 +44,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/config/helium.php' => config_path('helium.php'),
             __DIR__ . '/Http/Controllers/Admin/PagesController.php' => app_path('Http/Controllers/Admin/PagesController.php'),
-            __DIR__ . '/resources/lang' => resource_path('lang/vendor/helium'),
+            __DIR__ . '/resources/lang' => $this->app->langPath() . '/vendor/helium',
             __DIR__ . '/resources/views' => resource_path('views/vendor/helium'),
             __DIR__ . '/routes/admin.php' => base_path('routes/admin.php')
         ], 'helium');
@@ -57,15 +58,18 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'helium');
 
 
-        if (!$this->app->runningInConsole()) {
-            if (!File::exists(base_path('routes') . '/admin.php')) {
-                throw new \Exception("You need to publish laravel helium files (php artisan vendor:publish --tag=helium)", 42);
-            }
-            $this->loadRoutesFrom(base_path('routes') . '/admin.php');
+        $adminRoutes = base_path('routes') . '/admin.php';
+
+        if (File::exists($adminRoutes)) {
+            $this->loadRoutesFrom($adminRoutes);
 
             if (config('app.env') == 'local') {
                 $this->loadRoutesFrom(__DIR__ . '/routes/crud.php');
             }
+        } elseif (!$this->app->runningInConsole()) {
+            // In console the file may legitimately be missing yet: vendor:publish
+            // is precisely the command that creates it.
+            throw new \Exception("You need to publish laravel helium files (php artisan vendor:publish --tag=helium)", 42);
         }
 
 
@@ -90,6 +94,8 @@ class CoreServiceProvider extends ServiceProvider
     public function register()
     {
         require_once("helpers.php");
+
+        $this->registerFormPackage();
 
         $this->app->singleton('helium', function ($app) {
             return new Helium();
@@ -147,6 +153,23 @@ class CoreServiceProvider extends ServiceProvider
         //     $this->app['config']->set("helium.menu.Outils", $menuConfig);
         // }
     }
+    /**
+     * Register webup/laravel-form, on which Helium's own views depend.
+     *
+     * The package has no Laravel auto-discovery and its documented setup goes
+     * through config/app.php, which Laravel 11 removed. Registering it here
+     * keeps Helium self-contained. Both calls are idempotent, so applications
+     * that still register it themselves are unaffected.
+     *
+     * @return void
+     */
+    private function registerFormPackage()
+    {
+        $this->app->register(\Webup\LaravelForm\FormServiceProvider::class);
+
+        AliasLoader::getInstance()->alias('Form', \Webup\LaravelForm\Facades\Form::class);
+    }
+
     /**
      * Get the services provided by the provider.
      *

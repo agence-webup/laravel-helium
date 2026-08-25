@@ -42,7 +42,7 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->validate($request, [
+        $data = $request->validate([
             'name' => 'required|unique:roles,name',
             'permissions.*' => 'exists:permissions,name',
         ]);
@@ -76,7 +76,7 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
 
-        $data = $this->validate($request, [
+        $data = $request->validate([
             'name' => 'required|unique:roles,name,' . $id,
             'permissions.*' => 'exists:permissions,name',
         ]);

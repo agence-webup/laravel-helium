@@ -6,8 +6,8 @@ Route::group([
     'prefix' =>  config("helium.admin.prefix"),
     'as' =>  config("helium.admin.as"),
 ], function () {
-    Route::get('/login', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@showLoginForm')->name('login');
-    Route::post('/login', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@login')->name('postLogin');
+    Route::get('/login', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@showLoginForm')->name('login')->middleware('admin.guest:admin');
+    Route::post('/login', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@login')->name('postLogin')->middleware('admin.guest:admin');
     Route::post('/logout', '\Webup\LaravelHelium\Core\Http\Controllers\AuthController@logout')->name('logout');
 
     Route::group(['middleware' => 'admin.auth:admin'], function () {
