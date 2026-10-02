@@ -4,6 +4,7 @@ namespace Webup\LaravelHelium\Page\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 use Validator;
 use Webup\LaravelHelium\Page\Entities\Page;
 use Yajra\DataTables\Facades\DataTables;
@@ -70,7 +71,7 @@ class PageController extends Controller
         $page->content = $request->get('content');
         $page->published = $request->has('published');
         $page->seo_title = $page->title;
-        $page->slug = str_slug($page->title);
+        $page->slug = Str::slug($page->title);
         $page->save();
 
         // Flash message
@@ -124,7 +125,7 @@ class PageController extends Controller
         $page->content = $request->get('content');
         $page->published = $request->has('published');
         $page->seo_title = $page->title;
-        $page->slug = str_slug($page->title);
+        $page->slug = Str::slug($page->title);
         $page->save();
 
         // Flash message
